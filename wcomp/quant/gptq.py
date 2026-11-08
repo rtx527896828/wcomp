@@ -5,12 +5,17 @@ scale, sym: scale = amax / |qmin| per group; asym: scale / zero from the group's
 with a b-bit integer zero), so the bit accounting is identical to RTN and gptq_quantize(W, H=I) reproduces
 quantize_rtn exactly. Group parameters are computed from the *current*, error-updated weights when the
 group starts (column index % group == 0 in processing order).
+
+Phase 3 (additive, DESIGN.md "Phase 3 contract"): per-tensor widths (`bits` as a dict), per-row widths (`row_bits`,
+wcomp.quant.rtn.group_grid_rows), codebook rounding (`codebook`, wcomp.quant.rtn.fit_codebook: RMS-normalized groups,
+nearest Lloyd-Max / Gaussian-quantile level) and the index stream of every tensor (TensorBits.indices, verified by
+an exact dequantization round trip). The uniform-grid hot path is the Phase 1 one; its indices are recovered after
+the loop from W_hat and the stored scales (exact), so the per-column cost does not grow.
 """
 from __future__ import annotations
 
 import logging
 import math
-import os
 import time
 
 import torch
@@ -18,20 +23,22 @@ import torch.nn as nn
 from torch import Tensor
 
 from wcomp.bits import BitAccount
-from wcomp.quant.rtn import SCALE_BITS, group_grid
+from wcomp.quant.rtn import (ROW_SIDE_BITS, SCALE_BITS, bits_for, check_roundtrip, check_row_bits, codebook_note, fit_codebook,
+                             grid_indices, group_grid, group_grid_rows, rms_scale, row_bits_note, row_qrange, safe_scale)
 
 log = logging.getLogger(__name__)
 
 # Hessian accumulation path (DESIGN.md "GPTQ speed"): True forms each window's x^T x in f32 and adds it into
 # the f64 accumulator; False is the Phase 1 path (x cast to f64, addmm_ in f64; 1/64 f32 rate on consumer
-# Blackwell). The Phase 1 path stays the default until the acceptance row (gptq-sym-g128-3 on the 0.8B, seed 0:
-# PPL 24.45 within 0.5%, KL 0.3131 within 2%) is recorded in NOTES.md, so the Phase 1 method names keep producing
-# their Phase 1 numbers; the f32 path is selected per run by scripts/run_baselines.py --hessian-f32 (or the env
-# override WCOMP_HESSIAN_F32=1). A tensor note of the f32 path ends in " hessian-f32" (hessian_note); the default
-# path leaves the Phase 1 note unchanged, so a Phase 1 method name rerun on the default path reproduces its Phase 1
-# row note byte-for-byte (the readers scripts/plot_rd.hessian_tag and scripts/probe_io.hessian_tag treat a missing
-# token and the older "hessian-f64" token alike).
-HESSIAN_F32: bool = os.environ.get("WCOMP_HESSIAN_F32", "0") == "1"
+# Blackwell). The f32 path is selected only explicitly: by gptq_model(..., hessian_f32=True) (the Phase 3 "gptq32-*"
+# names, wcomp.methods) or, for the Phase 1 "gptq-sym-g128-*" names, by scripts/run_baselines.py --hessian-f32
+# setting this module flag, which is the default of gptq_model's hessian_f32=None. The Phase 2 environment override
+# WCOMP_HESSIAN_F32 is gone (Phase 3 contract): the flag is False at import whatever the environment says, so a
+# Phase 1 name keeps its Phase 1 (f64) numbers. A tensor note of the f32 path ends in " hessian-f32" (hessian_note);
+# the default path leaves the Phase 1 note unchanged, so a Phase 1 method name rerun on the default path reproduces
+# its Phase 1 row note byte-for-byte (the readers scripts/plot_rd.hessian_tag and scripts/probe_io.hessian_tag treat
+# a missing token and the older "hessian-f64" token alike).
+HESSIAN_F32: bool = False
 
 
 def hessian_note(note: str, f32: bool | None = None) -> str:
@@ -156,13 +163,31 @@ def gptq_quantize(
     block: int = 128,
     damp: float = 0.01,
     act_order: bool = False,
+    row_bits: Tensor | None = None,
+    codebook: dict | None = None,
 ) -> tuple[Tensor, dict]:
     """Quantize W [N, K] (f32) given the input Hessian H [K, K] (f64, mean of x x^T).
 
     Columns are processed left to right (or by descending diag(H) with act_order) in lazy batches of
     `block` columns; the quantization error of each column is fed back onto the remaining columns through
-    the upper Cholesky factor of H^-1. Dead columns (diag(H) == 0) are set to 0. Returns (W_hat f32 on
-    W's device, info) with info = {"index_bits", "aux_bits", "note"}.
+    the upper Cholesky factor of H^-1. Dead columns (diag(H) == 0) are zeroed in W before the loop: on the uniform
+    grids they reconstruct to exactly 0, on a codebook (even level count, no zero level) to the level nearest 0,
+    +-c_min * scale (their error reaches no other column, the Hinv row of a dead column is zero off the diagonal; the
+    0.8B has no dead column). Returns (W_hat f32 on
+    W's device, info) with info = {"index_bits", "aux_bits", "note", "indices", "levels", "side"}; "indices"
+    (Phase 3) are the grid indices q - qmin, int16 CPU [N*K] row-major, "levels" = 2^bits, "side" the side
+    information for wcomp.quant.rtn.dequantize_indices; every path asserts W_hat == dequantize_indices(indices, side)
+    exactly. On the uniform grids the indices are recovered from W_hat and the per-group scales after the loop
+    (wcomp.quant.rtn.grid_indices, exact), so the per-column hot path is the Phase 1 one.
+    `row_bits` (Phase 3, method G): int tensor [N], each output row's own width; the group grid of row i is
+    group_grid's rule at row_bits[i] bits (wcomp.quant.rtn.group_grid_rows, vectorized over the rows), index_bits =
+    K * sum(row_bits), levels = 2^max; the per-row width side information (ROW_SIDE_BITS per row) is charged by the
+    caller (gptq_model).
+    `codebook` (Phase 3, method E2 / E3): {"kind": "lloyd" | "nf", "bits": optional, "iters": 50} replaces the uniform
+    grid by the RMS-normalized group (f16 scale, computed like the grid when the group starts, from the error-updated
+    weights) and the nearest level of the per-tensor codebook of wcomp.quant.rtn.fit_codebook, fitted on the original
+    W before any update ("lloyd": 2^bits * 16 table bits; "nf": 0). The error feedback is unchanged, only the rounding
+    step differs; `sym` is irrelevant. With `row_bits`, one codebook per distinct width.
     """
     N, K = W.shape
     dev = W.device
@@ -172,11 +197,22 @@ def gptq_quantize(
         group = K
     if K % group != 0:  # same rule as quantize_rtn, so the two methods never report different bits
         raise ValueError(f"K={K} not divisible by group={group}")
+    rb = None if row_bits is None else check_row_bits(row_bits, N).to(dev)
+    cb = None
+    if codebook is not None:
+        if rb is None and not 1 <= bits <= 15:
+            raise ValueError(f"bits must be in 1..15 for a codebook, got {bits}")
+        cb = fit_codebook(W, group, codebook, bits, rb)  # the original weights, before dead columns / any update
+    elif rb is not None:
+        r_qmin, r_qmax = row_qrange(rb, sym)
+    elif not 1 <= bits <= 16:
+        raise ValueError(f"bits must be in 1..16, got {bits}")
 
     dead = torch.diag(H) == 0
     H[dead, dead] = 1.0
     W[:, dead] = 0.0
 
+    perm = None
     if act_order:
         perm = torch.argsort(torch.diag(H), descending=True)
         W = W[:, perm]
@@ -187,8 +223,12 @@ def gptq_quantize(
     Hinv = Hinv.to(torch.float32)
     del H
 
+    n_groups = K // group
     Q = torch.zeros_like(W)
-    scale = zero = None
+    scales = torch.empty(N, n_groups, dtype=torch.float32, device=dev)
+    zeros = None if (sym or cb is not None) else torch.empty(N, n_groups, dtype=torch.float32, device=dev)
+    idx = torch.empty(N, K, dtype=torch.int64, device=dev) if cb is not None else None
+    scale = zero = scale_safe = None
     for i1 in range(0, K, block):
         i2 = min(i1 + block, K)
         count = i2 - i1
@@ -208,10 +248,28 @@ def gptq_quantize(
                     if i > 0:
                         tail = tail - Err1[:, :i] @ Hinv[i1:col, i2:gend]
                     parts.append(tail)
-                scale, zero = grid_params(torch.cat(parts, dim=1) if len(parts) > 1 else parts[0], bits, sym)
+                wg = torch.cat(parts, dim=1) if len(parts) > 1 else parts[0]
+                gi = col // group
+                if cb is not None:
+                    scale = rms_scale(wg).squeeze(1)
+                    scale_safe = safe_scale(scale)
+                elif rb is None:
+                    scale, zero = grid_params(wg, bits, sym)
+                else:
+                    _, scale, zero = group_grid_rows(wg, rb, sym)
+                    scale, zero = scale.squeeze(1), zero.squeeze(1)
+                scales[:, gi] = scale
+                if zeros is not None:
+                    zeros[:, gi] = zero
             w = W1[:, i]
             d = Hinv1[i, i]
-            q = quantize_column(w, scale, zero, bits, sym)
+            if cb is not None:
+                q, idx[:, col] = cb.quantize_column(w, scale, scale_safe)
+            elif rb is None:
+                q = quantize_column(w, scale, zero, bits, sym)
+            else:
+                q = torch.clamp(torch.round(w / scale) + zero, r_qmin, r_qmax)
+                q = (q - zero) * scale
             Q1[:, i] = q
             err = (w - q) / d
             W1[:, i:] -= err.unsqueeze(1) * Hinv1[i, i:].unsqueeze(0)
@@ -219,15 +277,32 @@ def gptq_quantize(
         Q[:, i1:i2] = Q1
         W[:, i2:] -= Err1 @ Hinv[i1:i2, i2:]
 
+    if cb is not None:
+        qmin = None
+        idx = idx.to(torch.int16)
+    else:
+        qmin = (-(2 ** (bits - 1)) if sym else 0) if rb is None else r_qmin
+        idx = grid_indices(Q, scales, zeros, qmin, group)
     if act_order:
         Q = Q[:, invperm]
+        idx = idx[:, invperm]
     if not torch.isfinite(Q).all():
         raise RuntimeError("gptq_quantize: non-finite reconstruction")
 
-    n_groups = K // group
-    per_group = SCALE_BITS + (0 if sym else bits)  # f16 scale (+ b-bit zero), the same side information as RTN
-    aux_bits = N * n_groups * per_group
-    note = f"gptq {bits}b {'sym' if sym else 'asym'} g{group} block{block} damp{damp}"
+    if cb is not None:
+        aux_bits = N * n_groups * SCALE_BITS + cb.table_bits
+        index_bits, levels = (bits * N if rb is None else int(rb.sum())) * K, cb.levels
+        head = f"gptq {cb.kind} {f'{bits}b' if rb is None else row_bits_note(rb)}"
+    elif rb is None:
+        per_group = SCALE_BITS + (0 if sym else bits)  # f16 scale (+ b-bit zero), the same side information as RTN
+        aux_bits = N * n_groups * per_group
+        index_bits, levels = bits * N * K, 2**bits
+        head = f"gptq {bits}b {'sym' if sym else 'asym'}"
+    else:
+        aux_bits = N * n_groups * SCALE_BITS + (0 if sym else int(rb.sum()) * n_groups)
+        index_bits, levels = int(rb.sum()) * K, 2 ** int(rb.max())
+        head = f"gptq {row_bits_note(rb)} {'sym' if sym else 'asym'}"
+    note = f"{head} g{group} block{block} damp{damp}"
     if damp_used != damp:
         note += f"->{damp_used:g}"  # the Cholesky escape hatch escalated the damping
     if act_order:
@@ -235,7 +310,12 @@ def gptq_quantize(
         if n_groups > 1:
             # groups are contiguous in the permuted order, so each column needs its group index
             aux_bits += K * math.ceil(math.log2(n_groups))
-    info = {"index_bits": bits * N * K, "aux_bits": aux_bits, "note": note}
+    if cb is not None:
+        note += f": {codebook_note(cb)}"
+    side = {"scales": scales, "zeros": zeros, "qmin": qmin, "codebook": cb, "group": group, "perm": perm}
+    info = {"index_bits": index_bits, "aux_bits": aux_bits, "note": note, "indices": idx.reshape(-1).to("cpu"),
+            "levels": levels, "side": side}
+    check_roundtrip(Q, info)
     return Q, info
 
 
@@ -297,14 +377,25 @@ def _run_layer(layer: nn.Module, x: Tensor, kwargs: dict) -> Tensor:
 def gptq_model(
     model: nn.Module,
     calib_ids: Tensor,
-    bits: int,
+    bits,
     group: int = 128,
     sym: bool = True,
     block: int = 128,
     damp: float = 0.01,
     act_order: bool = False,
+    row_bits: dict | None = None,
+    hessian_f32: bool | None = None,
+    codebook: dict | None = None,
 ) -> BitAccount:
     """Quantize every nn.Linear under model.model.layers sequentially with GPTQ; weights replaced in bf16.
+
+    Phase 3 (additive): `bits` may be a dict[full module name -> int] (per-tensor widths, method A; every block
+    linear must be in it); `row_bits` a dict[full module name -> int Tensor [N]] (per-row widths, method G; tensors
+    absent from it use `bits`, a row-allocated tensor is charged ROW_SIDE_BITS per row and says so in its note);
+    `hessian_f32` chooses the Hessian path for this call (True: f32 per-window products, the "gptq32" names; None:
+    the module flag HESSIAN_F32, which the runner's --hessian-f32 sets for the Phase 1 names); `codebook` {"kind":
+    "lloyd" | "nf", "bits": optional} (method E2 / E3) replaces the uniform grid for every tensor (a given "bits" must
+    equal an int `bits`; with a dict `bits` each tensor's codebook has that tensor's width), table bits in aux_bits.
 
     For each layer: (1) run the layer on all calibration windows with hooks on each nn.Linear that
     accumulate H = x^T x / n_rows in f64 on the GPU (DeltaNet linears get their own input, so in_proj_*
@@ -314,6 +405,8 @@ def gptq_model(
     stops the model forward; layer kwargs are recorded once (see _capture_layer_inputs).
     Calibration activations are kept on the GPU in bf16 when they fit, else on the CPU.
     """
+    if codebook is not None and codebook.get("bits") is not None and not isinstance(bits, dict) and int(codebook["bits"]) != int(bits):
+        raise ValueError(f"codebook bits {codebook['bits']} differ from bits {bits}")
     model.eval()
     device = next(model.parameters()).device
     layers = model.model.layers
@@ -344,7 +437,7 @@ def gptq_model(
         def make_hook(name: str):
             def hook(mod, args):
                 x = args[0].reshape(-1, args[0].shape[-1])
-                add_xtx(hess[name][0], x)
+                add_xtx(hess[name][0], x, f32=hessian_f32)
                 hess[name][1] += x.shape[0]
 
             return hook
@@ -360,10 +453,19 @@ def gptq_model(
         for n, m in linears:
             H, rows = hess[n]
             H /= rows
-            W_hat, info = gptq_quantize(m.weight.float(), H, bits, group, sym, block, damp, act_order)
+            full = f"{prefix}.{i}.{n}"
+            rb = row_bits.get(full) if row_bits else None
+            b = bits_for(bits, full)
+            cb = None if codebook is None else {**codebook, "bits": b}
+            W_hat, info = gptq_quantize(m.weight.float(), H, b, group, sym, block, damp, act_order, row_bits=rb, codebook=cb)
             m.weight.data.copy_(W_hat.to(m.weight.dtype))
-            note = hessian_note(info["note"])  # the f32 path is marked; the default path keeps the Phase 1 note
-            account.add(f"{prefix}.{i}.{n}", m.weight.numel(), info["index_bits"], info["aux_bits"], note)
+            note = hessian_note(info["note"], hessian_f32)  # the f32 path is marked; the default path keeps the Phase 1 note
+            aux, rows_list = info["aux_bits"], None
+            if rb is not None:
+                aux += ROW_SIDE_BITS * m.weight.shape[0]
+                note += f"; {ROW_SIDE_BITS} bits/row width"
+                rows_list = check_row_bits(rb, m.weight.shape[0]).tolist()
+            account.add(full, m.weight.numel(), info["index_bits"], aux, note, indices=info["indices"], levels=info["levels"], row_bits=rows_list)
         del hess
         t_q = time.time() - t_q
 

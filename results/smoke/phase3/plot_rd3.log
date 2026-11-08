@@ -1,0 +1,2 @@
+warning: eig-gptq32-sym-g128-3 (seed 0): bits_blocks 17.89 beyond the x range, drawn at the right edge
+results\smoke\phase3\rd3_qwen3.5-0.8b_smoke.png

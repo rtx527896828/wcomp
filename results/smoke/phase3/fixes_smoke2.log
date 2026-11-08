@@ -1,0 +1,15 @@
+=== regress_rtn start 10:56:21 t=1794153381
+=== regress_rtn exit 0 end 10:56:45 t=1794153405
+=== regress_gptq_f64 start 10:56:45 t=1794153405
+=== regress_gptq_f64 exit 0 end 10:58:44 t=1794153525
+=== smoke_rows start 10:58:45 t=1794153525
+=== smoke_rows exit 0 end 11:01:48 t=1794153708
+=== smoke_rows_more start 11:01:48 t=1794153708
+=== smoke_rows_more exit 0 end 11:07:35 t=1794154055
+=== combo start 11:07:35 t=1794154055
+=== combo exit 0 end 11:08:57 t=1794154137
+=== plots start 11:08:57 t=1794154137
+=== plots exit 0 end 11:09:00 t=1794154140
+=== summary start 11:09:00 t=1794154140
+=== summary exit 0 end 11:09:03 t=1794154143
+ALL DONE

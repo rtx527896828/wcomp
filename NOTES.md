@@ -1221,3 +1221,798 @@ item 4 = **A** (type-level, then row/column level), item 2 = **D** (rotation; on
 admissible without training, see the Phase 3 contract), item 3 = **E**, "D outlier-column protection" and
 "F super-weight protection" and group size = dropped sub-variants, **B** and **C** dropped, **F** (usage-aware)
 dropped on P5/P7. Phase 3 and REPORT.md use the task statement's letters.
+
+## Phase 3: methods
+
+### Pre-registered hypotheses (verbatim from DESIGN.md "Phase 3 contract: methods")
+
+- H3-A. Type-level allocation from C4-measured damage beats uniform GPTQ by 15-30% KL at equal `bits_blocks` at
+  avg 3.5 and 3 on both Qwen models, both seeds; both shuffled allocations are no better than uniform (within 5%).
+  Tensor-level allocation adds < 10% KL on top of type-level. The C4-measured per-type damage ranks the types the
+  way the Phase 2 WikiText measurement did (Spearman > 0.9), so the allocation does not depend on the eval set.
+- H3-D. Hadamard + GPTQ beats GPTQ by > 20% KL at 3 bits on all three models; at 4 bits the gain is < 10% (noise
+  edge); at 2 bits it is the largest (> 40%). Random orthogonal equals Hadamard within 5% KL (the gain is generic
+  incoherence, not model-specific structure); the eigenbasis rotation costs > 1 bit/param stored and loses.
+- H3-E. Huffman coding of GPTQ indices saves 0.40-0.50 bits/param at 4 bits, 0.25-0.40 at 3, < 0.20 at 2 with
+  single-symbol codes (pair codes recover part of the 2-bit loss); the gap to the Shannon figure is < 0.05 bits at
+  4 bits. Lloyd-Max lowers KL by 10-25% at 3-4 bits for < 0.01 bits of table; the fixed Gaussian codebook captures
+  at least two thirds of that. All coders sit 1.0-1.5 bits above the Gaussian RD bound at equal MSE at 4 bits, and
+  the gap shrinks with fewer bits.
+- H3-G. Uncertain (the only tested proxy failed in Phase 2). Prior: the Fisher row split beats uniform RTN-4 by
+  10-20% KL at equal bits and the shuffled-row controls do not; if it fails, within-tensor allocation is dropped.
+- H3-combo. At avg 3.0 (fixed `bits_blocks` ~3.1, Huffman ~2.7-2.8) the combination reaches the KL of uniform
+  GPTQ-4 (fixed 4.125) on the 0.8B and the 2B, i.e. about 1.0-1.3 bits/param saved at equal quality against the
+  Phase 1 best coder, of which ~0.4 is entropy coding, ~0.25 rotation, ~0.2 allocation, the rest interaction.
+  At avg 2.5 the combination stays below +50% PPL (Phase 1's best 2-bit row was +655%).
+
+### Decisions fixed at integration, before any run
+
+- "gptq32" is GPTQ with the f32 per-window Hessian product, selected by the method name alone (`gptq_model(...,
+  hessian_f32=True)`); the Phase 1 `gptq-sym-g128-*` names keep the f64 path and the `WCOMP_HESSIAN_F32` environment
+  override is gone (the module flag is False at import whatever the environment says; `tests/test_quant_phase3.py`
+  asserts it). Regression after integration (`results/smoke/phase3/qwen3.5-0.8b/regress.jsonl`): fp16 / rtn-sym-g128-4
+  with `--limit-windows 8 --kl-windows 8` = 14.946912850877544 / 19.007505611738555, gptq-sym-g128-4 with
+  `--limit-windows 8 --kl-windows 4 --calib-n 16 --hessian-f64` = 16.248178182081652 (all three identical to Phase 1 / 2).
+- E3's fixed codebook (`nf-gptq32-g128-*`) is the Lloyd-Max optimum of N(0, 1) (kind "nf", computed from the density,
+  0 table bits; 4 levels +-0.4528 / +-1.510, 16 levels max 2.733), not the literal equiprobable Gaussian quantiles
+  Phi^-1((i+0.5)/L): under RMS normalization the quantile codebook's outer level sits at 1.86 sigma at 16 levels, it
+  clips the tails and its MSE on Gaussian weights is 2x the uniform amax grid's at 4 bits (8.91e-6 vs 4.48e-6) and 1.2x
+  at 3 bits (2.235e-5 vs 1.814e-5), so an E3 row built on it would lose by construction. Measured MSEs (unit variance):
+  4 bits lloyd 3.81e-6, nf 3.76e-6, uniform 4.48e-6, nfq 8.91e-6; 3 bits lloyd 1.361e-5, nf 1.363e-5, uniform 1.814e-5,
+  nfq 2.235e-5. The quantile codebook is kept as kind "nfq" (the Lloyd-Max initialisation E2 names) and is run next to
+  nf at seed 0 (`nfq-gptq32-g128-{4,3}`, added to the run list at the review before the runs), so the contract's E3 as
+  written has its own number beside the substitute the H3-E "fixed codebook captures >= 2/3" clause is read on.
+- Lloyd-Max (E2): 50 iterations from the Gaussian-quantile initialisation on the RMS-normalized weights of the whole
+  tensor (the original weights, before any GPTQ update), one codebook per tensor (per distinct width under row
+  allocation), stored f16, 2^b * 16 bits in the tensor's aux_bits; group scale = f16 RMS (16/128 bits); a zero-RMS
+  group stores scale 0 and dequantizes to 0. Indices are recovered exactly on every path (`W_hat == dequant(idx)` is
+  asserted in f32, uniform grids recover the indices from W_hat and the scales after the GPTQ loop).
+- Bit figures: `bits_blocks` (fixed), `bits_blocks_huff` (per tensor the best of a single-symbol canonical Huffman
+  code with a b * 2^b table, a pair-symbol code with a 2b * 2^(2b) table and the plain b-bit code with no table, plus
+  2 choice bits, so huff <= fixed + 2 bits per tensor; DESIGN.md's two-way choice with 1 bit had no table-free option
+  and charged small 8-bit tensors (36 x 16384 params: the 2048-bit table is 0.125 b/param) and near-uniform 3-bit
+  tensors above their fixed width in the smoke, 1.6e-4 bits/param on the combo row; amended at the review before the
+  runs), `bits_blocks_shannon` (the entropy bound of the code chosen for that tensor: the single-symbol entropy for the
+  single-symbol and the plain code, the pair-stream entropy per symbol when the pair code won, so the Shannon figure
+  never exceeds the table-free part of the Huffman one and huff - shannon is the coder's loss plus its tables), and
+  `bits_blocks_entropy0` (the plain order-0 entropy figure, the contract's "Shannon figure" as pre-registered; the
+  summary prints huff - entropy0 beside huff - shannon in H3-E); all side information in all of them. A row-allocated tensor
+  (method G, rows at different widths) is coded per width class (the decoder knows every row's width from the 2
+  bits/row side information): one Huffman table and one entropy per distinct width; coding the pooled stream on the
+  2^max alphabet would charge the width mixture a second time and exceeded the fixed figure in the smoke. The E4
+  table (`rd_bound.jsonl`) is per weight type from the group-normalized MSE against R(D) = 0.5 log2(1/D); for a
+  rotated row the reference weight is folded into the rotated input basis (the module's `wcomp_input_fold`) before
+  the MSE, i.e. the distortion is measured on the tensor the quantizer was given.
+- Allocation (A): d_u = KL_u / n_u from `results/phase3/<model>/damage_c4.jsonl` (32 seed-2 C4 windows, rtn-sym-g128-4
+  on the unit alone); the widths minimize sum n_u d_u 2^(-2(b_u-4)) over {2,3,4,5,6,8} with the numel-weighted mean
+  <= target by an exact multiple-choice-knapsack DP over the integer budget in units of gcd(numel)
+  (`wcomp.alloc.allocate`; amended at the review before the runs: DESIGN.md's "greedy marginal gain (exact for this
+  convex objective)" is not exact for this problem, with unequal numel and the 6 -> 8 double step it returns a 6%
+  worse objective at the same realized mean at avg 2.5 and 3.5 on the 0.8B type damage, e.g. avg 2.5 DP
+  {in_proj_z:2, out_proj:3, up:3, k:3, v:3} vs greedy {in_proj_z:3, out_proj:4, up:2, k:5, v:5}, and the same
+  allocation at avg 3 and 4; `tests/test_alloc.py` checks the DP against brute force); 3 bits per unit charged on the
+  unit's first tensor. Tensor units take the per-tensor damage rows (0.8B: required, `wcomp.methods.TENSOR_DAMAGE_MODELS`,
+  a file without them is an error) and, for the other models, the Fisher per-tensor totals
+  (`results/probe/<model>/fisher.json`, or the "totals" of `fisher_rows.pt` from `scripts/fisher_rows.py`, 512-token
+  windows on the 2B as A2 allows); the note, the alloc JSON ("signal") and the summary's tensor-vs-type line say which.
+  Shuffle controls: seeded derangement of the real assignment (no unit keeps its own slot, the largest unit frozen at
+  its permuted width), rebalanced to the real mean within 0.02 by single-level moves; a rebalanced draw equal to the
+  real allocation or leaving more than half of the parameters at their real width is not a control and is rejected
+  (next draw; on the 2B type shape, 7 types of which six share one width, the first seed-1 draw was walked back to
+  the real allocation by the rebalancer), an all-one-width allocation has no control (error); the alloc JSON records
+  the share of the parameters at their real width and the summary prints it beside the real / shuffle ratio, marking
+  a control identical to the real allocation invalid.
+  The chosen widths are written next to the runs (`<results-dir>/<model>/alloc_<method>_seed<s>.json`, i.e.
+  `results/phase3/<model>/` for protocol runs) and into the row's `alloc` field.
+- Row allocation (G): rows at b-1 / b / b+1 by the P6b Fisher row sums (`results/probe/<model>/fisher_rows.pt`, 32 C4
+  windows x 1024 tokens, seed 0, no weight gradient), per-tensor mean exactly b, 2 bits per row charged by the
+  quantizer; the shuffled-row controls permute each tensor's widths over its rows (mean unchanged). The 0.8B file exists
+  (totals agree with fisher.json to 5.1e-7 relative). A tensor at 2 or 8 bits is not split (no room below / above) and
+  carries no row side information, which the decoder infers from the width; a tensor at an interior width keeps its
+  row table and its 2 bits/row even when water-filling leaves every row at the tensor's width (Fisher row energies
+  within a factor of 4), since the decoder expects a table for every interior-width tensor (review fix; no smoke or
+  protocol row had such a tensor).
+- Rotations (D): "hadamard" as in Phase 1 (random orthogonal where no Hadamard order exists), "hadsign" = Hadamard
+  times a seeded random sign diagonal, "rnd" = seeded random orthogonal per input width, all 0 bits; "eig" = per
+  shared-input group (in_proj_*, q/k/v, gate/up share one input) the eigenvectors of the calibration Hessian, stored
+  bf16 and charged 16 K K bits per distinct matrix in aux_bits (collected 6 decoder layers at a time through the
+  already rotated layers).
+- Combination: `combo-gptq32-avg{x}` reads `results/phase3/<model>/combo.json` {"had", "lloyd", "rowalloc"} (booleans,
+  written after the decision rules below are applied to the single-method rows; the file does not exist before that
+  and the method refuses to run without it) and composes had() + type allocation at avg x + row allocation around each
+  type's width (if rowalloc) + Lloyd codebook (if lloyd) + GPTQ f32.
+- Smoke evidence for the pipeline (off-protocol, `--limit-windows 4 --kl-windows 4 --calib-n 8`, never mixed with
+  protocol rows): `results/smoke/phase3/qwen3.5-0.8b/runs.jsonl`, `rd_bound.jsonl`, `damage_c4.jsonl` (2 windows),
+  `results/smoke/phase3/rd3_qwen3.5-0.8b_smoke.png`, `results/smoke/phase3/summary_smoke.md`, logs in
+  `results/smoke/phase3/`.
+- The dPPL half of the "beats" rule (review before the runs): DESIGN.md's 4.4% is applied to dPPL = PPL - PPL_fp16
+  as written (`scripts/phase3_common.py compare()`, unchanged), but the 4.4% was measured as a spread of PPL (24.45 vs
+  23.40 at 3 bits); in dPPL the same seed pair differs by 18% at 3 bits (6.88 vs 5.83) and 77% at 4 bits (0.49 vs
+  0.87), while the -4.4% dPPL threshold is a PPL move of 1.2% at 3.125 bits and 0.16% at 4.125 bits. The dPPL margin
+  is therefore recorded as non-binding: any row that clears the 5% KL margin on every seed clears it automatically,
+  the verdict is carried by the KL margin plus the every-seed requirement, and summary.md (reference table: the
+  measured seed spread of KL / PPL / dPPL per width, footnote) and the rd3 plot footer say so. The margin is not
+  re-tuned after the fact.
+- Presentation (review before the runs): a row within 0.01 bits beyond the top reference point (G's 2 bits/row put
+  avg-4 rows at 4.1266) is not flagged as extrapolated; a method with a seed row that has no readable comparison is
+  "n/a (k of n seeds readable)", not "yes (1 seed)"; RTN-quantized rows get "rtn gate" instead of a verdict against
+  the gptq32 curve (their gates are the uniform RTN curve and rtn-sym-g128-4 with the shuffled-row controls); the
+  H3-A Spearman line reads damage_c4.jsonl through the allocation methods' checked reader; plot labels avoid other
+  rows' markers, move at most two steps without a leader line and get one beyond that.
+
+2026-11-08: pre-registered before any Phase 3 run; code `bf5b4e7+dirty/8270c1e57d` (wcomp.version.code_version after the integration and the two review-fix rounds; pytest 329 passed on it, `results/smoke/phase3/pytest_fixes2.log`).
+
+### Phase 3 run list (exact commands, sequential on the one GPU, from `D:\repos\wcomp`)
+
+Decision rules applied between the blocks (DESIGN.md): a method beats the baseline at its bits if its KL is > 5% below
+the interpolated gptq32 curve and its dPPL > 4.4% below, on both seeds where two exist; a claimed allocation gain needs
+the real assignment to beat both shuffles by > 5% KL; G gate = beats uniform rtn-sym-g128-4 by > 10% KL and both
+shuffled-row controls by > 5%; combo components: had iff had-gptq32 beats at 3 bits, lloyd iff lloyd-gptq32-g128-3
+beats the uniform grid by > 5% KL on both seeds, rowalloc iff the G gate passed. The decisions are written to NOTES.md
+and `results/phase3/<model>/combo.json` before the combo rows run. If a model's list passes 3 h, finish the current row
+and report.
+
+qwen3.5-0.8b:
+
+```
+uv run python scripts/damage_c4.py --model qwen3.5-0.8b --units type,tensor
+uv run python scripts/fisher_rows.py --model qwen3.5-0.8b
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods fp16,rtn-sym-g128-4,gptq32-sym-g128-4,gptq32-sym-g128-3,gptq32-sym-g128-2 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods gptq32-sym-g128-4,gptq32-sym-g128-3,gptq32-sym-g128-2 --seed 1
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods had-gptq32-sym-g128-4,had-gptq32-sym-g128-3,had-gptq32-sym-g128-2,rnd-gptq32-sym-g128-3,hadsign-gptq32-sym-g128-3,eig-gptq32-sym-g128-3 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods had-gptq32-sym-g128-4,had-gptq32-sym-g128-3,had-gptq32-sym-g128-2,rnd-gptq32-sym-g128-3 --seed 1
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods lloyd-gptq32-g128-4,lloyd-gptq32-g128-3,lloyd-gptq32-g128-2,nf-gptq32-g128-4,nf-gptq32-g128-3,nfq-gptq32-g128-4,nfq-gptq32-g128-3 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods lloyd-gptq32-g128-4,lloyd-gptq32-g128-3,lloyd-gptq32-g128-2 --seed 1
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods alloc-type-gptq32-avg2.5,alloc-type-gptq32-avg3,alloc-type-gptq32-avg3.5,alloc-type-gptq32-avg4,alloc-tensor-gptq32-avg3,alloc-tensor-gptq32-avg3.5,alloc-type-rtn-avg3,alloc-type-rtn-avg3.5,alloc-type-shuf1-gptq32-avg3,alloc-type-shuf2-gptq32-avg3 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods alloc-type-gptq32-avg2.5,alloc-type-gptq32-avg3,alloc-type-gptq32-avg3.5,alloc-type-gptq32-avg4,alloc-tensor-gptq32-avg3,alloc-tensor-gptq32-avg3.5 --seed 1
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods rowalloc-fisher-rtn-avg4,rowalloc-shuf1-rtn-avg4,rowalloc-shuf2-rtn-avg4 --seed 0
+# G gate decision written to NOTES.md; the next two commands only if it passed
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods rowalloc-fisher-gptq32-avg4,rowalloc-fisher-gptq32-avg3 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods rowalloc-fisher-gptq32-avg4,rowalloc-fisher-gptq32-avg3 --seed 1
+# combo decision written to NOTES.md and results/phase3/qwen3.5-0.8b/combo.json, then
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods combo-gptq32-avg2.5,combo-gptq32-avg3,combo-gptq32-avg3.5 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-0.8b --results-dir results/phase3 --methods combo-gptq32-avg2.5,combo-gptq32-avg3,combo-gptq32-avg3.5 --seed 1
+uv run python scripts/plot_rd3.py --model qwen3.5-0.8b
+```
+
+qwen3.5-2b:
+
+```
+uv run python scripts/damage_c4.py --model qwen3.5-2b --units type
+uv run python scripts/fisher_rows.py --model qwen3.5-2b --tokens 512
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods fp16,gptq32-sym-g128-4,gptq32-sym-g128-3,gptq32-sym-g128-2 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods gptq32-sym-g128-4,gptq32-sym-g128-3,gptq32-sym-g128-2 --seed 1
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods had-gptq32-sym-g128-4,had-gptq32-sym-g128-3,had-gptq32-sym-g128-2,lloyd-gptq32-g128-3 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods had-gptq32-sym-g128-4,had-gptq32-sym-g128-3,had-gptq32-sym-g128-2 --seed 1
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods alloc-type-gptq32-avg2.5,alloc-type-gptq32-avg3,alloc-type-gptq32-avg3.5,alloc-type-gptq32-avg4,alloc-type-shuf1-gptq32-avg3,alloc-type-shuf2-gptq32-avg3 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods alloc-type-gptq32-avg2.5,alloc-type-gptq32-avg3,alloc-type-gptq32-avg3.5,alloc-type-gptq32-avg4 --seed 1
+# only if fisher_rows.py fit in memory (results/probe/qwen3.5-2b/fisher_rows.pt exists)
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods alloc-tensor-gptq32-avg3,alloc-tensor-gptq32-avg3.5 --seed 0
+# combo decision written to NOTES.md and results/phase3/qwen3.5-2b/combo.json, then
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods combo-gptq32-avg2.5,combo-gptq32-avg3,combo-gptq32-avg3.5 --seed 0
+uv run python scripts/run_baselines.py --model qwen3.5-2b --results-dir results/phase3 --methods combo-gptq32-avg2.5,combo-gptq32-avg3,combo-gptq32-avg3.5 --seed 1
+uv run python scripts/plot_rd3.py --model qwen3.5-2b
+```
+
+minicpm5-2b:
+
+```
+uv run python scripts/damage_c4.py --model minicpm5-2b --units type
+uv run python scripts/run_baselines.py --model minicpm5-2b --results-dir results/phase3 --methods fp16,gptq32-sym-g128-4,gptq32-sym-g128-3,had-gptq32-sym-g128-3,lloyd-gptq32-g128-3,alloc-type-gptq32-avg3,alloc-type-gptq32-avg3.5 --seed 0
+uv run python scripts/run_baselines.py --model minicpm5-2b --results-dir results/phase3 --methods gptq32-sym-g128-3 --seed 1
+# combo decision written to NOTES.md and results/phase3/minicpm5-2b/combo.json (a combo with rowalloc needs
+# uv run python scripts/fisher_rows.py --model minicpm5-2b --tokens 512 first), then
+uv run python scripts/run_baselines.py --model minicpm5-2b --results-dir results/phase3 --methods combo-gptq32-avg3 --seed 0
+uv run python scripts/plot_rd3.py --model minicpm5-2b
+uv run python scripts/phase3_summary.py --models qwen3.5-0.8b,qwen3.5-2b,minicpm5-2b
+```
+
+### Verify round 3 close-out (2026-11-08, project owner)
+
+The round-3 fix agent returned before its own check script finished (results/smoke/phase3/fixes3_smoke.sh). Checked by hand:
+the Phase 1 regression reproduces fp16 14.946913 and rtn-sym-g128-4 19.007506 exactly; the 3-row Phase 3 smoke, the plot and
+the summary ran with exit 0. The full pytest reported 11 failures, all subprocess launches returning 0xC0000142 (DLL init
+failed) with empty stdout/stderr while the test process held ~46 GB RAM; rerunning those test files alone gave 80 passed.
+Classified as an environment failure, not a code defect. From the Run phase on, subagents run on Opus 5.5 (model switch only;
+contract, code and protocol unchanged).
+
+### Combination decision (0.8B), 2026-11-08
+
+Applied after all single-method rows existed (`results/phase3/qwen3.5-0.8b/runs.jsonl`, 51 rows, code `bf5b4e7+dirty/afb6534a49`;
+reference curve = seed means of gptq32-sym-g128-{4,3,2}: KL 0.06943 / 0.30173 / 1.83255 at 4.125 / 3.125 / 2.125 bits),
+before any combo row; written to `results/phase3/qwen3.5-0.8b/combo.json` = `{"had": true, "lloyd": false, "rowalloc": true}`.
+- had = true: had-gptq32-sym-g128-3 beats the baseline on both seeds: KL 0.21136 / 0.21445 vs curve 0.30173 (ratio 0.701 /
+  0.711, needs < 0.95), dPPL ratio 0.531 / 0.559 (needs < 0.956).
+- lloyd = false: lloyd-gptq32-g128-3 is worse than the uniform grid at 3 bits on both seeds: KL 0.34142 / 0.35874 vs curve
+  0.30171 (ratio 1.132 / 1.189; vs the same-seed gptq32-sym-g128-3 0.29988 / 0.30357: +13.9% / +18.2%), needs > 5% below.
+- rowalloc = true: the G gate passed (this is also the G gate decision of the run list): rowalloc-fisher-rtn-avg4 KL 0.17509
+  vs rtn-sym-g128-4 0.20514 (-14.7%, needs > 10%) and vs the shuffled-row controls 0.26623 / 0.24154 (-34.2% / -27.5%, each
+  needs > 5%).
+The combo rows are therefore had + type allocation + Fisher row allocation around each type's width + uniform grid + GPTQ f32.
+
+### Combination decision (2B), 2026-11-08
+
+Applied after all single-method rows existed (`results/phase3/qwen3.5-2b/runs.jsonl`, 26 rows, code `bf5b4e7+dirty/afb6534a49`;
+reference curve = seed means of gptq32-sym-g128-{4,3,2}: KL 0.05810 / 0.25334 / 1.92254 at 4.125 / 3.125 / 2.125 bits),
+before any combo row; the 2B's own had / lloyd rows agree with the 0.8B decision, so it is kept; written to
+`results/phase3/qwen3.5-2b/combo.json` = `{"had": true, "lloyd": false, "rowalloc": true}`.
+- had = true: had-gptq32-sym-g128-3 beats the baseline on both seeds: KL 0.16275 / 0.16383 vs curve 0.25334 (ratio 0.642 /
+  0.647, needs < 0.95), dPPL ratio 0.556 / 0.686 (needs < 0.956).
+- lloyd = false: lloyd-gptq32-g128-3 (seed 0, the only 2B seed the contract runs) is worse than the uniform grid at 3 bits:
+  KL 0.62069 vs curve 0.25333 (ratio 2.450; vs the same-seed gptq32-sym-g128-3 0.25460: +143.8%), needs > 5% below.
+- rowalloc = true: the G gate is measured on the 0.8B only (contract) and passed there (see the 0.8B decision); the 2B row
+  allocation uses `results/probe/qwen3.5-2b/fisher_rows.pt` (32 C4 windows x 512 tokens, 16,352 tokens, peak 8.63 GB).
+The combo rows are therefore had + type allocation + Fisher row allocation around each type's width + uniform grid + GPTQ f32.
+
+### Combination decision (MiniCPM), 2026-11-08
+
+Applied after all single-method rows existed (`results/phase3/minicpm5-2b/runs.jsonl`, 8 rows, code `bf5b4e7+dirty/afb6534a49`;
+reference curve = seed means of gptq32-sym-g128-{4,3} (4 bits seed 0 only, 3 bits seeds 0 and 1, as the contract runs
+MiniCPM): KL 0.07713 / 0.34362 at 4.125 / 3.125 bits), before any combo row; the MiniCPM had / lloyd rows agree with the
+0.8B and 2B decisions, so it is kept; written to `results/phase3/minicpm5-2b/combo.json` = `{"had": true, "lloyd": false, "rowalloc": true}`.
+- had = true: had-gptq32-sym-g128-3 (seed 0, the only MiniCPM seed the contract runs) beats the baseline: KL 0.24102 vs
+  curve 0.34362 (ratio 0.701, needs < 0.95), dPPL ratio 0.634 (needs < 0.956).
+- lloyd = false: lloyd-gptq32-g128-3 (seed 0) is worse than the uniform grid at 3 bits: KL 1.26109 vs curve 0.34361
+  (ratio 3.670; vs the same-seed gptq32-sym-g128-3 0.34211: +268.6%), needs > 5% below.
+- rowalloc = true: the G gate is measured on the 0.8B only (contract) and passed there (see the 0.8B decision); the MiniCPM
+  row allocation uses `results/probe/minicpm5-2b/fisher_rows.pt` (32 C4 windows x 512 tokens, 16,352 tokens, 294 linears,
+  peak 9.04 GB), written by the run list's `fisher_rows.py --model minicpm5-2b --tokens 512` before the combo row.
+- Note: the type allocation at avg 3 is uniform on MiniCPM (all 7 types at 3 bits; alloc-type-gptq32-avg3 reproduces
+  gptq32-sym-g128-3 seed 0 exactly, KL 0.34211, bits_blocks 3.1250).
+The combo row is therefore had + type allocation + Fisher row allocation around each type's width + uniform grid + GPTQ f32.
+
+### Results (2026-11-08)
+
+Sources: `results/phase3/<model>/runs.jsonl` (0.8B 57 rows, 2B 32, MiniCPM 9), `damage_c4.jsonl`, `rd_bound.jsonl`,
+`combo.json`, `results/phase3/summary.md`, plots `results/rd3_<model>.png`. Every number below is read from those files
+or recomputed from them; the audit recomputations are named where they go beyond summary.md. Rule used throughout
+(DESIGN.md): "beats" = KL more than 5% and dPPL more than 4.4% below the seed-mean gptq32 curve (log-linear in
+`bits_blocks`), on every seed that exists; "saved" = curve bits at the row's KL minus the row's bits (fixed against
+the fixed curve, huff against the baseline's own Huffman curve); `*` = read on an extended end segment (outside the
+measured curve), `-15.036` for eig is read far outside it.
+
+#### Provenance, change points, failures
+
+- Run order and times: 0.8B 12:02-14:26 (51 + 6 combo rows), 2B 14:28-16:34, MiniCPM 16:36-17:31. The (method, seed)
+  sets equal the run list exactly; every group exited 0; no failure, no rerun, no code edit during the runs.
+  combo.json was written before the combo rows on every model (0.8B 14:12:36 before 14:12:49; 2B 16:08:48; MiniCPM
+  17:23:03), and the G gate decision is the rowalloc paragraph of the 0.8B combination decision above.
+- Code: every Phase 3 row (98 of 98) carries `bf5b4e7+dirty/afb6534a49`, not the pre-registration line's
+  `8270c1e57d`. `afb6534a49` is the code after the round-3 fixes accepted in the round-3 close-out (last source mtime
+  11:41:03); its regression rows (`results/smoke/phase3/qwen3.5-0.8b/regress.jsonl`, 11:55) reproduce 14.946913 /
+  19.007506. The close-out did not name the hash; this line does.
+- The 11 per-type damage rows of the 0.8B and the fp16 / `@all` entries of its `damage_c4_ref.json` were measured at
+  `8270c1e57d` and reused by the resume logic; the 186 per-tensor rows at `afb6534a49`. `damage_c4.py` restamps the
+  ref file's version on every run, so the ref file shows `afb6534a49` for values measured earlier. Audit re-measure
+  of all 11 types on the current code: KL / PPL / top1 identical (max relative difference 0.0), ref fp16 PPL 20.0389 and
+  `@all` KL 0.17074 identical. No number is affected. Open (low): stamp a reused ref entry with its own version.
+- `results/phase3/qwen3.5-0.8b/stale_pre_exclusion/` holds a damage file from 08:33 (integration, before the
+  calibration-document exclusion); the alloc JSONs name the sha of the current damage file, so it is not used.
+- `fisher_rows.py` overwrote `results/probe/qwen3.5-0.8b/fisher_rows.pt` (32,736 tokens, totals within 5.14e-7 of
+  `fisher.json`); the 2B (16,352 tokens at 512-token windows, peak 8.63 GB) and MiniCPM (16,352 tokens, 294 linears,
+  peak 9.04 GB) files are new and untracked.
+- Phase 1 / 2 untouched: `git diff --quiet HEAD -- results/` clean; Phase 3 fp16 rows equal Phase 1 bit-for-bit
+  (17.567525 / 11.810692 / 13.781604), 0.8B rtn-sym-g128-4 KL 0.2051447 equals Phase 1, gptq32-3 seed 0 (23.32 /
+  0.29988) equals the Phase 2 acceptance row.
+- Presentation change after the runs (change point `bf5b4e7+dirty/5c0601e1e3`): during the post-run audit, the
+  presentation-audit subagent edited `scripts/plot_rd3.py` (17:37:48), `scripts/phase3_common.py` (17:38:13, only the
+  `DPPL_RULE_NOTE` string and its comment) and `scripts/phase3_summary.py` (17:38:39), and regenerated
+  `results/phase3/summary.md` and the three `results/rd3_*.png` (17:39:40-17:39:51). Why: the footnote's "dPPL margin
+  carried by the KL margin" claim was false on the data (next section), the summary had no dPPL ratio column, and the
+  plot footers were cut off and labels overlapped. No runner, damage or Fisher script imports these modules; no
+  runs.jsonl / damage / rd_bound file changed after 17:30:30; the first 14 columns of every summary row, the reference
+  tables, hypotheses and RD tables are unchanged (diff with the added columns stripped). Regression smoke under
+  `5c0601e1e3`: 14.946913 / 19.007506. `tests/test_phase3_presentation.py` alone: 21 passed; full pytest on
+  `5c0601e1e3`: 329 passed, 10 failed in the full run (all 10 are subprocess launches returning 0xC0000142, DLL init failed, with empty output, the same environment failure as the round-3 close-out); the four affected files rerun alone: 114 passed. Any row run from now on carries `5c0601e1e3` or later; the 98 protocol rows carry
+  `afb6534a49`.
+
+#### Correction to the pre-registration: the dPPL margin binds
+
+The "Decisions fixed at integration" paragraph above records the dPPL margin as non-binding ("any row that clears the
+5% KL margin on every seed clears it automatically"). That is false on the protocol data. The margin was not re-tuned;
+the verdicts below are the rule as written. Eleven rows (seven method / width verdicts) clear the KL margin and fail
+on dPPL alone; MiniCPM has none:
+
+| model | method | KL ratio s0 / s1 | dPPL ratio s0 / s1 | verdict (rule) | KL-only verdict |
+|---|---|---|---|---|---|
+| 0.8B | had-gptq32-sym-g128-4 | 0.755 / 0.703 | 2.306 / 1.820 | no | yes |
+| 0.8B | alloc-type-gptq32-avg3.5 | 0.930 / 0.914 | 1.500 / 1.326 | no | yes |
+| 0.8B | alloc-tensor-gptq32-avg3.5 | 0.804 / 0.840 | 0.963 / 1.383 | no | yes |
+| 0.8B | rowalloc-fisher-gptq32-avg4 | 0.914 / 0.925 | 2.272 / 2.873 | no | yes |
+| 0.8B | rowalloc-fisher-gptq32-avg3 | 0.919 / 0.908 | 1.087 / 0.935 | no (1 of 2 seeds) | yes |
+| 0.8B | combo-gptq32-avg3 | 0.884 / 0.908 | 0.854 / 0.963 | no (1 of 2 seeds) | yes |
+| 2B | combo-gptq32-avg3.5 | 0.725 / 0.740 | 0.636 / 0.970 | no (1 of 2 seeds) | yes |
+
+(alloc-tensor-gptq32-avg3.5 was missed by the run reports; summary.md lists it.) Cause: the dPPL half rests on the
+4-bit end of the curve, where the reference seed pair is 0.49 vs 0.91 dPPL on the 0.8B (113% spread) and the 4.4%
+threshold is a PPL move of 0.16%; at 4 bits dPPL is noise (2B had-4 seed 1: PPL 11.862 vs fp16 11.811, dPPL ratio
+0.075 at KL ratio 0.727). Every KL-only "yes" above is reported as such; none is promoted to a "beats".
+
+#### Interpolation (chord) bias between curve points (audit)
+
+log(KL) is convex in bits on both Qwen curves (quadratic through the three seed-mean points: +0.167 / bit^2 on the
+0.8B, +0.277 / bit^2 on the 2B), so the log-linear chord overstates the curve's KL by about 4.3% (0.8B) and 7.2% (2B) at
+a segment midpoint, and log(dPPL) by about 9% (0.8B, +0.346 / bit^2). Rows at 3.125 / 4.125 / 2.125 bits (all D, E, G
+rows, alloc-tensor avg 3, combo avg 3, alloc-type avg 3 / 4) are read on measured points and are unaffected. Rows at
+2.62 / 3.62 bits (alloc-type avg 2.5 / 3.5, alloc-tensor avg 3.5, combo avg 2.5 / 3.5) carry this bias in their favour;
+a mid-segment ratio above ~0.91 (0.8B) or ~0.88 (2B) is not resolvable. Applied below where it changes a verdict.
+
+#### Reference curve and the noise model with all seed pairs
+
+| model | method | seed | bits_blocks | huff | shannon | ppl | dPPL% | kl | top1 | KL curve @bits | KL ratio | dPPL ratio | beats | saved fixed | saved huff |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.8B | gptq32-sym-g128-4 | 0 | 4.1250 | 3.6423 | 3.6257 | 18.00 | +2.4% | 0.07206 | 0.8659 | 0.06943 | — | — | ref | — | — |
+| 0.8B | gptq32-sym-g128-4 | 1 | 4.1250 | 3.6423 | 3.6257 | 18.48 | +5.2% | 0.06679 | 0.8727 | 0.06943 | — | — | ref | — | — |
+| 0.8B | gptq32-sym-g128-3 | 0 | 3.1250 | 2.6570 | 2.6395 | 23.32 | +32.8% | 0.29988 | 0.7391 | 0.30173 | — | — | ref | — | — |
+| 0.8B | gptq32-sym-g128-3 | 1 | 3.1250 | 2.6570 | 2.6396 | 23.63 | +34.5% | 0.30357 | 0.7365 | 0.30173 | — | — | ref | — | — |
+| 0.8B | gptq32-sym-g128-2 | 0 | 2.1250 | 1.6809 | 1.6683 | 127.26 | +624.4% | 1.88628 | 0.3824 | 1.83255 | — | — | ref | — | — |
+| 0.8B | gptq32-sym-g128-2 | 1 | 2.1250 | 1.6809 | 1.6683 | 116.17 | +561.3% | 1.77881 | 0.4029 | 1.83255 | — | — | ref | — | — |
+| 0.8B | rtn-sym-g128-4 | 0 | 4.1250 | 3.6412 | 3.6248 | 22.67 | +29.0% | 0.20514 | 0.7799 | 0.06943 | 2.955 | 7.617 | rtn gate | -0.737 | -0.725 |
+| 2B | gptq32-sym-g128-4 | 0 | 4.1250 | 3.6338 | 3.6172 | 12.46 | +5.5% | 0.05931 | 0.8795 | 0.05810 | — | — | ref | — | — |
+| 2B | gptq32-sym-g128-4 | 1 | 4.1250 | 3.6338 | 3.6173 | 12.53 | +6.1% | 0.05689 | 0.8856 | 0.05810 | — | — | ref | — | — |
+| 2B | gptq32-sym-g128-3 | 0 | 3.1250 | 2.6485 | 2.6314 | 15.11 | +28.0% | 0.25460 | 0.7707 | 0.25334 | — | — | ref | — | — |
+| 2B | gptq32-sym-g128-3 | 1 | 3.1250 | 2.6486 | 2.6314 | 15.06 | +27.5% | 0.25208 | 0.7692 | 0.25334 | — | — | ref | — | — |
+| 2B | gptq32-sym-g128-2 | 0 | 2.1250 | 1.6738 | 1.6609 | 85.85 | +626.9% | 1.94470 | 0.4103 | 1.92254 | — | — | ref | — | — |
+| 2B | gptq32-sym-g128-2 | 1 | 2.1250 | 1.6739 | 1.6609 | 87.56 | +641.4% | 1.90039 | 0.4124 | 1.92254 | — | — | ref | — | — |
+| MiniCPM | gptq32-sym-g128-4 | 0 | 4.1250 | 3.6610 | 3.6457 | 14.58 | +5.8% | 0.07713 | 0.8678 | 0.07713 | — | — | ref | — | — |
+| MiniCPM | gptq32-sym-g128-3 | 0 | 3.1250 | 2.6756 | 2.6573 | 18.23 | +32.3% | 0.34211 | 0.7337 | 0.34362 | — | — | ref | — | — |
+| MiniCPM | gptq32-sym-g128-3 | 1 | 3.1250 | 2.6756 | 2.6573 | 18.37 | +33.3% | 0.34513 | 0.7278 | 0.34362 | — | — | ref | — | — |
+
+Seed spreads (max / min - 1) over every two-seed pair, GPTQ calibration seed only (rotation seed = run seed where
+used):
+
+| model | pairs | KL spread: median / max | KL pairs above 5% | PPL spread max | dPPL spread at ~4.1 bits |
+|---|---|---|---|---|---|
+| 0.8B | 21 | 1.8% / 7.9% (gptq32-4) | 5 (gptq32-4 7.9, had-4 7.4, gptq32-2 6.0, lloyd-4 5.2, lloyd-3 5.1) | 9.5% (gptq32-2) | 7-113% |
+| 2B | 13 | 2.1% / 12.3% (had-4) | 1 (had-4 12.3) | 3.9% | 3-713% |
+| MiniCPM | 1 | 0.9% (gptq32-3) | 0 | 0.8% | n/a |
+
+Reading: at 3.125 bits the KL spread is 0.7-3.9% for every family except Lloyd (5.1%), so the 5% KL margin is
+adequate there; at 4.125 and 2.125 bits KL spreads reach 6-12%, so a KL ratio between ~0.88 and 0.95 at those widths
+is not resolvable with two seeds; dPPL at ~4 bits is noise-dominated (above). Not sampled at all: noise of the
+allocation signal (every seed uses the same damage file and the same Fisher file; the seed-0 and seed-1 alloc JSONs
+have identical widths and row splits in all 18 pairs checked) and noise of the eval windows (all rows share the same
+32 WikiText KL windows, i.e. the comparisons are paired). The old Phase 2 figure (4.4% PPL / ~5% KL, three pairs) is
+consistent with the 3-bit pairs and too small for the 4-bit and 2-bit pairs.
+
+#### A: sensitivity-driven bit allocation (H3-A)
+
+Pre-registered: type-level allocation from C4-measured damage beats uniform GPTQ by 15-30% KL at equal `bits_blocks`
+at avg 3.5 and 3 on both Qwen models, both seeds; both shuffled allocations are no better than uniform (within 5%);
+tensor-level adds < 10% KL on top of type-level; C4 damage ranks the types as the Phase 2 WikiText measurement did
+(Spearman > 0.9).
+
+Run: damage on 32 seed-2 C4 windows (calibration documents of seeds 0, 1 removed: 242 / 242 / 241 documents),
+rtn-sym-g128-4 on one unit at a time, types on all three models and 186 tensors on the 0.8B (7.4 s per unit);
+alloc-type avg 2.5 / 3 / 3.5 / 4 on both Qwens seeds 0 and 1, MiniCPM avg 3 / 3.5 seed 0; alloc-tensor avg 3 / 3.5
+(0.8B both seeds, damage signal; 2B seed 0, Fisher-totals signal); alloc-type-rtn avg 3 / 3.5 (0.8B seed 0); shuffles
+avg 3 seed 0 on both Qwens.
+
+C4 damage per type (KL of rtn-sym-g128-4 on that type alone; d = KL / numel) against the Phase 2 WikiText `@only` KL:
+
+| model | type | numel (M) | C4 KL | d (nats/param) | WikiText @only KL | C4 rank / WT rank |
+|---|---|---|---|---|---|---|
+| 0.8B | out_proj | 37.75 | 0.03739 | 9.91e-10 | 0.04739 | 1 / 1 |
+| 0.8B | down | 88.08 | 0.02693 | 3.06e-10 | 0.03200 | 2 / 2 |
+| 0.8B | up | 88.08 | 0.02592 | 2.94e-10 | 0.02911 | 3 / 3 |
+| 0.8B | o | 12.58 | 0.02020 | 1.61e-09 | 0.02524 | 4 / 4 |
+| 0.8B | in_proj_qkv | 113.25 | 0.01442 | 1.27e-10 | 0.01731 | 5 / 5 |
+| 0.8B | gate | 88.08 | 0.01343 | 1.52e-10 | 0.01428 | 6 / 6 |
+| 0.8B | v | 3.15 | 0.00835 | 2.66e-09 | 0.01017 | 7 / 7 |
+| 0.8B | in_proj_z | 37.75 | 0.00763 | 2.02e-10 | 0.00886 | 8 / 8 |
+| 0.8B | q | 25.17 | 0.00479 | 1.90e-10 | 0.00637 | 9 / 9 |
+| 0.8B | k | 3.15 | 0.00242 | 7.70e-10 | 0.00308 | 10 / 10 |
+| 0.8B | in_proj_ab | 0.59 | 0.00167 | 2.83e-09 | 0.00191 | 11 / 11 |
+| 2B | out_proj | 75.50 | 0.02355 | 3.12e-10 | 0.02721 | 1 / 1 |
+| 2B | down | 301.99 | 0.02133 | 7.06e-11 | 0.02342 | 2 / 2 |
+| 2B | up | 301.99 | 0.01981 | 6.56e-11 | 0.02291 | 3 / 3 |
+| 2B | in_proj_qkv | 226.49 | 0.01165 | 5.14e-11 | 0.01432 | 4 / 4 |
+| 2B | gate | 301.99 | 0.01113 | 3.69e-11 | 0.01284 | 5 / 5 |
+| 2B | o | 25.17 | 0.01014 | 4.03e-10 | 0.01159 | 6 / 6 |
+| 2B | v | 6.29 | 0.00746 | 1.19e-09 | 0.00839 | 7 / 8 |
+| 2B | in_proj_z | 75.50 | 0.00732 | 9.70e-11 | 0.00871 | 8 / 7 |
+| 2B | q | 50.33 | 0.00388 | 7.71e-11 | 0.00484 | 9 / 9 |
+| 2B | k | 6.29 | 0.00199 | 3.16e-10 | 0.00250 | 10 / 10 |
+| 2B | in_proj_ab | 1.18 | 0.00169 | 1.43e-09 | 0.00166 | 11 / 11 |
+| MiniCPM | down | 528.48 | 0.07591 | 1.44e-10 | 0.08193 | 1 / 1 |
+| MiniCPM | up | 528.48 | 0.03950 | 7.47e-11 | 0.04610 | 2 / 2 |
+| MiniCPM | v | 22.02 | 0.02870 | 1.30e-09 | 0.03176 | 3 / 4 |
+| MiniCPM | o | 176.16 | 0.02844 | 1.61e-10 | 0.03552 | 4 / 3 |
+| MiniCPM | gate | 528.48 | 0.02542 | 4.81e-11 | 0.03056 | 5 / 5 |
+| MiniCPM | q | 176.16 | 0.02194 | 1.25e-10 | 0.02365 | 6 / 6 |
+| MiniCPM | k | 22.02 | 0.00943 | 4.28e-10 | 0.01171 | 7 / 7 |
+
+Spearman(C4, WikiText) on raw KL 1.000 / 0.991 / 0.964, on d 0.991 / 1.000 / 1.000 (0.8B / 2B / MiniCPM). C4 KL is
+0.75-1.02x the WikiText KL per type (C4 fp16 PPL 20.04 / 15.58 / 20.62). The sum of the type KLs is 0.163 / 0.120 /
+0.229 against 0.171 / 0.120 / 0.245 with every type quantized at once (near-additive at 4 bits). Per tensor (0.8B,
+186 rows): d spans 1.58e-10 to 5.45e-08 (2.5 decades; the top six are layer 0-4 in_proj_a / in_proj_b, 16,384 params
+each); within a type d varies by 1.3x (q, k) up to 11.7x (out_proj); layer-0 out_proj alone has KL 0.01541, 41% of
+the whole out_proj type's 0.03739; the per-tensor KLs sum to 0.280, 1.7x the type sum (0.163), i.e. damage is
+sub-additive across the tensors of a type (each tensor measured alone overstates its share of the joint damage).
+
+Widths (alloc JSONs next to the runs; identical for seeds 0 and 1):
+- 0.8B avg 3: in_proj_qkv 2, in_proj_z 3, in_proj_ab 8, out_proj 5, gate 3, up 3, down 3, q 3, k 4, v 5, o 5;
+  tensor-level avg 3: 7 tensors at 2 bits, 117 at 3, 22 at 4, 16 at 5, 24 at 6.
+- 2B avg 3: in_proj_qkv 3, in_proj_z 4, in_proj_ab 8, out_proj 5, gate 2, up 3, down 3, q 3, k 4, v 5, o 5;
+  avg 3.5: 3, 4, 8, 5, 3, 3, 4, 4, 6, 8, 5; tensor-level (Fisher) avg 3: 2b:33, 3b:96, 4b:41, 5b:12, 6b:4.
+- MiniCPM avg 3: all seven types at 3 (the exact optimum for these damages, cost 0.91733 = uniform; the cheapest
+  trade, v to 4 and k to 2, costs more than it saves), so alloc-type-gptq32-avg3 is gptq32-sym-g128-3 seed 0 to the
+  last digit; avg 3.5: q 4, k 5, v 6, o 4, gate 3, up 3, down 4.
+- The audit's own DP reproduces every type allocation (widths and objective), and bits_blocks = mean width + 0.125 +
+  3 bits/unit matches every row to 1e-5.
+
+| model | method | seed | bits_blocks | huff | shannon | ppl | dPPL% | kl | top1 | KL curve @bits | KL ratio | dPPL ratio | beats | saved fixed | saved huff |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.8B | alloc-type-gptq32-avg4 | 0 | 4.1234 | 3.6445 | 3.6255 | 18.53 | +5.5% | 0.07249 | 0.8640 | 0.06959 | 1.042 | 1.432 | no | -0.028 | -0.031 |
+| 0.8B | alloc-type-gptq32-avg4 | 1 | 4.1234 | 3.6445 | 3.6255 | 18.91 | +7.6% | 0.07280 | 0.8638 | 0.06959 | 1.046 | 1.999 | no | -0.031 | -0.034 |
+| 0.8B | alloc-type-gptq32-avg3.5 | 0 | 3.6240 | 3.1487 | 3.1312 | 20.56 | +17.0% | 0.13482 | 0.8183 | 0.14494 | 0.930 | 1.500 | no (dPPL decides) | +0.049 | +0.049 |
+| 0.8B | alloc-type-gptq32-avg3.5 | 1 | 3.6240 | 3.1487 | 3.1312 | 20.21 | +15.0% | 0.13249 | 0.8218 | 0.14494 | 0.914 | 1.326 | no (dPPL decides) | +0.061 | +0.060 |
+| 0.8B | alloc-type-gptq32-avg3 | 0 | 3.1246 | 2.6582 | 2.6418 | 24.61 | +40.1% | 0.31921 | 0.7288 | 0.30194 | 1.057 | 1.191 | no | -0.031 | -0.032 |
+| 0.8B | alloc-type-gptq32-avg3 | 1 | 3.1246 | 2.6583 | 2.6418 | 24.24 | +38.0% | 0.31491 | 0.7306 | 0.30194 | 1.043 | 1.128 | no | -0.023 | -0.024 |
+| 0.8B | alloc-type-gptq32-avg2.5 | 0 | 2.6228 | 2.1645 | 2.1507 | 35.02 | +99.4% | 0.69544 | 0.6163 | 0.74651 | 0.932 | 0.699 | yes | +0.039 | +0.041 |
+| 0.8B | alloc-type-gptq32-avg2.5 | 1 | 2.6228 | 2.1646 | 2.1508 | 37.14 | +111.4% | 0.69757 | 0.6124 | 0.74651 | 0.934 | 0.784 | yes | +0.038 | +0.039 |
+| 0.8B | alloc-type-rtn-avg3.5 | 0 | 3.6240 | 3.1468 | 3.1292 | 25.21 | +43.5% | 0.35249 | 0.7174 | 0.14494 | 2.432 | 3.836 | rtn gate | -0.585 | -0.574 |
+| 0.8B | alloc-type-rtn-avg3 | 0 | 3.1246 | 2.6544 | 2.6376 | 48.42 | +175.6% | 0.94535 | 0.5516 | 0.30194 | 3.131 | 5.215 | rtn gate | -0.633 | -0.615 |
+| 0.8B | alloc-tensor-gptq32-avg3.5 | 0 | 3.6250 | 3.1499 | 3.1324 | 19.48 | +10.9% | 0.11637 | 0.8296 | 0.14473 | 0.804 | 0.963 | no (dPPL decides) | +0.148 | +0.146 |
+| 0.8B | alloc-tensor-gptq32-avg3.5 | 1 | 3.6250 | 3.1499 | 3.1324 | 20.32 | +15.7% | 0.12159 | 0.8251 | 0.14473 | 0.840 | 1.383 | no (dPPL decides) | +0.119 | +0.117 |
+| 0.8B | alloc-tensor-gptq32-avg3 | 0 | 3.1250 | 2.6572 | 2.6402 | 22.65 | +29.0% | 0.24545 | 0.7603 | 0.30173 | 0.813 | 0.861 | yes | +0.141 | +0.138 |
+| 0.8B | alloc-tensor-gptq32-avg3 | 1 | 3.1250 | 2.6572 | 2.6403 | 22.63 | +28.8% | 0.24099 | 0.7673 | 0.30173 | 0.799 | 0.857 | yes | +0.153 | +0.151 |
+| 0.8B | alloc-type-shuf1-gptq32-avg3 | 0 | 3.1135 | 2.6481 | 2.6325 | 30.07 | +71.2% | 0.54256 | 0.6602 | 0.30803 | 1.761 | 2.048 | no | -0.314 | -0.309 |
+| 0.8B | alloc-type-shuf2-gptq32-avg3 | 0 | 3.1274 | 2.6673 | 2.6526 | 57.44 | +227.0% | 1.12708 | 0.5209 | 0.30068 | 3.748 | 6.782 | no | -0.733 | -0.723 |
+| 2B | alloc-type-gptq32-avg4 | 0 | 4.1239 | 3.6352 | 3.6174 | 12.60 | +6.6% | 0.06452 | 0.8763 | 0.05820 | 1.109 | 1.146 | no | -0.070 | -0.071 |
+| 2B | alloc-type-gptq32-avg4 | 1 | 4.1239 | 3.6352 | 3.6174 | 12.62 | +6.8% | 0.06466 | 0.8778 | 0.05820 | 1.111 | 1.179 | no | -0.072 | -0.073 |
+| 2B | alloc-type-gptq32-avg3.5 | 0 | 3.6243 | 3.1411 | 3.1237 | 13.35 | +13.0% | 0.12170 | 0.8347 | 0.12145 | 1.002 | 1.025 | no | -0.001 | -0.002 |
+| 2B | alloc-type-gptq32-avg3.5 | 1 | 3.6243 | 3.1412 | 3.1237 | 13.22 | +12.0% | 0.12025 | 0.8356 | 0.12145 | 0.990 | 0.943 | no | +0.007 | +0.006 |
+| 2B | alloc-type-gptq32-avg3 | 0 | 3.1247 | 2.6496 | 2.6336 | 16.15 | +36.8% | 0.30352 | 0.7500 | 0.25349 | 1.197 | 1.323 | no | -0.089 | -0.088 |
+| 2B | alloc-type-gptq32-avg3 | 1 | 3.1247 | 2.6496 | 2.6337 | 15.65 | +32.5% | 0.29309 | 0.7551 | 0.25349 | 1.156 | 1.171 | no | -0.072 | -0.071 |
+| 2B | alloc-type-gptq32-avg2.5 | 0 | 2.6234 | 2.1591 | 2.1450 | 22.95 | +94.3% | 0.64756 | 0.6444 | 0.70013 | 0.925 | 0.708 | yes | +0.039 | +0.038 |
+| 2B | alloc-type-gptq32-avg2.5 | 1 | 2.6234 | 2.1591 | 2.1450 | 22.79 | +92.9% | 0.64251 | 0.6415 | 0.70013 | 0.918 | 0.697 | yes | +0.042 | +0.042 |
+| 2B | alloc-tensor-gptq32-avg3.5 | 0 | 3.6250 | 3.1423 | 3.1256 | 13.33 | +12.9% | 0.11551 | 0.8419 | 0.12132 | 0.952 | 1.016 | no | +0.033 | +0.032 |
+| 2B | alloc-tensor-gptq32-avg3 | 0 | 3.1250 | 2.6510 | 2.6348 | 15.51 | +31.3% | 0.27580 | 0.7601 | 0.25334 | 1.089 | 1.128 | no | -0.042 | -0.043 |
+| 2B | alloc-type-shuf1-gptq32-avg3 | 0 | 3.1396 | 2.6664 | 2.6503 | 20.30 | +71.9% | 0.55421 | 0.6711 | 0.24795 | 2.235 | 2.649 | no | -0.401 | -0.394 |
+| 2B | alloc-type-shuf2-gptq32-avg3 | 0 | 3.1267 | 2.6550 | 2.6396 | 24.56 | +107.9% | 0.70729 | 0.6273 | 0.25270 | 2.799 | 3.899 | no | -0.508 | -0.500 |
+| MiniCPM | alloc-type-gptq32-avg3.5 | 0 | 3.6250 | 3.1683 | 3.1510 | 15.64 | +13.5% | 0.16066 | 0.8108 | 0.16280 | 0.987 | 0.979 | no | +0.009 | +0.009 |
+| MiniCPM | alloc-type-gptq32-avg3 | 0 | 3.1250 | 2.6756 | 2.6573 | 18.23 | +32.3% | 0.34211 | 0.7337 | 0.34362 | 0.996 | 0.985 | no | +0.003 | +0.003 |
+
+Controls. Shuffles (bits within 0.015 of the real allocation; 10-22% of the parameters left at their real width):
+KL ratio vs the curve 1.761 / 3.748 (0.8B) and 2.235 / 2.799 (2B); the real allocation's KL is 0.588 / 0.283 and
+0.548 / 0.429 of the shuffles'. RTN gate (0.8B): alloc-type-rtn avg 3 / 3.5 KL 0.94535 / 0.35249 = 0.628 / 0.633 of
+the uniform RTN curve at the same bits, i.e. the Phase 2 RTN-derived lever reproduces on RTN, larger than Phase 2's
+estimate (KL x 0.72-0.81).
+
+Verdict per clause:
+- Type-level beats uniform GPTQ by 15-30% at avg 3.5 and 3, both Qwens, both seeds: **refuted**. 0.8B avg 3.5
+  -7.0% / -8.6% (KL-only clears 5%, dPPL decides "no"; mid-segment, inside the ~4% chord bias plus margin), avg 3
+  +5.7% / +4.3% (worse); 2B avg 3.5 +0.2% / -1.0%, avg 3 +19.7% / +15.6% (worse). Also worse at avg 4: +4.2% /
+  +4.6% (0.8B, inside noise), +10.9% / +11.1% (2B). MiniCPM avg 3.5 -1.3% (no). The only rule "yes" is avg 2.5
+  (0.932 / 0.934 on the 0.8B, 0.925 / 0.918 on the 2B, +0.04 bits), which sits mid-segment: against the quadratic
+  curve it is 0.971 / 0.974 and 0.991 / 0.984, so **not established**. At every width that lies on a measured curve
+  point, type allocation is equal to or worse than uniform.
+- Shuffles no better than uniform: **supported** (they are 1.8-3.7x worse, not "within 5%"); real beats both shuffles
+  by > 5%: true, but there is no gain over uniform to attribute.
+- Tensor-level adds < 10% on top of type-level: **refuted on the 0.8B** (tensor / type KL 0.769 / 0.765 at avg 3,
+  0.863 / 0.918 at avg 3.5), **holds on the 2B** (0.909 at avg 3, 0.949 at avg 3.5, Fisher signal, seed 0 only).
+  alloc-tensor-gptq32-avg3 on the 0.8B is the one positive A row: 0.813 / 0.799 of the curve, dPPL 0.861 / 0.857,
+  +0.141 / +0.153 bits fixed, on a measured curve point, both seeds. Its allocation-signal noise is untested (one
+  damage draw). The 2B tensor rows do not beat (1.089 at avg 3, 0.952 at avg 3.5 with dPPL 1.016).
+- Spearman > 0.9: **supported** on all three models.
+- Mechanism for the GPTQ failure (proposed, not tested): the allocator assumes KL x 4 per bit removed (2^(-2 b)) and is
+  fitted on RTN-4 damage; the measured uniform GPTQ curve multiplies KL by 4.35 / 4.36 from 4 to 3 bits but by 6.07 /
+  7.59 from 3 to 2 bits (0.8B / 2B), and avg 3 sends the largest types to 2 bits (in_proj_qkv, 23% of the 0.8B's block
+  parameters; gate, 22% of the 2B's). GPTQ also removes 56-71% of the RTN-4 KL (Phase 2), and not necessarily evenly across types.
+
+#### D: zero-bit rotation (H3-D)
+
+Pre-registered: Hadamard + GPTQ beats GPTQ by > 20% KL at 3 bits on all three models; at 4 bits the gain is < 10%;
+at 2 bits it is the largest (> 40%); random orthogonal equals Hadamard within 5% KL; the eigenbasis rotation costs
+> 1 bit/param stored and loses.
+
+Run: had-gptq32 4 / 3 / 2 on both Qwens seeds 0 and 1, MiniCPM 3 seed 0; rnd-3 0.8B seeds 0, 1; hadsign-3 and eig-3
+0.8B seed 0.
+
+| model | method | seed | bits_blocks | huff | shannon | ppl | dPPL% | kl | top1 | KL curve @bits | KL ratio | dPPL ratio | beats | saved fixed | saved huff |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.8B | had-gptq32-sym-g128-4 | 0 | 4.1250 | 3.6992 | 3.6858 | 19.11 | +8.8% | 0.05244 | 0.8838 | 0.06943 | 0.755 | 2.306 | no (dPPL decides) | +0.191* | +0.131* |
+| 0.8B | had-gptq32-sym-g128-4 | 1 | 4.1250 | 3.6992 | 3.6858 | 18.79 | +6.9% | 0.04884 | 0.8868 | 0.06943 | 0.703 | 1.820 | no (dPPL decides) | +0.239* | +0.179* |
+| 0.8B | had-gptq32-sym-g128-3 | 0 | 3.1250 | 2.7138 | 2.6942 | 20.71 | +17.9% | 0.21136 | 0.7775 | 0.30173 | 0.701 | 0.531 | yes | +0.242 | +0.182 |
+| 0.8B | had-gptq32-sym-g128-3 | 1 | 3.1250 | 2.7138 | 2.6942 | 20.87 | +18.8% | 0.21445 | 0.7767 | 0.30173 | 0.711 | 0.559 | yes | +0.232 | +0.172 |
+| 0.8B | had-gptq32-sym-g128-2 | 0 | 2.1250 | 1.7152 | 1.7080 | 69.80 | +297.3% | 1.28951 | 0.4936 | 1.83255 | 0.704 | 0.502 | yes | +0.195 | +0.156 |
+| 0.8B | had-gptq32-sym-g128-2 | 1 | 2.1250 | 1.7152 | 1.7079 | 67.16 | +282.3% | 1.29795 | 0.4951 | 1.83255 | 0.708 | 0.476 | yes | +0.191 | +0.152 |
+| 0.8B | rnd-gptq32-sym-g128-3 | 0 | 3.1250 | 2.7142 | 2.6946 | 22.09 | +25.7% | 0.21271 | 0.7753 | 0.30173 | 0.705 | 0.765 | yes | +0.238 | +0.177 |
+| 0.8B | rnd-gptq32-sym-g128-3 | 1 | 3.1250 | 2.7141 | 2.6945 | 21.38 | +21.7% | 0.20470 | 0.7798 | 0.30173 | 0.678 | 0.644 | yes | +0.264 | +0.203 |
+| 0.8B | hadsign-gptq32-sym-g128-3 | 0 | 3.1250 | 2.7142 | 2.6946 | 21.46 | +22.1% | 0.21220 | 0.7742 | 0.30173 | 0.703 | 0.658 | yes (1 seed) | +0.240 | +0.179 |
+| 0.8B | eig-gptq32-sym-g128-3 | 0 | 17.8923 | 17.4618 | 17.4430 | 29.67 | +68.9% | 0.48990 | 0.6692 | —* | — | — | no | -15.036 | -15.067 |
+| 2B | had-gptq32-sym-g128-4 | 0 | 4.1250 | 3.6988 | 3.6857 | 12.23 | +3.5% | 0.03764 | 0.9043 | 0.05810 | 0.648 | 0.610 | yes | +0.295* | +0.225* |
+| 2B | had-gptq32-sym-g128-4 | 1 | 4.1250 | 3.6988 | 3.6857 | 11.86 | +0.4% | 0.04226 | 0.9004 | 0.05810 | 0.727 | 0.075 | yes | +0.216* | +0.148* |
+| 2B | had-gptq32-sym-g128-3 | 0 | 3.1250 | 2.7135 | 2.6940 | 13.63 | +15.4% | 0.16275 | 0.8092 | 0.25334 | 0.642 | 0.556 | yes | +0.301 | +0.231 |
+| 2B | had-gptq32-sym-g128-3 | 1 | 3.1250 | 2.7135 | 2.6940 | 14.06 | +19.0% | 0.16383 | 0.8099 | 0.25334 | 0.647 | 0.686 | yes | +0.296 | +0.227 |
+| 2B | had-gptq32-sym-g128-2 | 0 | 2.1250 | 1.7187 | 1.7105 | 32.76 | +177.4% | 1.01444 | 0.5608 | 1.92254 | 0.528 | 0.280 | yes | +0.315 | +0.263 |
+| 2B | had-gptq32-sym-g128-2 | 1 | 2.1250 | 1.7187 | 1.7105 | 34.01 | +188.0% | 1.00553 | 0.5684 | 1.92254 | 0.523 | 0.296 | yes | +0.320 | +0.267 |
+| MiniCPM | had-gptq32-sym-g128-3 | 0 | 3.1250 | 2.7137 | 2.6942 | 16.64 | +20.8% | 0.24102 | 0.7757 | 0.34362 | 0.701 | 0.634 | yes (1 seed) | +0.237 | +0.196 |
+
+Control: rnd / had (same seed) KL 1.006 / 0.955, hadsign / had 1.004; on PPL, rnd is 6.7% / 2.4% worse than had
+(seed 0 beyond the 4.4% PPL spread, seed 1 inside; the rnd pair itself spreads 3.3%), not a resolved difference.
+
+Verdict per clause:
+- > 20% at 3 bits on all three models: **supported** (0.8B -29.9% / -28.9%, 2B -35.8% / -35.3%, MiniCPM -29.9% one
+  seed); beats on KL and dPPL; +0.23 to +0.30 bits fixed, +0.17 to +0.23 Huffman.
+- < 10% at 4 bits: **refuted** on both Qwens. 0.8B -24.5% / -29.7% (verdict "no" by dPPL alone, 2.31 / 1.82; the
+  KL-only reading beats), 2B -35.2% / -27.3% (beats). The 2B saved figures +0.295 / +0.216 are read outside the curve
+  (KL below its lowest point; +0.400 / +0.285 on the quadratic): **extrapolated, not measured**.
+- Largest at 2 bits, > 40%: **refuted on the 0.8B** (-29.6% / -29.2%, not larger than at 3 bits), **supported on the
+  2B** (-47.2% / -47.7%, the largest of its three widths).
+- rnd within 5% of had: **supported** (generic incoherence; seed 1 at -4.5% is near the edge).
+- eig costs > 1 bit/param and loses: **supported**: 14.767 bits/param of stored bf16 rotations (re-derived from the
+  shapes), saved -15.04; its KL 0.48990 is also 1.63x plain gptq32-3 (seed 0) before any bits are counted (the eigenbasis
+  makes GPTQ worse, not better; mechanism not examined).
+- Side observations: rotation costs coding gain (had-3 Huffman saving 0.411 vs 0.468 for the baseline at 3 bits, i.e.
+  -0.057 bits), so had's Huffman saving is ~0.06 bits below its fixed saving; rotation equalizes the RD gap across
+  types (MiniCPM k 1.88 -> 1.14 fixed bits above the bound at 3 bits; all-types 1.27 -> 1.13 on the 0.8B at 4 bits).
+- Equal-quality point against GPTQ-4 (interpolated inside the measured had segment, log-linear; not a measured row):
+  the had curve reaches the gptq32-4 seed-mean KL at 3.905 bits on the 0.8B and 3.859 on the 2B, i.e. 0.22 / 0.27
+  bits fixed saved; with Huffman (3.483 / 3.437) that is 0.64 / 0.69 bits below gptq32-4's fixed 4.125 and 0.16 / 0.20
+  below gptq32-4's own Huffman figure. The chord bias, if had's curve is convex like the baseline's, makes these
+  savings lower bounds.
+
+#### E: codebook and entropy coding (H3-E)
+
+Pre-registered: Huffman coding of GPTQ indices saves 0.40-0.50 bits/param at 4 bits, 0.25-0.40 at 3, < 0.20 at 2 with
+single-symbol codes (pair codes recover part of the 2-bit loss); the gap to the Shannon figure is < 0.05 bits at 4
+bits; Lloyd-Max lowers KL by 10-25% at 3-4 bits for < 0.01 bits of table; the fixed Gaussian codebook captures at
+least two thirds of that; all coders sit 1.0-1.5 bits above the Gaussian RD bound at equal MSE at 4 bits, and the gap
+shrinks with fewer bits.
+
+Run: Huffman / Shannon / entropy0 figures on every row; lloyd-gptq32 4 / 3 / 2 on the 0.8B seeds 0, 1, lloyd-3 on the
+2B and MiniCPM seed 0; nf-4 / 3 and nfq-4 / 3 on the 0.8B seed 0; rd_bound.jsonl for every row (616 / 341 / 56 rows).
+
+Huffman on the gptq32 baseline (fixed - huff; identical on both seeds to 3 decimals):
+
+| model | 4 bits | 3 bits | 2 bits | huff - entropy0 at 4 bits |
+|---|---|---|---|---|
+| 0.8B | 0.483 | 0.468 | 0.444 | 0.016 |
+| 2B | 0.491 | 0.476 | 0.451 | 0.016 |
+| MiniCPM | 0.464 | 0.449 | n/a | 0.015 |
+
+An independent Huffman implementation (audit, 8 rows incl. combo, row-allocated and RTN rows) reproduces
+`bits_blocks_huff` and entropy0 to full float precision.
+
+| model | method | seed | bits_blocks | huff | shannon | ppl | dPPL% | kl | top1 | KL curve @bits | KL ratio | dPPL ratio | beats | saved fixed | saved huff |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.8B | lloyd-gptq32-g128-4 | 0 | 4.1251 | 3.9297 | 3.9179 | 19.58 | +11.4% | 0.10666 | 0.8320 | 0.06942 | 1.536 | 3.005 | no | -0.292 | -0.575 |
+| 0.8B | lloyd-gptq32-g128-4 | 1 | 4.1251 | 3.9297 | 3.9179 | 19.44 | +10.7% | 0.10141 | 0.8398 | 0.06942 | 1.461 | 2.797 | no | -0.258 | -0.542 |
+| 0.8B | lloyd-gptq32-g128-3 | 0 | 3.1250 | 2.9388 | 2.9248 | 24.28 | +38.2% | 0.34142 | 0.6881 | 0.30171 | 1.132 | 1.136 | no | -0.069 | -0.349 |
+| 0.8B | lloyd-gptq32-g128-3 | 1 | 3.1250 | 2.9388 | 2.9247 | 23.97 | +36.4% | 0.35874 | 0.6827 | 0.30171 | 1.189 | 1.083 | no | -0.096 | -0.375 |
+| 0.8B | lloyd-gptq32-g128-2 | 0 | 2.1250 | 2.0424 | 2.0232 | 71.10 | +304.7% | 1.32661 | 0.4671 | 1.83247 | 0.724 | 0.514 | yes | +0.179 | -0.187 |
+| 0.8B | lloyd-gptq32-g128-2 | 1 | 2.1250 | 2.0424 | 2.0232 | 71.81 | +308.8% | 1.35011 | 0.4665 | 1.83247 | 0.737 | 0.521 | yes | +0.169 | -0.196 |
+| 0.8B | nf-gptq32-g128-4 | 0 | 4.1250 | 3.9014 | 3.8861 | 19.43 | +10.6% | 0.12637 | 0.8154 | 0.06943 | 1.820 | 2.785 | no | -0.408 | -0.661 |
+| 0.8B | nf-gptq32-g128-3 | 0 | 3.1250 | 2.9569 | 2.9439 | 25.60 | +45.7% | 0.39999 | 0.6705 | 0.30173 | 1.326 | 1.359 | no | -0.156 | -0.452 |
+| 0.8B | nfq-gptq32-g128-4 | 0 | 4.1250 | 4.1250 | 4.1233 | 28.88 | +64.4% | 0.49311 | 0.6530 | 0.06943 | 7.103 | 16.908 | no | -1.272 | -1.734 |
+| 0.8B | nfq-gptq32-g128-3 | 0 | 3.1250 | 3.1250 | 3.1216 | 53.90 | +206.8% | 1.05740 | 0.5252 | 0.30173 | 3.504 | 6.148 | no | -0.695 | -1.147 |
+| 2B | lloyd-gptq32-g128-3 | 0 | 3.1250 | 2.9354 | 2.9208 | 21.83 | +84.8% | 0.62069 | 0.6423 | 0.25333 | 2.450 | 3.055 | no | -0.442 | -0.718 |
+| MiniCPM | lloyd-gptq32-g128-3 | 0 | 3.1250 | 2.9477 | 2.9346 | 44.76 | +224.8% | 1.26109 | 0.5258 | 0.34361 | 3.670 | 6.860 | no | -0.870* | -1.130* |
+
+Lloyd-Max mechanism (audit probe, 15 tensors of 0.8B layers 3 and 12; not a pre-registered measurement): Lloyd's
+group-normalized MSE is lower than the uniform grid's (0.01721 vs 0.01923 at 4 bits, 0.0579 vs 0.0777 at 3), but its
+3-bit outer level sits at 2.2-2.4 sigma while max |w / rms_g| reaches 10.4: it clips 2.8% of the weights, which carry
+22.7% of the squared error (0.66% / 17.9% at 4 bits); the amax uniform grid never clips. The KL loss is tail
+clipping under RMS normalization (MSE-optimal, KL-harmful), not a broken path.
+
+RD gap (bits above R(D) = 0.5 log2(1/D) on the group-normalized weight MSE, i.e. the distance to 6.02 dB/bit), gptq32
+numel-weighted over types, fixed / Huffman / Shannon:
+
+| model | 4 bits | 3 bits | 2 bits |
+|---|---|---|---|
+| 0.8B | 1.27 / 0.79 / 0.77 | 1.28 / 0.81 / 0.79 | 1.32 / 0.87 / 0.86 |
+| 2B | 1.24 / 0.75 / 0.73 | 1.25 / 0.77 / 0.75 | 1.29 / 0.84 / 0.83 |
+| MiniCPM | 1.21 / 0.74 / 0.73 | 1.21 / 0.76 / 0.74 | n/a |
+
+Per type, median over every row of the model's rd_bound.jsonl (fixed / Huffman / Shannon):
+
+| type | 0.8B (56 runs) | 2B (31 runs) | MiniCPM (8 runs) |
+|---|---|---|---|
+| in_proj_qkv | 1.25 / 0.84 / 0.82 | 1.26 / 0.77 / 0.76 | - |
+| in_proj_z | 1.25 / 0.81 / 0.79 | 1.24 / 0.78 / 0.76 | - |
+| in_proj_ab | 1.52 / 1.12 / 1.00 | 1.66 / 0.94 / 0.87 | - |
+| out_proj | 1.32 / 0.88 / 0.86 | 1.34 / 0.83 / 0.82 | - |
+| gate | 1.22 / 0.79 / 0.77 | 1.21 / 0.75 / 0.74 | 1.18 / 0.73 / 0.72 |
+| up | 1.19 / 0.76 / 0.75 | 1.19 / 0.75 / 0.74 | 1.17 / 0.73 / 0.71 |
+| down | 1.31 / 0.86 / 0.85 | 1.26 / 0.77 / 0.75 | 1.19 / 0.72 / 0.70 |
+| q | 1.33 / 0.86 / 0.84 | 1.32 / 0.81 / 0.80 | 1.35 / 0.90 / 0.88 |
+| k | 1.42 / 0.95 / 0.93 | 1.49 / 0.84 / 0.82 | 1.86 / 1.33 / 1.31 |
+| v | 1.54 / 0.99 / 0.96 | 1.60 / 0.91 / 0.89 | 1.46 / 0.87 / 0.85 |
+| o | 1.37 / 0.89 / 0.87 | 1.38 / 0.84 / 0.83 | 1.24 / 0.83 / 0.81 |
+
+All 1013 rd_bound rows satisfy gap = bits - 0.5 log2(1/D) exactly, and numel-weighting the per-type rows reproduces
+each run's bits figures.
+
+**Proxy flagged, not averaged:** the weight-MSE RD gap is contradicted by KL in four families. RTN-4 sits at 0.96
+bits above the bound against GPTQ-4's 1.27 while its KL is 2.95x higher; Lloyd lowers the gap (1.07 vs 1.28 at 3 bits)
+while raising KL 13-19%; row allocation raises it (1.49-1.51 vs 1.27-1.28) while lowering KL 7.5-9.2%; the combo sits at
+1.37 at avg 3.5 with KL 0.66x the curve. GPTQ trades weight MSE for output error by design, so the weight-domain
+gap measures distance from a bound on the wrong distortion; it is reported as pre-registered but carries no
+quality claim.
+
+Verdict per clause:
+- 0.40-0.50 at 4 bits: **supported** (0.464-0.491).
+- 0.25-0.40 at 3 bits: **refuted** (0.449-0.476, above the range).
+- < 0.20 at 2 bits: **refuted** (0.444 / 0.451); the pair-code clause is moot (no 2-bit loss to recover).
+- Shannon gap < 0.05 at 4 bits: **supported** (huff - entropy0 0.015-0.016).
+- Lloyd-Max 10-25% lower KL at 3-4 bits for < 0.01 bits of table: table cost holds (<= 0.0001 bits), the KL clause
+  is **refuted**: +53.6% / +46.1% at 4 bits and +13.2% / +18.9% at 3 bits on the 0.8B, +145% on the 2B and +267% on
+  MiniCPM at 3 bits. At 2 bits Lloyd beats on the fixed curve (0.724 / 0.737, +0.18 / +0.17 bits) but loses on the
+  coded curve (-0.19 / -0.20 bits: its indices are near-equiprobable, 2.04 of 2.125 bits after Huffman against 1.68
+  for the uniform grid) and against Hadamard (1.025 / 1.044 of the had curve): **no net win**.
+- Fixed Gaussian codebook captures >= 2/3 of the Lloyd gain: **refuted** (no gain to share; nf is itself worse than
+  Lloyd, seed 0: 1.820 vs 1.536 at 4 bits, 1.326 vs 1.132 at 3; nfq as written in DESIGN.md is 7.10 / 3.50).
+- 1.0-1.5 bits above the bound at 4 bits: **supported for the fixed code** (1.21-1.27); the entropy-coded figures are
+  0.74-0.79, below the range.
+- Gap shrinks with fewer bits: **refuted** (fixed gap grows by 0.05 bits from 4 to 2 on both Qwens, the Huffman gap by
+  0.08-0.09; flat from 4 to 3 on MiniCPM, which has no 2-bit row).
+
+#### G: within-tensor row allocation by Fisher row energy (H3-G)
+
+Pre-registered: uncertain; prior: the Fisher row split beats uniform RTN-4 by 10-20% KL at equal bits and the
+shuffled-row controls do not; if it fails, within-tensor allocation is dropped.
+
+Run: rowalloc-fisher-rtn-avg4 and two shuffled-row controls (0.8B seed 0); gate passed, so rowalloc-fisher-gptq32
+avg 4 / 3 (0.8B seeds 0, 1). Rows at b-1 / b / b+1, 2 bits per row of side information (+0.0016 bits/param).
+
+| model | method | seed | bits_blocks | huff | shannon | ppl | dPPL% | kl | top1 | KL curve @bits | KL ratio | dPPL ratio | beats | saved fixed | saved huff |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.8B | rowalloc-shuf1-rtn-avg4 | 0 | 4.1266 | 3.6452 | 3.6273 | 24.20 | +37.7% | 0.26623 | 0.7535 | 0.06926 | 3.844 | 9.938 | rtn gate | -0.916 | -0.904 |
+| 0.8B | rowalloc-shuf2-rtn-avg4 | 0 | 4.1266 | 3.6453 | 3.6274 | 23.37 | +33.0% | 0.24154 | 0.7570 | 0.06926 | 3.487 | 8.693 | rtn gate | -0.850 | -0.839 |
+| 0.8B | rowalloc-fisher-gptq32-avg4 | 0 | 4.1266 | 3.6463 | 3.6282 | 19.08 | +8.6% | 0.06328 | 0.8714 | 0.06926 | 0.914 | 2.272 | no (dPPL decides) | +0.061* | +0.058* |
+| 0.8B | rowalloc-fisher-gptq32-avg4 | 1 | 4.1266 | 3.6463 | 3.6282 | 19.48 | +10.9% | 0.06408 | 0.8732 | 0.06926 | 0.925 | 2.873 | no (dPPL decides) | +0.053* | +0.050* |
+| 0.8B | rowalloc-fisher-gptq32-avg3 | 0 | 3.1266 | 2.6593 | 2.6428 | 23.97 | +36.4% | 0.27663 | 0.7489 | 0.30102 | 0.919 | 1.087 | no (1 of 2 seeds) (dPPL decides) | +0.058 | +0.056 |
+| 0.8B | rowalloc-fisher-gptq32-avg3 | 1 | 3.1266 | 2.6593 | 2.6428 | 23.07 | +31.3% | 0.27347 | 0.7482 | 0.30102 | 0.908 | 0.935 | no (1 of 2 seeds) | +0.065 | +0.064 |
+| 0.8B | rowalloc-fisher-rtn-avg4 | 0 | 4.1266 | 3.6450 | 3.6270 | 21.13 | +20.3% | 0.17509 | 0.7949 | 0.06926 | 2.528 | 5.346 | rtn gate | -0.631 | -0.623 |
+
+Gate: KL 0.17509 vs rtn-sym-g128-4 0.20514 = 0.853 (-14.7%); controls 0.26623 / 0.24154 are 1.30x / 1.18x worse than
+uniform, real / control 0.658 / 0.725; all three at exactly 4.12661 bits.
+
+Verdict: **supported** at the pre-registered clause (RTN gate, -14.7%, inside 10-20%; controls do not beat uniform).
+With GPTQ the gain shrinks to -7.5% to -9.2% KL (+0.05 to +0.07 bits fixed) and does not pass the two-sided rule
+(avg 4 "no", avg 3 "no (1 of 2 seeds)", dPPL decides every one of the four rows; KL-only all four pass). Within-tensor
+allocation is therefore not dropped, but its GPTQ gain is not established. The cheap second observation of G
+(d_t against ||W_t X||^2 / n_t and the output RMS) was not in the run list and was not run.
+
+#### Combination (H3-combo)
+
+Pre-registered: at avg 3.0 (fixed ~3.1, Huffman ~2.7-2.8) the combination reaches the KL of uniform GPTQ-4 (fixed
+4.125) on the 0.8B and the 2B, i.e. about 1.0-1.3 bits/param saved at equal quality against the Phase 1 best coder,
+of which ~0.4 is entropy coding, ~0.25 rotation, ~0.2 allocation, the rest interaction; at avg 2.5 it stays below
++50% PPL.
+
+Run: components from the decisions above (`combo.json` = had + rowalloc, no Lloyd, identical sha 8a50c79fd2 on all
+three models): had + type allocation + Fisher row split around each type's width + uniform grid + GPTQ f32. Avg 2.5 /
+3 / 3.5 on both Qwens seeds 0, 1; avg 3 on MiniCPM seed 0 (where the type allocation is uniform, so the combo is had +
+row split).
+
+| model | method | seed | bits_blocks | huff | shannon | ppl | dPPL% | kl | top1 | KL curve @bits | KL ratio | dPPL ratio | beats | saved fixed | saved huff |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.8B | combo-gptq32-avg3.5 | 0 | 3.6256 | 3.2063 | 3.1915 | 19.34 | +10.1% | 0.09473 | 0.8504 | 0.14460 | 0.655 | 0.893 | yes | +0.288 | +0.228 |
+| 0.8B | combo-gptq32-avg3.5 | 1 | 3.6256 | 3.2063 | 3.1915 | 19.41 | +10.5% | 0.09741 | 0.8483 | 0.14460 | 0.674 | 0.929 | yes | +0.269 | +0.209 |
+| 0.8B | combo-gptq32-avg3 | 0 | 3.1258 | 2.7122 | 2.6970 | 22.60 | +28.7% | 0.26646 | 0.7541 | 0.30139 | 0.884 | 0.854 | no (1 of 2 seeds) | +0.084 | +0.028 |
+| 0.8B | combo-gptq32-avg3 | 1 | 3.1258 | 2.7122 | 2.6970 | 23.25 | +32.3% | 0.27357 | 0.7477 | 0.30139 | 0.908 | 0.963 | no (1 of 2 seeds) (dPPL decides) | +0.066 | +0.010 |
+| 0.8B | combo-gptq32-avg2.5 | 0 | 2.6234 | 2.2123 | 2.1997 | 31.55 | +79.6% | 0.55650 | 0.6500 | 0.74575 | 0.746 | 0.561 | yes | +0.162 | +0.113 |
+| 0.8B | combo-gptq32-avg2.5 | 1 | 2.6234 | 2.2122 | 2.1997 | 32.65 | +85.8% | 0.57858 | 0.6429 | 0.74575 | 0.776 | 0.605 | yes | +0.141 | +0.092 |
+| 2B | combo-gptq32-avg3.5 | 0 | 3.6251 | 3.2071 | 3.1914 | 12.76 | +8.1% | 0.08790 | 0.8595 | 0.12130 | 0.725 | 0.636 | no (1 of 2 seeds) | +0.219 | +0.150 |
+| 2B | combo-gptq32-avg3.5 | 1 | 3.6251 | 3.2071 | 3.1914 | 13.26 | +12.3% | 0.08970 | 0.8565 | 0.12130 | 0.740 | 0.970 | no (1 of 2 seeds) (dPPL decides) | +0.205 | +0.136 |
+| 2B | combo-gptq32-avg3 | 0 | 3.1253 | 2.7124 | 2.6971 | 14.43 | +22.2% | 0.21294 | 0.7843 | 0.25322 | 0.841 | 0.799 | yes | +0.118 | +0.052 |
+| 2B | combo-gptq32-avg3 | 1 | 3.1253 | 2.7124 | 2.6972 | 14.78 | +25.2% | 0.20839 | 0.7878 | 0.25322 | 0.823 | 0.907 | yes | +0.132 | +0.067 |
+| 2B | combo-gptq32-avg2.5 | 0 | 2.6237 | 2.2140 | 2.2022 | 18.66 | +58.0% | 0.45086 | 0.6921 | 0.69978 | 0.644 | 0.435 | yes | +0.217 | +0.157 |
+| 2B | combo-gptq32-avg2.5 | 1 | 2.6237 | 2.2140 | 2.2022 | 18.28 | +54.8% | 0.43439 | 0.6966 | 0.69978 | 0.621 | 0.411 | yes | +0.235 | +0.175 |
+| MiniCPM | combo-gptq32-avg3 | 0 | 3.1258 | 2.7139 | 2.6956 | 16.56 | +20.2% | 0.23240 | 0.7766 | 0.34321 | 0.677 | 0.616 | yes (1 seed) | +0.261 | +0.220 |
+
+KL / gptq32-4 seed-mean KL at avg 3: 3.84 / 3.94 (0.8B), 3.67 / 3.59 (2B), 3.01 (MiniCPM). Total bits saved at equal
+KL against fixed-length uniform GPTQ (curve fixed bits at the combo's KL minus the combo's Huffman bits): 0.8B 0.497 /
+0.479, 2B 0.531 / 0.545, MiniCPM 0.673 at avg 3; best case 0.8B avg 3.5 0.707 / 0.688 (mid-segment).
+
+Decomposition at avg 3 (each part = that single-method row's own saved fixed at ~3.125 bits; coding gain = combo
+fixed - combo Huffman):
+
+| model | coding gain | had | type alloc | row alloc (gptq32 avg 3) | sum of parts (excl. coding) | combo saved fixed | interaction |
+|---|---|---|---|---|---|---|---|
+| 0.8B s0 / s1 | 0.414 | +0.242 / +0.232 | -0.031 / -0.023 | +0.058 / +0.065 | +0.269 / +0.274 | +0.084 / +0.066 | -0.185 / -0.209 |
+| 2B s0 / s1 | 0.413 | +0.301 / +0.296 | -0.089 / -0.072 | not run | - | +0.118 / +0.132 | rowalloc + interaction -0.094 / -0.092 |
+| MiniCPM s0 | 0.412 | +0.237 | +0.003 (uniform) | not run | - | +0.261 | rowalloc + interaction +0.024 (inside noise) |
+| pre-registered | ~0.4 | ~0.25 | ~0.2 (allocation) | | | | rest |
+
+At avg 3.5 the 0.8B parts are roughly additive (had ~+0.22 / +0.24 interpolated, type +0.049 / +0.061, combo +0.288 /
++0.269); on the 2B the interaction is -0.08 / -0.06; at avg 2.5 -0.07 to -0.09 on both.
+
+Against Hadamard alone (combo KL / had-gptq32 curve, log-linear chord between the seed-mean had points; audit's
+quadratic in brackets): 0.8B avg 2.5 1.057 / 1.099 (1.107 / 1.151), avg 3 1.253 / 1.286, avg 3.5 0.913 / 0.939 (0.956
+/ 0.983); 2B avg 2.5 1.108 / 1.067 (1.166 / 1.124), avg 3 1.305 / 1.277, avg 3.5 1.089 / 1.111 (1.146 / 1.170);
+MiniCPM avg 3 0.964 of had-3 (one seed, inside the noise). The combination never beats Hadamard alone by more than
+the noise and is 25-31% worse at avg 3: its bits saved are Hadamard's, and type allocation plus the row split add
+zero or less on top of the rotation.
+
+Verdict per clause:
+- Reaches gptq32-4's KL at avg 3: **refuted** (3.0-3.9x).
+- 1.0-1.3 bits saved: **refuted** (0.48-0.55 on the Qwens, 0.67 on MiniCPM, coding included).
+- Fixed ~3.1 / Huffman 2.7-2.8: holds (3.1258 / 2.712).
+- Split ~0.4 coding / ~0.25 rotation / ~0.2 allocation: coding and rotation **match**, allocation **refuted**
+  (-0.02 to -0.09 type, +0.06 row), interaction **negative** (-0.19 / -0.21 on the 0.8B at avg 3).
+- Avg 2.5 below +50% PPL: **refuted** (+79.6% / +85.8% on the 0.8B, +58.0% / +54.8% on the 2B; Phase 1's best 2-bit
+  row was +655%, so it is much better than that, but not below +50%).
+- Rule verdicts against the gptq32 curve: 0.8B avg 2.5 yes, avg 3 no (1 of 2 seeds, dPPL), avg 3.5 yes; 2B avg 2.5
+  yes, avg 3 yes, avg 3.5 no (1 of 2 seeds, dPPL); MiniCPM avg 3 yes (1 seed). The 0.8B avg 3.5 "yes" holds on KL
+  under the quadratic (0.683 / 0.702) but its dPPL half does not (0.974 / 1.012): read it as **KL-only**. Combo avg 2.5
+  passes both margins under the quadratic on both Qwens (0.8B KL 0.778 / 0.809, dPPL 0.612 / 0.660; 2B 0.690 / 0.665,
+  0.529 / 0.500).
+
+#### Classification of every result
+
+| result | class |
+|---|---|
+| Hadamard + GPTQ -29% to -36% KL at 3 bits on three models, both seeds; random orthogonal and signed Hadamard equal it | reproduced known (incoherence processing; Phase 2 had one seed) |
+| Hadamard at 4 bits -25% to -35% KL (pre-registered < 10%) | new or unexpected (against our prior; not new to the field) |
+| Hadamard at 2 bits -29% (0.8B) vs -47% (2B) | small refinement (model-dependent, two seeds each) |
+| Eigenbasis rotation: 14.8 bits/param stored, and KL 1.63x worse than no rotation | reproduced known (cost); new or unexpected (quality loss before bits) |
+| Huffman saves 0.44-0.49 bits at 2-4 bits, 0.015-0.016 bits from entropy0 | reproduced known (P1 entropy proxy 0.49-0.51); small refinement (3- and 2-bit savings above the pre-registered ranges) |
+| Rotation costs 0.057 bits of coding gain | small refinement |
+| Lloyd-Max: lower weight MSE, higher KL (+13% to +267%) at 3-4 bits; tail clipping under RMS normalization | new or unexpected |
+| Lloyd at 2 bits wins fixed, loses coded | small refinement |
+| Type-level allocation works on RTN (KL x 0.63) | reproduced known (Phase 2 estimate x 0.72-0.81, larger here) |
+| Type-level allocation does not transfer to GPTQ: worse at avg 3 and 4 on both Qwens, mid-segment wins inside the chord bias | new or unexpected |
+| Tensor-level allocation -19% / -20% KL at avg 3 on the 0.8B, but not on the 2B (Fisher signal) | small refinement (one model, one damage draw) |
+| Shuffled allocations 1.8-3.7x worse than uniform | reproduced known (the allocation is not arbitrary) |
+| C4 vs WikiText damage Spearman 0.96-1.00 | reproduced known |
+| Fisher row split -14.7% on RTN, controls worse than uniform; -8% to -9% with GPTQ (not passing) | small refinement (own idea; gate passed, transfer to GPTQ not established) |
+| Combination sub-additive at avg 2.5 / 3, never better than Hadamard alone | new or unexpected |
+| RD gap grows with fewer bits; weight-MSE gap contradicted by KL in four families | new or unexpected (proxy flagged) |
+| dPPL margin binds (11 rows), dPPL at 4 bits noise-dominated | new or unexpected (process; contradicts the pre-registration's own note) |
+| MiniCPM type allocation at avg 3 is uniform | reproduced known (follows from its damages) |
+
+#### Negative results
+
+- Type-level allocation from RTN-4 damage does not beat uniform GPTQ at avg 3, 3.5 or 4 on either Qwen; on the 2B it
+  is 16-20% worse at avg 3.
+- Lloyd-Max per-tensor codebooks under RMS normalization lose 13-267% KL at 3-4 bits; the fixed Gaussian Lloyd-Max
+  codebook (nf) loses more; the Gaussian-quantile codebook (nfq) loses 3.5-7x.
+- The eigenbasis rotation loses 15 bits/param and is worse than no rotation even before bits.
+- The combination does not reach GPTQ-4 at avg 3 (3-4x its KL), saves 0.48-0.67 bits not 1.0-1.3, and is worse than
+  Hadamard alone at avg 2.5 / 3.
+- Fisher row allocation with GPTQ: KL -8% to -9%, not passing the two-sided rule.
+- The 2B tensor-level allocation from Fisher totals does not beat the curve.
+- The weight-MSE RD gap does not predict KL (see E).
+
+#### Audit findings and their resolution
+
+| finding (severity) | resolution |
+|---|---|
+| dPPL margin binds, pre-registration calls it non-binding; 11 rows / 7 verdicts; run reports missed one (medium / high) | recorded in "Correction" above with a KL-only column; summary footnote, rows-table columns and plot footer fixed in `5c0601e1e3`; margin not re-tuned |
+| H3-A refuted, H3-D partly refuted, H3-E mostly refuted, H3-combo refuted, H3-G supported (medium / low) | recorded per clause above, as the audit's recomputation (which matches summary.md to the printed digits) |
+| Mid-segment "beats" rest on a 4-7% chord bias: alloc-type avg 2.5 (high); 0.8B combo avg 3.5 dPPL half (medium) | alloc-type avg 2.5 recorded "not established"; combo avg 3.5 (0.8B) recorded KL-only; future: measure a mid-segment reference point |
+| Combo bits saved are Hadamard's (medium) | combo reported against the had curve as well; allocation components credited zero or less |
+| 2B had-4 saved figures are extrapolated (low) | labelled extrapolated; verdict (read at a curve point) kept |
+| Lloyd-2 wins only on fixed bits (low) | recorded "no net win"; codebook rows to be judged on both curves |
+| Two seeds repeat only GPTQ calibration noise, not allocation-signal noise (low) | recorded in the noise model; a second damage draw is a next step before claiming the tensor-level gain is robust |
+| Presentation code edited after the runs, code version moved to `5c0601e1e3`, unrecorded (medium) | recorded as a change point in Provenance (who, why, what changed, regression smoke, pytest) |
+| 0.8B damage file mixes two code versions; ref file restamped (low) | recorded; bit-for-bit reproduction at the current code; restamp fix in `damage_c4.py` left open |
+| Run-phase code `afb6534a49` never named in NOTES (low) | named in Provenance |
+| Plot footers cut off, hollow markers ambiguous, labels placed before tight_layout, MiniCPM seed legend, clipped labels (medium / low) | fixed in `5c0601e1e3`; remaining 0.8B density and the MiniCPM avg-3 coincidence left (data, not encoding) |
+
+Checked and found correct by the audits (not repeated in detail): verdicts recomputed without project imports match
+summary.md on all three models; bits_blocks hand-counted for all 95 non-fp16, non-eig rows (difference exactly 0);
+Huffman and entropy0 re-implemented (full precision match); no calibration leak (damage rows only seed-2 C4 with the
+calibration documents removed, WikiText read only by `evaluate`); controls at equal bits; type allocations optimal;
+eig cost re-derived; combo component decisions follow the rules.
+
+#### Next directions
+
+1. **Codebook on rotated weights, clipping-aware.** Lloyd-Max lowers the group-normalized MSE by 25% at 3 bits (0.0579
+   vs 0.0777) but clips 2.8% of the weights carrying 22.7% of the squared error, and KL rises 13-19%; Hadamard removes
+   exactly those tails (k on MiniCPM 1.88 -> 1.14 bits above the bound; max |w / rms_g| up to 10.4 before rotation). A
+   pre-registered `had-lloyd` row (and an amax-normalized or outer-level-pinned Lloyd) at 3 bits is the cheapest test
+   of whether a non-uniform grid adds anything on top of the one lever that worked (-30% to -36% KL).
+2. **Allocation measured on GPTQ, at the widths it assigns, on top of Hadamard.** Type allocation from RTN-4 damage
+   loses 4-20% KL at avg 3, while the same allocation wins 37% on RTN and the 0.8B tensor-level one wins 19-20%; the
+   per-bit KL factor of GPTQ is 4.4 from 4 to 3 bits and 6.1-7.6 from 3 to 2, against the 4 the allocator assumes. A
+   damage measured with had-GPTQ at 2 and 3 bits per type / tensor (plus a second C4 draw as the signal-noise control)
+   would show whether any allocation survives on the had curve, where the combo currently sits at 1.25-1.31x.
+3. **Fix the yardstick before the next method round.** Measure mid-segment reference points (uniform half-layer 2/3 and
+   3/4-bit splits at 2.625 / 3.625 bits) and a 5-bit anchor, so mid-segment rows are read without the 4-7% chord bias
+   and 4-bit rows are not extrapolated; and pre-register a dPPL rule that respects the measured 4-bit dPPL spread
+   (113% on the 0.8B), since 11 rows were decided by a margin inside the noise.

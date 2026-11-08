@@ -1,0 +1,60 @@
+{
+ "unit": "type",
+ "target_mean_bits": 3.0,
+ "realized_mean_bits": 2.9996048992493085,
+ "levels": [
+  2,
+  3,
+  4,
+  5,
+  6,
+  8
+ ],
+ "bits": {
+  "in_proj_qkv": 2,
+  "in_proj_z": 3,
+  "in_proj_ab": 8,
+  "out_proj": 5,
+  "gate": 3,
+  "up": 3,
+  "down": 3,
+  "q": 3,
+  "k": 4,
+  "v": 5,
+  "o": 5
+ },
+ "damage_per_param": {
+  "in_proj_qkv": 1.282813741277795e-10,
+  "in_proj_z": 2.104412099091384e-10,
+  "in_proj_ab": 2.8552828788679617e-09,
+  "out_proj": 1.036083017806397e-09,
+  "gate": 1.571114693262764e-10,
+  "up": 3.0010220124229077e-10,
+  "down": 3.198589181839974e-10,
+  "q": 1.9126518745278052e-10,
+  "k": 7.723574498782681e-10,
+  "v": 2.710739810709368e-09,
+  "o": 1.6375100881038291e-09
+ },
+ "numel": {
+  "in_proj_qkv": 113246208,
+  "in_proj_z": 37748736,
+  "in_proj_ab": 589824,
+  "out_proj": 37748736,
+  "gate": 88080384,
+  "up": 88080384,
+  "down": 88080384,
+  "q": 25165824,
+  "k": 3145728,
+  "v": 3145728,
+  "o": 12582912
+ },
+ "source": "d = KL/numel per type from results/phase3/qwen3.5-0.8b/damage_c4.jsonl",
+ "side_info_bits_per_unit": 3,
+ "n_units": 11,
+ "shuffle_seed": null,
+ "method": "alloc-type-gptq32-avg3",
+ "model": "qwen3.5-0.8b",
+ "seed": 0,
+ "timestamp": "2026-11-08T13:55:02+00:00"
+}

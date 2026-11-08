@@ -1,0 +1,149 @@
+{
+ "unit": "type",
+ "target_mean_bits": 3.0,
+ "realized_mean_bits": 3.0023706045041485,
+ "levels": [
+  2,
+  3,
+  4,
+  5,
+  6,
+  8
+ ],
+ "bits": {
+  "in_proj_qkv": 5,
+  "in_proj_z": 3,
+  "in_proj_ab": 5,
+  "out_proj": 2,
+  "gate": 2,
+  "up": 2,
+  "down": 2,
+  "q": 5,
+  "k": 3,
+  "v": 3,
+  "o": 5
+ },
+ "damage_per_param": {
+  "in_proj_qkv": 1.2520754511996998e-10,
+  "in_proj_z": 2.0596507560869868e-10,
+  "in_proj_ab": 2.6624457234057268e-09,
+  "out_proj": 9.212289091704475e-10,
+  "gate": 1.5430551734375382e-10,
+  "up": 2.851379380973774e-10,
+  "down": 2.921895330296857e-10,
+  "q": 1.9081698008239407e-10,
+  "k": 7.287100208190082e-10,
+  "v": 2.455850880465888e-09,
+  "o": 1.6331422946315593e-09
+ },
+ "numel": {
+  "in_proj_qkv": 113246208,
+  "in_proj_z": 37748736,
+  "in_proj_ab": 589824,
+  "out_proj": 37748736,
+  "gate": 88080384,
+  "up": 88080384,
+  "down": 88080384,
+  "q": 25165824,
+  "k": 3145728,
+  "v": 3145728,
+  "o": 12582912
+ },
+ "source": "d = KL/numel per type from results/smoke/phase3/qwen3.5-0.8b/damage_c4.jsonl (damage_c4.jsonl sha 66853ecac3, c4 seed2 excl. calib docs of seeds 0,1, 2 windows)",
+ "damage_file": {
+  "path": "results/smoke/phase3/qwen3.5-0.8b/damage_c4.jsonl",
+  "sha256": "66853ecac3",
+  "c4_set": "seed2 excluding the documents of the 128x2048 calibration sets of seeds 0,1",
+  "windows": [
+   2
+  ]
+ },
+ "side_info_bits_per_unit": 3,
+ "n_units": 11,
+ "shuffle_seed": 2,
+ "real_bits": {
+  "in_proj_qkv": 2,
+  "in_proj_z": 3,
+  "in_proj_ab": 8,
+  "out_proj": 5,
+  "gate": 3,
+  "up": 3,
+  "down": 3,
+  "q": 3,
+  "k": 4,
+  "v": 5,
+  "o": 5
+ },
+ "real_mean_bits": 2.9996048992493085,
+ "shuffle": {
+  "raw_bits": {
+   "in_proj_qkv": 5,
+   "in_proj_z": 4,
+   "in_proj_ab": 5,
+   "out_proj": 2,
+   "gate": 3,
+   "up": 3,
+   "down": 3,
+   "q": 8,
+   "k": 3,
+   "v": 3,
+   "o": 5
+  },
+  "permutation": {
+   "in_proj_qkv": "out_proj",
+   "in_proj_z": "k",
+   "in_proj_ab": "o",
+   "out_proj": "in_proj_qkv",
+   "gate": "in_proj_z",
+   "up": "gate",
+   "down": "up",
+   "q": "in_proj_ab",
+   "k": "q",
+   "v": "down",
+   "o": "v"
+  },
+  "frozen_unit": "in_proj_qkv",
+  "moves": [
+   [
+    "down",
+    3,
+    2
+   ],
+   [
+    "gate",
+    3,
+    2
+   ],
+   [
+    "up",
+    3,
+    2
+   ],
+   [
+    "q",
+    8,
+    6
+   ],
+   [
+    "in_proj_z",
+    4,
+    3
+   ],
+   [
+    "q",
+    6,
+    5
+   ]
+  ],
+  "units_at_real_width": [
+   "in_proj_z",
+   "o"
+  ],
+  "params_share_at_real_width": 0.10114579217700513,
+  "draws": 1
+ },
+ "method": "alloc-type-shuf2-gptq32-avg3",
+ "model": "qwen3.5-0.8b",
+ "seed": 0,
+ "timestamp": "2026-11-08T16:04:31+00:00"
+}

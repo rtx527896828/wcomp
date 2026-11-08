@@ -1,0 +1,18 @@
+10:56:24 run_baselines: loading reference qwen3.5-0.8b
+W1108 10:56:25.386000 19552 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  14%|#4        | 45/320 [00:00<00:00, 443.14it/s]Loading weights:  38%|###8      | 122/320 [00:00<00:00, 633.21it/s]Loading weights:  63%|######2   | 201/320 [00:00<00:00, 704.26it/s]Loading weights:  90%|########9 | 287/320 [00:00<00:00, 761.18it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 732.89it/s]
+10:56:26 run_baselines: eval windows (8, 2048)
+10:56:26 run_baselines: smoke run (limit-windows 8; kl-windows 8)
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+10:56:35 run_baselines: reference hidden states (8, 2048, 1024) in 9.2s; reference layers moved to the CPU
+10:56:35 run_baselines: === fp16 ===
+10:56:35 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  23%|##2       | 73/320 [00:00<00:00, 719.20it/s]Loading weights:  50%|####9     | 159/320 [00:00<00:00, 798.01it/s]Loading weights:  75%|#######4  | 239/320 [00:00<00:00, 790.49it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 796.32it/s]
+10:56:38 run_baselines: fp16: ppl 14.95 kl 0.00000 top1 1.0000 bits_blocks 16.0000 bits_all 16.0000 huff None shannon None rotation none time 2.7s (method 0.0s)
+10:56:38 run_baselines: === rtn-sym-g128-4 ===
+10:56:38 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  18%|#7        | 56/320 [00:00<00:00, 523.50it/s]Loading weights:  43%|####3     | 138/320 [00:00<00:00, 688.34it/s]Loading weights:  65%|######5   | 209/320 [00:00<00:00, 695.29it/s]Loading weights:  91%|#########1| 292/320 [00:00<00:00, 745.97it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 723.72it/s]
+10:56:44 run_baselines: rtn-sym-g128-4: ppl 19.01 kl 0.20113 top1 0.7799 bits_blocks 4.1250 bits_all 8.1462 huff 3.6412 shannon 3.6248 rotation none time 6.1s (method 2.7s)
+10:56:45 run_baselines: rtn-sym-g128-4: 11 rd_bound rows appended to D:\repos\wcomp\results\smoke\phase3\qwen3.5-0.8b\rd_bound.jsonl
+10:56:45 run_baselines: wrote D:\repos\wcomp\results\smoke\phase3\qwen3.5-0.8b\regress.jsonl

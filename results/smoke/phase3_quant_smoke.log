@@ -1,0 +1,21 @@
+08:30:46 run_baselines: loading reference qwen3.5-0.8b
+W1108 08:30:47.680000 33984 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  10%|9         | 31/320 [00:00<00:00, 307.00it/s]Loading weights:  34%|###4      | 110/320 [00:00<00:00, 578.50it/s]Loading weights:  59%|#####9    | 190/320 [00:00<00:00, 665.02it/s]Loading weights:  82%|########1 | 262/320 [00:00<00:00, 686.23it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 669.66it/s]
+08:30:50 run_baselines: eval windows (8, 2048)
+08:30:50 run_baselines: smoke run (limit-windows 8; kl-windows 8)
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+08:30:57 run_baselines: reference hidden states (8, 2048, 1024) in 7.2s; reference layers moved to the CPU
+08:30:57 run_baselines: === fp16 ===
+08:30:57 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  17%|#6        | 53/320 [00:00<00:00, 527.28it/s]Loading weights:  34%|###4      | 109/320 [00:00<00:00, 528.12it/s]Loading weights:  51%|#####     | 163/320 [00:00<00:00, 518.92it/s]Loading weights:  67%|######7   | 215/320 [00:00<00:00, 505.86it/s]Loading weights:  83%|########3 | 266/320 [00:00<00:00, 487.64it/s]Loading weights:  98%|#########8| 315/320 [00:00<00:00, 480.03it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 500.29it/s]
+08:31:00 run_baselines: fp16: ppl 14.95 kl 0.00000 top1 1.0000 bits_blocks 16.0000 bits_all 16.0000 huff None shannon None rotation none time 3.2s (method 0.0s)
+08:31:00 run_baselines: === rtn-sym-g128-4 ===
+08:31:00 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  12%|#2        | 39/320 [00:00<00:00, 386.75it/s]Loading weights:  36%|###6      | 116/320 [00:00<00:00, 611.18it/s]Loading weights:  61%|######    | 194/320 [00:00<00:00, 673.28it/s]Loading weights:  82%|########1 | 262/320 [00:00<00:00, 669.32it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 666.30it/s]
+08:31:04 run_baselines: rtn-sym-g128-4: ppl 19.01 kl 0.20113 top1 0.7799 bits_blocks 4.1250 bits_all 8.1462 huff 3.6412 shannon 3.6254 rotation none time 4.2s (method 0.8s)
+08:31:06 run_baselines: rtn-sym-g128-4: 11 rd_bound rows appended to D:\repos\wcomp\results\smoke\qwen3.5-0.8b\rd_bound.jsonl
+08:31:06 run_baselines: wrote D:\repos\wcomp\results\smoke\qwen3.5-0.8b\phase3_quant_smoke.jsonl
+EXIT1 0
+unknown methods ['lloyd-gptq32-g128-3']; known: ['eig-gptq32-sym-g128-3', 'fp16', 'gptq-sym-g128-2', 'gptq-sym-g128-3', 'gptq-sym-g128-4', 'gptq32-sym-g128-2', 'gptq32-sym-g128-3', 'gptq32-sym-g128-4', 'had-fp16', 'had-gptq-sym-g128-3', 'had-gptq32-sym-g128-2', 'had-gptq32-sym-g128-3', 'had-gptq32-sym-g128-4', 'had-rtn-sym-g128-2', 'had-rtn-sym-g128-3', 'had-rtn-sym-g128-4', 'hadsign-gptq32-sym-g128-3', 'rnd-gptq32-sym-g128-3', 'rtn-asym-g128-2', 'rtn-asym-g128-3', 'rtn-asym-g128-4', 'rtn-sym-g128-2', 'rtn-sym-g128-3', 'rtn-sym-g128-4', 'rtn-sym-g128-8'] or a parametric P0 name (wcomp.methods.resolve)
+EXIT2 1

@@ -1,0 +1,13 @@
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+........................................................................ [ 65%]
+........................................................................ [ 87%]
+.........................................                                [100%]
+============================== warnings summary ===============================
+tests/test_plots_phase2.py::test_figures_tolerate_missing_stats
+  D:\repos\wcomp\scripts\plot_probe.py:199: UserWarning: constrained_layout not applied because axes sizes collapsed to zero.  Try making figure larger or Axes decorations smaller.
+    fig.savefig(out, dpi=140, facecolor=SURFACE)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+329 passed, 1 warning in 490.05s (0:08:10)
+pytest exit 0

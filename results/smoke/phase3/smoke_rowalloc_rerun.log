@@ -1,0 +1,14 @@
+09:04:42 run_baselines: loading reference qwen3.5-0.8b
+W1108 09:04:43.553000 12264 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  15%|#5        | 48/320 [00:00<00:00, 478.83it/s]Loading weights:  42%|####1     | 134/320 [00:00<00:00, 702.01it/s]Loading weights:  67%|######6   | 214/320 [00:00<00:00, 743.69it/s]Loading weights:  93%|#########3| 299/320 [00:00<00:00, 779.97it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 752.69it/s]
+09:04:44 run_baselines: eval windows (4, 2048)
+09:04:44 run_baselines: smoke run (limit-windows 4; kl-windows 4)
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+09:04:46 run_baselines: reference hidden states (4, 2048, 1024) in 1.3s; reference layers moved to the CPU
+09:04:46 run_baselines: === rowalloc-fisher-rtn-avg4 ===
+09:04:46 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  27%|##6       | 86/320 [00:00<00:00, 817.87it/s]Loading weights:  52%|#####2    | 168/320 [00:00<00:00, 816.40it/s]Loading weights:  78%|#######8  | 250/320 [00:00<00:00, 800.97it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 821.43it/s]
+09:04:49 run_baselines: rowalloc-fisher-rtn-avg4: ppl 22.63 kl 0.16923 top1 0.7904 bits_blocks 4.1266 bits_all 8.1472 huff 3.6450 shannon 3.6270 rotation none time 3.7s (method 0.9s)
+09:04:51 run_baselines: rowalloc-fisher-rtn-avg4: 11 rd_bound rows appended to D:\repos\wcomp\results\smoke\phase3\qwen3.5-0.8b\rd_bound.jsonl
+09:04:51 run_baselines: wrote D:\repos\wcomp\results\smoke\phase3\qwen3.5-0.8b\runs.jsonl

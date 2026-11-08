@@ -405,8 +405,10 @@ PHASE1 = {  # fp16 ppl, rtn-sym-g128-4 (ppl, kl), rtn-sym-g128-3 (ppl, kl), gptq
 
 def _row(model: str, method: str, bits: float, ppl: float, kl: float, seed: int = 0, calib_seed=None, note: str = "", ts: str = TS) -> dict:
     return {"model": model, "method": method, "seed": seed, "calib_seed": calib_seed, "bits_blocks": bits, "bits_all": bits * 0.5 + 8,
+            "bits_blocks_huff": None, "bits_blocks_shannon": None, "bits_blocks_entropy0": None,
             "ppl": ppl, "kl": kl, "top1_agree": max(0.0, 1 - kl), "n_tokens": 296815, "kl_tokens": 65504, "time_s": 30.0,
-            "time_method_s": 0.1, "note": note, "git_or_code_version": "fixture/0000000000",
+            "time_method_s": 0.1, "note": note, "alloc": None, "rotation": "hadamard" if "hadamard" in note else "none",
+            "git_or_code_version": "fixture/0000000000",
             "env": "torch 2.11.0+cu128; transformers 5.22.2; kernels none", "timestamp": ts}
 
 

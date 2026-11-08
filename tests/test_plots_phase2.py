@@ -335,10 +335,12 @@ def test_load_rows_keys_on_smoke_and_hessian_tags(tmp_path, capsys):
 
 
 def test_is_phase1_name_agrees_with_the_method_registry():
-    from wcomp.methods import METHODS
+    from wcomp.methods import METHODS, PHASE1_METHODS
 
-    for name in METHODS:
+    for name in PHASE1_METHODS:
         assert io.is_phase1_name(name), name
+    for name in METHODS:  # the Phase 3 registry entries (gptq32, rotation variants) are not Phase 1 names
+        assert io.is_phase1_name(name) == (name in PHASE1_METHODS), name
     for name in ("rtn-sym-g32-4", "rtn-sym-g128-4@only=down", "rtn-sym-g128-4+keepcols=1", "rtn-sym-g128-3@layer=5", "gptq-sym-g64-3"):
         assert not io.is_phase1_name(name), name
 

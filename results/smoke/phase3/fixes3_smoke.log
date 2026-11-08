@@ -1,0 +1,11 @@
+=== pytest start 11:48:14 t=1794156494
+=== pytest exit 1 end 11:55:17 t=1794156917
+=== regress_rtn start 11:55:17 t=1794156917
+=== regress_rtn exit 0 end 11:55:33 t=1794156933
+=== smoke_rows start 11:55:33 t=1794156933
+=== smoke_rows exit 0 end 11:58:30 t=1794157110
+=== plots start 11:58:30 t=1794157110
+=== plots exit 0 end 11:58:34 t=1794157114
+=== summary start 11:58:34 t=1794157114
+=== summary exit 0 end 11:58:37 t=1794157117
+ALL DONE

@@ -1,0 +1,27 @@
+{
+ "fp16": {
+  "ppl": 15.583139885631033,
+  "kl": 0.0,
+  "top1_agree": 1.0,
+  "n_tokens": 65504,
+  "kl_tokens": 65504,
+  "time_s": 8.6
+ },
+ "rtn-sym-g128-4@all": {
+  "ppl": 17.365999803939356,
+  "kl": 0.12023070799947981,
+  "top1_agree": 0.8211559599413776,
+  "n_tokens": 65504,
+  "kl_tokens": 65504,
+  "numel": 1372717056,
+  "time_s": 10.7
+ },
+ "model": "qwen3.5-2b",
+ "c4_seed": 2,
+ "c4_set": "seed2 excluding the documents of the 128x2048 calibration sets of seeds 0,1",
+ "excluded_documents": 242,
+ "windows": 32,
+ "bits": 4,
+ "git_or_code_version": "bf5b4e7+dirty/afb6534a49",
+ "timestamp": "2026-11-08T19:29:17+00:00"
+}

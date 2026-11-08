@@ -1,0 +1,12 @@
+.................................F
+================================== FAILURES ===================================
+________ test_coded_bits_uniform_indices_equal_b_per_symbol_plus_table ________
+
+>   ???
+E   assert (3202 == (3208 + 1))
+
+tests\test_coding_rotate.py:77: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_coding_rotate.py::test_coded_bits_uniform_indices_equal_b_per_symbol_plus_table
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+exit 1

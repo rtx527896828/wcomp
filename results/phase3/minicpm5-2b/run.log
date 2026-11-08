@@ -1,0 +1,470 @@
+=== [g01] start 2026-11-08 16:36:03
+=== cmd: uv run python scripts/damage_c4.py --model minicpm5-2b --units type
+16:36:06 damage_c4: loading reference minicpm5-2b
+W1108 16:36:07.269000 19400 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|4         | 17/381 [00:00<00:02, 162.02it/s]Loading weights:  10%|9         | 37/381 [00:00<00:01, 177.06it/s]Loading weights:  16%|#5        | 60/381 [00:00<00:01, 198.90it/s]Loading weights:  22%|##1       | 82/381 [00:00<00:01, 193.86it/s]Loading weights:  28%|##7       | 105/381 [00:00<00:01, 199.61it/s]Loading weights:  33%|###3      | 126/381 [00:00<00:01, 199.67it/s]Loading weights:  39%|###9      | 149/381 [00:00<00:01, 202.40it/s]Loading weights:  45%|####4     | 171/381 [00:00<00:01, 200.22it/s]Loading weights:  50%|#####     | 192/381 [00:00<00:00, 190.27it/s]Loading weights:  57%|#####6    | 216/381 [00:01<00:00, 200.98it/s]Loading weights:  62%|######2   | 237/381 [00:01<00:00, 198.23it/s]Loading weights:  67%|######7   | 257/381 [00:01<00:00, 195.34it/s]Loading weights:  73%|#######3  | 280/381 [00:01<00:00, 199.78it/s]Loading weights:  79%|#######9  | 302/381 [00:01<00:00, 203.42it/s]Loading weights:  85%|########5 | 324/381 [00:01<00:00, 207.89it/s]Loading weights:  91%|######### | 345/381 [00:01<00:00, 201.56it/s]Loading weights:  96%|#########6| 366/381 [00:01<00:00, 201.08it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 200.18it/s]
+16:36:18 damage_c4: C4 seed-2 windows (32, 2048), 241 calibration documents of seeds (0, 1) excluded
+16:36:30 damage_c4: reference hidden states (32, 2048, 2048) in 12.4s; reference layers on the CPU
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|4         | 17/381 [00:00<00:02, 148.63it/s]Loading weights:  12%|#1        | 45/381 [00:00<00:01, 208.64it/s]Loading weights:  20%|#9        | 76/381 [00:00<00:01, 247.26it/s]Loading weights:  27%|##7       | 104/381 [00:00<00:01, 258.86it/s]Loading weights:  35%|###4      | 132/381 [00:00<00:00, 266.06it/s]Loading weights:  42%|####1     | 160/381 [00:00<00:00, 264.42it/s]Loading weights:  50%|####9     | 189/381 [00:00<00:00, 259.08it/s]Loading weights:  57%|#####7    | 218/381 [00:00<00:00, 263.04it/s]Loading weights:  64%|######4   | 245/381 [00:00<00:00, 245.02it/s]Loading weights:  71%|#######   | 270/381 [00:01<00:00, 240.15it/s]Loading weights:  77%|#######7  | 295/381 [00:01<00:00, 235.83it/s]Loading weights:  85%|########4 | 323/381 [00:01<00:00, 247.57it/s]Loading weights:  92%|#########2| 351/381 [00:01<00:00, 251.50it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 251.95it/s]
+16:36:45 damage_c4: fp16: ppl 20.6207 kl 0.00e+00 (12.4s)
+16:37:00 damage_c4: rtn-sym-g128-4@all: ppl 25.2202 kl 0.24539 (15.4s)
+16:37:00 damage_c4: 7 units to measure (0 already in D:\repos\wcomp\results\phase3\minicpm5-2b\damage_c4.jsonl)
+16:37:13 damage_c4: [1/7] type q: numel 176160768 kl 0.02194 ppl 21.0093 (12.7s)
+16:37:26 damage_c4: [2/7] type k: numel 22020096 kl 0.00943 ppl 20.7006 (12.7s)
+16:37:38 damage_c4: [3/7] type v: numel 22020096 kl 0.02870 ppl 21.1541 (12.6s)
+16:37:51 damage_c4: [4/7] type o: numel 176160768 kl 0.02844 ppl 20.9488 (12.7s)
+16:38:04 damage_c4: [5/7] type gate: numel 528482304 kl 0.02542 ppl 21.0363 (13.2s)
+16:38:17 damage_c4: [6/7] type up: numel 528482304 kl 0.03950 ppl 21.2104 (13.2s)
+16:38:30 damage_c4: [7/7] type down: numel 528482304 kl 0.07591 ppl 21.9623 (13.2s)
+16:38:30 damage_c4: wrote D:\repos\wcomp\results\phase3\minicpm5-2b\damage_c4.jsonl
+=== [g01] exit 0 end 2026-11-08 16:38:31
+=== [g02] start 2026-11-08 16:38:40
+=== cmd: uv run python scripts/run_baselines.py --model minicpm5-2b --results-dir results/phase3 --methods fp16,gptq32-sym-g128-4,gptq32-sym-g128-3,had-gptq32-sym-g128-3,lloyd-gptq32-g128-3,alloc-type-gptq32-avg3,alloc-type-gptq32-avg3.5 --seed 0
+16:38:43 run_baselines: loading reference minicpm5-2b
+W1108 16:38:44.048000 34280 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|4         | 18/381 [00:00<00:02, 166.80it/s]Loading weights:  12%|#2        | 47/381 [00:00<00:01, 233.78it/s]Loading weights:  19%|#8        | 71/381 [00:00<00:01, 232.31it/s]Loading weights:  25%|##5       | 96/381 [00:00<00:01, 236.45it/s]Loading weights:  32%|###2      | 123/381 [00:00<00:01, 247.72it/s]Loading weights:  39%|###9      | 149/381 [00:00<00:00, 249.80it/s]Loading weights:  46%|####6     | 177/381 [00:00<00:00, 259.43it/s]Loading weights:  53%|#####3    | 203/381 [00:00<00:00, 257.96it/s]Loading weights:  60%|######    | 230/381 [00:00<00:00, 260.14it/s]Loading weights:  68%|######7   | 258/381 [00:01<00:00, 263.84it/s]Loading weights:  75%|#######4  | 285/381 [00:01<00:00, 261.67it/s]Loading weights:  82%|########1 | 312/381 [00:01<00:00, 263.22it/s]Loading weights:  89%|########8 | 339/381 [00:01<00:00, 236.10it/s]Loading weights:  96%|#########5| 365/381 [00:01<00:00, 241.16it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 251.76it/s]
+16:38:46 run_baselines: eval windows (139, 2048)
+16:38:58 run_baselines: reference hidden states (32, 2048, 2048) in 11.8s; reference layers moved to the CPU
+16:38:58 run_baselines: calibration windows (128, 2048) (seed 0)
+16:38:58 run_baselines: === fp16 ===
+16:38:58 run_baselines: gpu memory: 10.60 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 15/381 [00:00<00:02, 147.52it/s]Loading weights:  11%|#         | 41/381 [00:00<00:01, 211.53it/s]Loading weights:  17%|#6        | 63/381 [00:00<00:01, 207.53it/s]Loading weights:  24%|##3       | 91/381 [00:00<00:01, 222.56it/s]Loading weights:  31%|###       | 117/381 [00:00<00:01, 234.94it/s]Loading weights:  38%|###8      | 146/381 [00:00<00:00, 250.15it/s]Loading weights:  45%|####5     | 172/381 [00:00<00:00, 249.61it/s]Loading weights:  52%|#####2    | 199/381 [00:00<00:00, 254.13it/s]Loading weights:  59%|#####9    | 226/381 [00:00<00:00, 258.46it/s]Loading weights:  67%|######7   | 257/381 [00:01<00:00, 270.63it/s]Loading weights:  75%|#######4  | 285/381 [00:01<00:00, 268.88it/s]Loading weights:  82%|########1 | 312/381 [00:01<00:00, 264.36it/s]Loading weights:  89%|########8 | 339/381 [00:01<00:00, 233.98it/s]Loading weights:  96%|#########6| 366/381 [00:01<00:00, 241.48it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 247.20it/s]
+16:39:50 run_baselines: fp16: ppl 13.78 kl 0.00000 top1 1.0000 bits_blocks 16.0000 bits_all 16.0000 huff None shannon None rotation none time 52.2s (method 0.0s)
+16:39:50 run_baselines: === gptq32-sym-g128-4 ===
+16:39:50 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|5         | 20/381 [00:00<00:02, 177.08it/s]Loading weights:  12%|#1        | 45/381 [00:00<00:01, 215.18it/s]Loading weights:  19%|#9        | 74/381 [00:00<00:01, 246.76it/s]Loading weights:  27%|##6       | 101/381 [00:00<00:01, 252.88it/s]Loading weights:  34%|###3      | 128/381 [00:00<00:00, 257.23it/s]Loading weights:  41%|####1     | 158/381 [00:00<00:00, 265.07it/s]Loading weights:  49%|####8     | 186/381 [00:00<00:00, 268.21it/s]Loading weights:  56%|#####6    | 214/381 [00:00<00:00, 271.79it/s]Loading weights:  64%|######3   | 242/381 [00:00<00:00, 262.61it/s]Loading weights:  71%|#######1  | 271/381 [00:01<00:00, 269.40it/s]Loading weights:  78%|#######8  | 299/381 [00:01<00:00, 232.35it/s]Loading weights:  85%|########5 | 325/381 [00:01<00:00, 236.21it/s]Loading weights:  93%|#########2| 353/381 [00:01<00:00, 245.36it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 254.22it/s]
+16:39:52 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+16:39:53 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.4s
+16:40:01 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.1s, quantize 5.7s, forward 0.9s, total 8.7s
+16:40:08 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:40:15 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:40:22 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:40:29 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:40:36 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:40:43 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:40:50 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:40:57 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.9s
+16:41:04 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:41:10 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:41:17 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:41:24 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:41:31 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:41:38 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:41:45 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:41:52 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:41:59 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:42:06 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:42:13 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:42:20 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:42:27 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:42:33 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:42:40 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:42:47 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:42:54 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:43:01 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:43:08 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:43:15 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:43:22 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:43:29 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:43:36 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:43:43 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:43:50 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:43:57 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:44:04 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:44:11 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:44:17 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:44:24 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:44:31 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:44:38 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:44:45 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:45:39 run_baselines: gptq32-sym-g128-4: ppl 14.58 kl 0.07713 top1 0.8678 bits_blocks 4.1250 bits_all 6.6491 huff 3.6610 shannon 3.6457 rotation none time 348.9s (method 293.1s)
+16:45:41 run_baselines: gptq32-sym-g128-4: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+16:45:41 run_baselines: === gptq32-sym-g128-3 ===
+16:45:41 run_baselines: gpu memory: 10.53 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 14/381 [00:00<00:02, 139.43it/s]Loading weights:  11%|#1        | 42/381 [00:00<00:01, 217.67it/s]Loading weights:  18%|#7        | 67/381 [00:00<00:01, 232.23it/s]Loading weights:  25%|##5       | 96/381 [00:00<00:01, 253.55it/s]Loading weights:  32%|###2      | 123/381 [00:00<00:01, 255.21it/s]Loading weights:  39%|###9      | 149/381 [00:00<00:00, 253.39it/s]Loading weights:  46%|####5     | 175/381 [00:00<00:00, 226.48it/s]Loading weights:  53%|#####3    | 203/381 [00:00<00:00, 237.64it/s]Loading weights:  61%|######    | 231/381 [00:00<00:00, 247.85it/s]Loading weights:  68%|######7   | 258/381 [00:01<00:00, 252.17it/s]Loading weights:  75%|#######4  | 285/381 [00:01<00:00, 254.92it/s]Loading weights:  82%|########1 | 311/381 [00:01<00:00, 255.89it/s]Loading weights:  88%|########8 | 337/381 [00:01<00:00, 256.16it/s]Loading weights:  95%|#########5| 363/381 [00:01<00:00, 253.68it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 250.71it/s]
+16:45:43 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+16:45:43 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.4s
+16:45:50 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.0s, quantize 3.9s, forward 0.9s, total 6.9s
+16:45:57 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:46:04 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:46:11 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:46:18 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:46:25 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:46:32 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:46:39 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:46:46 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:46:53 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:46:59 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:47:06 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:47:13 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:47:20 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:47:27 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:47:34 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:47:41 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:47:48 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:47:55 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:02 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:09 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:16 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:22 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+16:48:29 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:36 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:43 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:50 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:48:57 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:49:04 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:49:11 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:49:18 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+16:49:25 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:49:32 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:49:39 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:49:46 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:49:53 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:49:59 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:50:06 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:50:13 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+16:50:20 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+16:50:27 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:50:34 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+16:51:28 run_baselines: gptq32-sym-g128-3: ppl 18.23 kl 0.34211 top1 0.7337 bits_blocks 3.1250 bits_all 5.8616 huff 2.6756 shannon 2.6573 rotation none time 347.2s (method 291.6s)
+16:51:29 run_baselines: gptq32-sym-g128-3: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+16:51:29 run_baselines: === had-gptq32-sym-g128-3 ===
+16:51:29 run_baselines: gpu memory: 10.53 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   3%|3         | 13/381 [00:00<00:02, 126.22it/s]Loading weights:  10%|9         | 38/381 [00:00<00:01, 194.42it/s]Loading weights:  18%|#7        | 68/381 [00:00<00:01, 239.10it/s]Loading weights:  25%|##4       | 95/381 [00:00<00:01, 237.46it/s]Loading weights:  33%|###3      | 126/381 [00:00<00:01, 254.88it/s]Loading weights:  40%|###9      | 152/381 [00:00<00:00, 249.15it/s]Loading weights:  46%|####6     | 177/381 [00:00<00:00, 237.47it/s]Loading weights:  53%|#####2    | 201/381 [00:00<00:00, 237.19it/s]Loading weights:  61%|######    | 232/381 [00:00<00:00, 253.14it/s]Loading weights:  69%|######8   | 261/381 [00:01<00:00, 252.19it/s]Loading weights:  76%|#######5  | 288/381 [00:01<00:00, 257.24it/s]Loading weights:  83%|########2 | 316/381 [00:01<00:00, 257.03it/s]Loading weights:  90%|########9 | 342/381 [00:01<00:00, 253.81it/s]Loading weights:  97%|#########6| 369/381 [00:01<00:00, 255.06it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 251.74it/s]
+16:51:32 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+16:51:33 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.8s
+16:51:40 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.4s, quantize 3.9s, forward 1.2s, total 7.5s
+16:51:48 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:51:55 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+16:52:03 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:52:11 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:52:18 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:52:26 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+16:52:34 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:52:41 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:52:49 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:52:57 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:53:04 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:53:12 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+16:53:20 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:53:27 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:53:35 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:53:43 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:53:50 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:53:58 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:54:06 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:54:13 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:54:21 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:54:29 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:54:36 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:54:44 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+16:54:51 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:54:59 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.5s, quantize 3.8s, forward 1.2s, total 7.6s
+16:55:07 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:55:14 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+16:55:22 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:55:30 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+16:55:37 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+16:55:45 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:55:53 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+16:56:00 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:56:08 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:56:15 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:56:23 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:56:31 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:56:38 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+16:56:46 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+16:56:54 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.5s, quantize 3.8s, forward 1.2s, total 7.6s
+16:58:04 run_baselines: had-gptq32-sym-g128-3: ppl 16.64 kl 0.24102 top1 0.7757 bits_blocks 3.1250 bits_all 5.8616 huff 2.7137 shannon 2.6942 rotation hadamard time 395.0s (method 323.0s)
+16:58:05 run_baselines: had-gptq32-sym-g128-3: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+16:58:05 run_baselines: === lloyd-gptq32-g128-3 ===
+16:58:05 run_baselines: gpu memory: 10.52 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|4         | 18/381 [00:00<00:02, 169.18it/s]Loading weights:  11%|#1        | 43/381 [00:00<00:01, 214.12it/s]Loading weights:  18%|#8        | 69/381 [00:00<00:01, 233.77it/s]Loading weights:  25%|##4       | 95/381 [00:00<00:01, 243.68it/s]Loading weights:  33%|###3      | 126/381 [00:00<00:00, 266.41it/s]Loading weights:  40%|####      | 153/381 [00:00<00:00, 232.02it/s]Loading weights:  47%|####6     | 178/381 [00:00<00:00, 237.20it/s]Loading weights:  54%|#####4    | 207/381 [00:00<00:00, 244.84it/s]Loading weights:  61%|######1   | 234/381 [00:00<00:00, 251.39it/s]Loading weights:  69%|######8   | 261/381 [00:01<00:00, 250.78it/s]Loading weights:  76%|#######6  | 290/381 [00:01<00:00, 260.78it/s]Loading weights:  83%|########3 | 317/381 [00:01<00:00, 256.96it/s]Loading weights:  90%|######### | 344/381 [00:01<00:00, 256.86it/s]Loading weights:  97%|#########7| 370/381 [00:01<00:00, 254.86it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 252.47it/s]
+16:58:07 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+16:58:07 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.4s
+16:58:19 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.0s, quantize 8.4s, forward 0.9s, total 11.3s
+16:58:26 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:58:34 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:58:41 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:58:49 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:58:57 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:59:04 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.7s
+16:59:12 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:59:19 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.1s, quantize 4.5s, forward 0.9s, total 7.5s
+16:59:27 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:59:34 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.5s
+16:59:42 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+16:59:50 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.6s
+16:59:57 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:00:05 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.1s, quantize 4.5s, forward 0.9s, total 7.6s
+17:00:12 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:00:20 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.5s
+17:00:27 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:00:35 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.6s
+17:00:43 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:00:50 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.6s
+17:00:58 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:01:05 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:01:13 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:01:21 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:01:28 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.1s, quantize 4.5s, forward 0.9s, total 7.6s
+17:01:36 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.6s
+17:01:43 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:01:51 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.1s, quantize 4.5s, forward 0.9s, total 7.5s
+17:01:59 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:02:06 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.5s
+17:02:14 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:02:21 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:02:29 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.1s, quantize 4.5s, forward 0.9s, total 7.6s
+17:02:37 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.7s
+17:02:44 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.6s
+17:02:52 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.1s, quantize 4.6s, forward 0.9s, total 7.6s
+17:02:59 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.7s
+17:03:07 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.2s, quantize 4.6s, forward 0.9s, total 7.6s
+17:03:15 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.6s
+17:03:22 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.2s, quantize 4.5s, forward 0.9s, total 7.5s
+17:03:30 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.1s, quantize 4.5s, forward 0.9s, total 7.6s
+17:04:23 run_baselines: lloyd-gptq32-g128-3: ppl 44.76 kl 1.26109 top1 0.5258 bits_blocks 3.1250 bits_all 5.8617 huff 2.9477 shannon 2.9346 rotation none time 378.5s (method 323.0s)
+17:04:24 run_baselines: lloyd-gptq32-g128-3: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+17:04:24 run_baselines: === alloc-type-gptq32-avg3 ===
+17:04:24 run_baselines: gpu memory: 10.52 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   7%|7         | 28/381 [00:00<00:01, 266.62it/s]Loading weights:  14%|#4        | 55/381 [00:00<00:01, 240.39it/s]Loading weights:  21%|##        | 80/381 [00:00<00:01, 243.15it/s]Loading weights:  29%|##8       | 109/381 [00:00<00:01, 249.98it/s]Loading weights:  36%|###5      | 137/381 [00:00<00:00, 255.49it/s]Loading weights:  44%|####3     | 167/381 [00:00<00:00, 262.80it/s]Loading weights:  51%|#####     | 194/381 [00:00<00:00, 263.82it/s]Loading weights:  58%|#####8    | 222/381 [00:00<00:00, 266.44it/s]Loading weights:  65%|######5   | 249/381 [00:00<00:00, 266.50it/s]Loading weights:  72%|#######2  | 276/381 [00:01<00:00, 266.97it/s]Loading weights:  80%|#######9  | 303/381 [00:01<00:00, 240.14it/s]Loading weights:  86%|########6 | 328/381 [00:01<00:00, 236.54it/s]Loading weights:  93%|#########3| 356/381 [00:01<00:00, 246.22it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 256.48it/s]
+17:04:26 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+17:04:27 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.4s
+17:04:33 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.8s
+17:04:40 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:04:47 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:04:54 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:05:01 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:05:08 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:05:15 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:05:22 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.9s
+17:05:29 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:05:36 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:05:43 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:05:50 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:05:57 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:06:03 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:06:10 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:06:17 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.9s
+17:06:24 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:06:31 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:06:38 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:06:45 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:06:52 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:06:59 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:07:06 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:07:13 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:07:20 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.1s
+17:07:27 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.2s, quantize 4.1s, forward 0.9s, total 7.2s
+17:07:34 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.1s
+17:07:41 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:07:48 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:07:55 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:02 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:09 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.2s, quantize 4.0s, forward 0.9s, total 7.1s
+17:08:16 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:23 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:08:30 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:37 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:44 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:51 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:08:58 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:09:05 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.2s, quantize 4.0s, forward 0.9s, total 7.0s
+17:09:12 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:09:19 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:10:13 run_baselines: alloc-type-gptq32-avg3: ppl 18.23 kl 0.34211 top1 0.7337 bits_blocks 3.1250 bits_all 5.8616 huff 2.6756 shannon 2.6573 rotation none time 348.6s (method 293.0s)
+17:10:13 run_baselines: alloc-type-gptq32-avg3: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+17:10:13 run_baselines: === alloc-type-gptq32-avg3.5 ===
+17:10:13 run_baselines: gpu memory: 10.52 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|4         | 19/381 [00:00<00:02, 179.39it/s]Loading weights:  12%|#1        | 45/381 [00:00<00:01, 214.57it/s]Loading weights:  19%|#9        | 74/381 [00:00<00:01, 239.24it/s]Loading weights:  27%|##7       | 104/381 [00:00<00:01, 257.58it/s]Loading weights:  34%|###4      | 131/381 [00:00<00:00, 260.04it/s]Loading weights:  41%|####1     | 158/381 [00:00<00:00, 263.04it/s]Loading weights:  49%|####8     | 185/381 [00:00<00:00, 264.05it/s]Loading weights:  56%|#####5    | 212/381 [00:00<00:00, 240.98it/s]Loading weights:  62%|######2   | 237/381 [00:00<00:00, 229.12it/s]Loading weights:  70%|######9   | 265/381 [00:01<00:00, 242.04it/s]Loading weights:  77%|#######6  | 293/381 [00:01<00:00, 252.32it/s]Loading weights:  84%|########3 | 319/381 [00:01<00:00, 251.30it/s]Loading weights:  91%|######### | 345/381 [00:01<00:00, 253.77it/s]Loading weights:  97%|#########7| 371/381 [00:01<00:00, 250.01it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 251.60it/s]
+17:10:16 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+17:10:16 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.4s
+17:10:23 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.0s, quantize 3.9s, forward 0.9s, total 6.8s
+17:10:30 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:10:37 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:10:44 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:10:51 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:10:58 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:11:05 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:11:12 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:11:18 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:11:25 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:11:32 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:11:39 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:11:46 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 7.0s
+17:11:53 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:12:00 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:12:07 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:12:14 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:12:21 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:12:28 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:12:35 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:12:42 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:12:49 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:12:56 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.2s, quantize 4.2s, forward 0.9s, total 7.3s
+17:13:03 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.2s, quantize 4.0s, forward 0.9s, total 7.1s
+17:13:10 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 7.0s
+17:13:17 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:13:24 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:13:31 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:13:38 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:13:45 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:13:51 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:13:58 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:14:05 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:14:12 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:14:19 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:14:26 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:14:33 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:14:40 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:14:47 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 6.9s
+17:14:54 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 6.9s
+17:15:01 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.9s
+17:15:08 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.1s, quantize 3.9s, forward 0.9s, total 7.0s
+17:16:01 run_baselines: alloc-type-gptq32-avg3.5: ppl 15.64 kl 0.16066 top1 0.8108 bits_blocks 3.6250 bits_all 6.2554 huff 3.1683 shannon 3.1510 rotation none time 348.0s (method 292.2s)
+17:16:02 run_baselines: alloc-type-gptq32-avg3.5: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+17:16:02 run_baselines: wrote D:\repos\wcomp\results\phase3\minicpm5-2b\runs.jsonl
+=== [g02] exit 0 end 2026-11-08 17:16:03
+=== [g03] start 2026-11-08 17:16:10
+=== cmd: uv run python scripts/run_baselines.py --model minicpm5-2b --results-dir results/phase3 --methods gptq32-sym-g128-3 --seed 1
+17:16:23 run_baselines: loading reference minicpm5-2b
+W1108 17:16:24.237000 30684 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|4         | 18/381 [00:00<00:02, 165.04it/s]Loading weights:  11%|#1        | 43/381 [00:00<00:01, 209.74it/s]Loading weights:  17%|#7        | 66/381 [00:00<00:01, 217.41it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 225.75it/s]Loading weights:  32%|###1      | 121/381 [00:00<00:01, 251.11it/s]Loading weights:  39%|###8      | 148/381 [00:00<00:00, 253.40it/s]Loading weights:  46%|####6     | 177/381 [00:00<00:00, 263.43it/s]Loading weights:  54%|#####4    | 207/381 [00:00<00:00, 262.04it/s]Loading weights:  61%|######1   | 234/381 [00:00<00:00, 258.55it/s]Loading weights:  69%|######8   | 262/381 [00:01<00:00, 261.02it/s]Loading weights:  76%|#######6  | 290/381 [00:01<00:00, 266.13it/s]Loading weights:  83%|########3 | 317/381 [00:01<00:00, 243.82it/s]Loading weights:  90%|######### | 343/381 [00:01<00:00, 240.12it/s]Loading weights:  98%|#########7| 373/381 [00:01<00:00, 254.85it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 251.93it/s]
+17:16:32 run_baselines: eval windows (139, 2048)
+17:16:44 run_baselines: reference hidden states (32, 2048, 2048) in 11.8s; reference layers moved to the CPU
+17:16:44 run_baselines: calibration windows (128, 2048) (seed 1)
+17:16:44 run_baselines: === gptq32-sym-g128-3 ===
+17:16:44 run_baselines: gpu memory: 10.60 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 14/381 [00:00<00:02, 139.99it/s]Loading weights:  10%|#         | 40/381 [00:00<00:01, 205.30it/s]Loading weights:  18%|#7        | 68/381 [00:00<00:01, 235.40it/s]Loading weights:  24%|##4       | 92/381 [00:00<00:01, 215.86it/s]Loading weights:  32%|###1      | 121/381 [00:00<00:01, 240.26it/s]Loading weights:  39%|###8      | 148/381 [00:00<00:00, 249.15it/s]Loading weights:  46%|####5     | 174/381 [00:00<00:00, 248.75it/s]Loading weights:  53%|#####3    | 203/381 [00:00<00:00, 260.26it/s]Loading weights:  61%|######    | 231/381 [00:00<00:00, 264.25it/s]Loading weights:  68%|######7   | 258/381 [00:01<00:00, 263.60it/s]Loading weights:  75%|#######4  | 285/381 [00:01<00:00, 256.79it/s]Loading weights:  82%|########2 | 313/381 [00:01<00:00, 262.91it/s]Loading weights:  89%|########9 | 340/381 [00:01<00:00, 235.40it/s]Loading weights:  96%|#########5| 365/381 [00:01<00:00, 232.98it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 245.19it/s]
+17:16:46 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+17:16:46 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.4s
+17:16:53 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.0s, quantize 4.1s, forward 0.9s, total 7.0s
+17:17:00 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:17:07 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:17:14 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:17:21 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.9s
+17:17:28 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:17:35 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.8s
+17:17:42 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:17:48 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.8s
+17:17:55 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:18:02 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:18:09 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:18:16 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.8s
+17:18:23 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:18:30 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:18:36 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:18:43 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:18:50 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:18:57 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:19:04 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:19:11 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:19:18 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.2s, quantize 3.7s, forward 0.9s, total 6.8s
+17:19:24 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:19:31 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:19:38 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:19:45 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:19:52 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.8s
+17:19:59 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.1s, quantize 3.8s, forward 0.9s, total 6.8s
+17:20:05 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.2s, quantize 3.7s, forward 0.9s, total 6.8s
+17:20:12 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.8s
+17:20:19 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:20:26 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:20:33 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 7.0s
+17:20:40 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.2s, quantize 4.0s, forward 0.9s, total 7.2s
+17:20:47 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:20:54 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.2s, quantize 3.9s, forward 0.9s, total 7.0s
+17:21:01 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 7.0s
+17:21:08 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:21:15 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:21:22 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:21:29 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:21:35 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.2s, quantize 3.8s, forward 0.9s, total 6.9s
+17:22:30 run_baselines: gptq32-sym-g128-3: ppl 18.37 kl 0.34513 top1 0.7278 bits_blocks 3.1250 bits_all 5.8616 huff 2.6756 shannon 2.6573 rotation none time 345.9s (method 289.5s)
+17:22:31 run_baselines: gptq32-sym-g128-3: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+17:22:31 run_baselines: wrote D:\repos\wcomp\results\phase3\minicpm5-2b\runs.jsonl
+=== [g03] exit 0 end 2026-11-08 17:22:31
+=== [g04] start 2026-11-08 17:22:47
+=== cmd: uv run python scripts/fisher_rows.py --model minicpm5-2b --tokens 512
+W1108 17:22:54.524000 35540 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   3%|2         | 10/381 [00:00<00:03, 98.35it/s]Loading weights:  10%|9         | 38/381 [00:00<00:01, 203.78it/s]Loading weights:  17%|#6        | 63/381 [00:00<00:01, 221.88it/s]Loading weights:  24%|##4       | 92/381 [00:00<00:01, 246.56it/s]Loading weights:  31%|###1      | 119/381 [00:00<00:01, 253.14it/s]Loading weights:  38%|###8      | 146/381 [00:00<00:00, 256.29it/s]Loading weights:  45%|####5     | 172/381 [00:00<00:00, 256.53it/s]Loading weights:  52%|#####2    | 199/381 [00:00<00:00, 257.17it/s]Loading weights:  60%|######    | 229/381 [00:00<00:00, 268.36it/s]Loading weights:  67%|######7   | 256/381 [00:01<00:00, 229.67it/s]Loading weights:  73%|#######3  | 280/381 [00:01<00:00, 231.21it/s]Loading weights:  81%|########  | 307/381 [00:01<00:00, 235.08it/s]Loading weights:  88%|########7 | 334/381 [00:01<00:00, 243.94it/s]Loading weights:  94%|#########4| 360/381 [00:01<00:00, 246.63it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 247.82it/s]
+17:23:09 fisher_rows: 294 linears, 16352 tokens, 12.4s, peak 9.04 GB
+17:23:09 fisher_rows: wrote D:\repos\wcomp\results\probe\minicpm5-2b\fisher_rows.pt
+=== [g04] exit 0 end 2026-11-08 17:23:09
+=== [g05] start 2026-11-08 17:23:31
+=== cmd: uv run python scripts/run_baselines.py --model minicpm5-2b --results-dir results/phase3 --methods combo-gptq32-avg3 --seed 0
+17:23:33 run_baselines: loading reference minicpm5-2b
+W1108 17:23:34.656000 36732 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   3%|3         | 13/381 [00:00<00:02, 128.56it/s]Loading weights:  10%|#         | 39/381 [00:00<00:01, 201.20it/s]Loading weights:  17%|#7        | 65/381 [00:00<00:01, 227.60it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 234.66it/s]Loading weights:  31%|###1      | 119/381 [00:00<00:01, 250.21it/s]Loading weights:  39%|###8      | 148/381 [00:00<00:00, 261.66it/s]Loading weights:  46%|####5     | 175/381 [00:00<00:00, 224.30it/s]Loading weights:  53%|#####3    | 203/381 [00:00<00:00, 237.33it/s]Loading weights:  60%|######    | 230/381 [00:00<00:00, 244.89it/s]Loading weights:  67%|######7   | 257/381 [00:01<00:00, 234.11it/s]Loading weights:  76%|#######6  | 290/381 [00:01<00:00, 259.36it/s]Loading weights:  84%|########3 | 319/381 [00:01<00:00, 265.83it/s]Loading weights:  91%|#########1| 347/381 [00:01<00:00, 262.11it/s]Loading weights:  98%|#########8| 374/381 [00:01<00:00, 263.02it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 250.68it/s]
+17:23:37 run_baselines: eval windows (139, 2048)
+17:23:48 run_baselines: reference hidden states (32, 2048, 2048) in 11.6s; reference layers moved to the CPU
+17:23:48 run_baselines: calibration windows (128, 2048) (seed 0)
+17:23:48 run_baselines: === combo-gptq32-avg3 ===
+17:23:48 run_baselines: gpu memory: 10.60 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   6%|6         | 23/381 [00:00<00:01, 224.34it/s]Loading weights:  13%|#3        | 51/381 [00:00<00:01, 252.92it/s]Loading weights:  20%|##        | 77/381 [00:00<00:01, 252.98it/s]Loading weights:  27%|##7       | 103/381 [00:00<00:01, 251.44it/s]Loading weights:  34%|###3      | 129/381 [00:00<00:01, 244.86it/s]Loading weights:  40%|####      | 154/381 [00:00<00:00, 241.29it/s]Loading weights:  47%|####6     | 179/381 [00:00<00:00, 240.65it/s]Loading weights:  55%|#####4    | 208/381 [00:00<00:00, 241.00it/s]Loading weights:  61%|######1   | 233/381 [00:00<00:00, 224.09it/s]Loading weights:  69%|######8   | 262/381 [00:01<00:00, 235.90it/s]Loading weights:  77%|#######6  | 292/381 [00:01<00:00, 246.71it/s]Loading weights:  84%|########3 | 320/381 [00:01<00:00, 255.89it/s]Loading weights:  91%|######### | 346/381 [00:01<00:00, 252.26it/s]Loading weights:  98%|#########7| 373/381 [00:01<00:00, 252.98it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 249.95it/s]
+17:23:53 wcomp.quant.gptq: gptq: 128 windows x 2048 tokens, activations on cuda:0 (1024 MB)
+17:23:53 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.6s
+17:24:01 wcomp.quant.gptq: gptq layer  0: 7 linears, hessian 2.4s, quantize 4.0s, forward 1.2s, total 7.6s
+17:24:09 wcomp.quant.gptq: gptq layer  1: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+17:24:16 wcomp.quant.gptq: gptq layer  2: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+17:24:24 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:24:32 wcomp.quant.gptq: gptq layer  4: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:24:39 wcomp.quant.gptq: gptq layer  5: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+17:24:47 wcomp.quant.gptq: gptq layer  6: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:24:55 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:25:02 wcomp.quant.gptq: gptq layer  8: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:25:10 wcomp.quant.gptq: gptq layer  9: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:25:18 wcomp.quant.gptq: gptq layer 10: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:25:25 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+17:25:33 wcomp.quant.gptq: gptq layer 12: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+17:25:41 wcomp.quant.gptq: gptq layer 13: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:25:48 wcomp.quant.gptq: gptq layer 14: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.2s, total 7.8s
+17:25:56 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.2s, total 7.8s
+17:26:04 wcomp.quant.gptq: gptq layer 16: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.2s, total 7.9s
+17:26:12 wcomp.quant.gptq: gptq layer 17: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:26:20 wcomp.quant.gptq: gptq layer 18: 7 linears, hessian 2.6s, quantize 4.1s, forward 1.3s, total 7.9s
+17:26:27 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.8s
+17:26:35 wcomp.quant.gptq: gptq layer 20: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+17:26:43 wcomp.quant.gptq: gptq layer 21: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.2s, total 7.8s
+17:26:51 wcomp.quant.gptq: gptq layer 22: 7 linears, hessian 2.5s, quantize 4.2s, forward 1.3s, total 8.0s
+17:26:59 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 2.7s, quantize 4.1s, forward 1.3s, total 8.0s
+17:27:07 wcomp.quant.gptq: gptq layer 24: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.3s, total 7.9s
+17:27:15 wcomp.quant.gptq: gptq layer 25: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.3s, total 7.9s
+17:27:23 wcomp.quant.gptq: gptq layer 26: 7 linears, hessian 2.6s, quantize 4.1s, forward 1.3s, total 7.9s
+17:27:31 wcomp.quant.gptq: gptq layer 27: 7 linears, hessian 2.6s, quantize 4.1s, forward 1.3s, total 8.0s
+17:27:39 wcomp.quant.gptq: gptq layer 28: 7 linears, hessian 2.5s, quantize 4.0s, forward 1.3s, total 7.8s
+17:27:46 wcomp.quant.gptq: gptq layer 29: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.2s, total 7.9s
+17:27:54 wcomp.quant.gptq: gptq layer 30: 7 linears, hessian 2.6s, quantize 4.1s, forward 1.2s, total 7.9s
+17:28:02 wcomp.quant.gptq: gptq layer 31: 7 linears, hessian 2.6s, quantize 4.0s, forward 1.2s, total 7.9s
+17:28:10 wcomp.quant.gptq: gptq layer 32: 7 linears, hessian 2.5s, quantize 4.0s, forward 1.3s, total 7.9s
+17:28:18 wcomp.quant.gptq: gptq layer 33: 7 linears, hessian 2.7s, quantize 4.0s, forward 1.2s, total 7.9s
+17:28:26 wcomp.quant.gptq: gptq layer 34: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+17:28:33 wcomp.quant.gptq: gptq layer 35: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+17:28:41 wcomp.quant.gptq: gptq layer 36: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.6s
+17:28:49 wcomp.quant.gptq: gptq layer 37: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:28:56 wcomp.quant.gptq: gptq layer 38: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:29:04 wcomp.quant.gptq: gptq layer 39: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.6s
+17:29:12 wcomp.quant.gptq: gptq layer 40: 7 linears, hessian 2.5s, quantize 3.9s, forward 1.2s, total 7.7s
+17:29:19 wcomp.quant.gptq: gptq layer 41: 7 linears, hessian 2.6s, quantize 3.9s, forward 1.2s, total 7.7s
+17:30:30 run_baselines: combo-gptq32-avg3: ppl 16.56 kl 0.23240 top1 0.7766 bits_blocks 3.1258 bits_all 5.8623 huff 2.7139 shannon 2.6956 rotation hadamard time 401.5s (method 328.9s)
+17:30:31 run_baselines: combo-gptq32-avg3: 7 rd_bound rows appended to D:\repos\wcomp\results\phase3\minicpm5-2b\rd_bound.jsonl
+17:30:31 run_baselines: wrote D:\repos\wcomp\results\phase3\minicpm5-2b\runs.jsonl
+=== [g05] exit 0 end 2026-11-08 17:30:32
+=== [g06] start 2026-11-08 17:30:47
+=== cmd: uv run python scripts/plot_rd3.py --model minicpm5-2b
+D:\repos\wcomp\results\rd3_minicpm5-2b.png
+=== [g06] exit 0 end 2026-11-08 17:30:50
+=== [g07] start 2026-11-08 17:30:50
+=== cmd: uv run python scripts/plot_rd3.py --model qwen3.5-0.8b
+warning: eig-gptq32-sym-g128-3 (seed 0): bits_blocks 17.89 beyond the x range, drawn at the right edge
+D:\repos\wcomp\results\rd3_qwen3.5-0.8b.png
+=== [g07] exit 0 end 2026-11-08 17:30:54
+=== [g08] start 2026-11-08 17:30:54
+=== cmd: uv run python scripts/plot_rd3.py --model qwen3.5-2b
+D:\repos\wcomp\results\rd3_qwen3.5-2b.png
+=== [g08] exit 0 end 2026-11-08 17:30:58
+=== [g09] start 2026-11-08 17:30:58
+=== cmd: uv run python scripts/phase3_summary.py --models qwen3.5-0.8b,qwen3.5-2b,minicpm5-2b
+D:\repos\wcomp\results\phase3\summary.md
+=== [g09] exit 0 end 2026-11-08 17:31:01

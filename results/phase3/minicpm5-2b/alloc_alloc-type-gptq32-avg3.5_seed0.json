@@ -1,0 +1,57 @@
+{
+ "unit": "type",
+ "target_mean_bits": 3.5,
+ "realized_mean_bits": 3.5,
+ "levels": [
+  2,
+  3,
+  4,
+  5,
+  6,
+  8
+ ],
+ "bits": {
+  "q": 4,
+  "k": 5,
+  "v": 6,
+  "o": 4,
+  "gate": 3,
+  "up": 3,
+  "down": 4
+ },
+ "damage_per_param": {
+  "q": 1.2453005591964402e-10,
+  "k": 4.2808144587754145e-10,
+  "v": 1.3035702809101196e-09,
+  "o": 1.614229051756384e-10,
+  "gate": 4.810632499193035e-11,
+  "up": 7.474025892606808e-11,
+  "down": 1.4362917969415518e-10
+ },
+ "numel": {
+  "q": 176160768,
+  "k": 22020096,
+  "v": 22020096,
+  "o": 176160768,
+  "gate": 528482304,
+  "up": 528482304,
+  "down": 528482304
+ },
+ "source": "d = KL/numel per type from results/phase3/minicpm5-2b/damage_c4.jsonl (damage_c4.jsonl sha d287cd3cff, c4 seed2 excl. calib docs of seeds 0,1, 32 windows)",
+ "signal": "damage",
+ "damage_file": {
+  "path": "results/phase3/minicpm5-2b/damage_c4.jsonl",
+  "sha256": "d287cd3cff",
+  "c4_set": "seed2 excluding the documents of the 128x2048 calibration sets of seeds 0,1",
+  "windows": [
+   32
+  ]
+ },
+ "side_info_bits_per_unit": 3,
+ "n_units": 7,
+ "shuffle_seed": null,
+ "method": "alloc-type-gptq32-avg3.5",
+ "model": "minicpm5-2b",
+ "seed": 0,
+ "timestamp": "2026-11-08T22:10:16+00:00"
+}

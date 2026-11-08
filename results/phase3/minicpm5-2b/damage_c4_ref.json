@@ -1,0 +1,27 @@
+{
+ "fp16": {
+  "ppl": 20.620706753101363,
+  "kl": 0.0,
+  "top1_agree": 1.0,
+  "n_tokens": 65504,
+  "kl_tokens": 65504,
+  "time_s": 12.4
+ },
+ "rtn-sym-g128-4@all": {
+  "ppl": 25.22024485709539,
+  "kl": 0.2453921809398356,
+  "top1_agree": 0.7284898632144602,
+  "n_tokens": 65504,
+  "kl_tokens": 65504,
+  "numel": 1981808640,
+  "time_s": 15.4
+ },
+ "model": "minicpm5-2b",
+ "c4_seed": 2,
+ "c4_set": "seed2 excluding the documents of the 128x2048 calibration sets of seeds 0,1",
+ "excluded_documents": 241,
+ "windows": 32,
+ "bits": 4,
+ "git_or_code_version": "bf5b4e7+dirty/afb6534a49",
+ "timestamp": "2026-11-08T21:37:00+00:00"
+}

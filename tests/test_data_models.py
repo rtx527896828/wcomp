@@ -141,3 +141,32 @@ def test_c4_calibration_counts_tokens_not_characters(monkeypatch, tmp_path):
     assert (tmp_path / "fake_c4_calib_2x128_seed0.pt").exists()
     with pytest.raises(RuntimeError):
         c4_calibration(_ByteTokenizer(), "fake", n=3, seqlen=128, seed=0)
+
+
+def test_c4_calibration_excludes_documents_and_reports_them(monkeypatch, tmp_path):
+    """Phase 3 damage set: the documents of the calibration seeds are excluded by shard index (not only by seed); the
+    document ids of a set are reproducible from an existing Phase 1 window cache, and the exclusion names its own cache."""
+    import wcomp.data as data
+    from wcomp.data import c4_calibration_documents
+
+    docs = [f"{chr(97 + i)}" * (150 + 7 * i) for i in range(12)]  # twelve eligible one-byte documents
+    monkeypatch.setattr(data, "c4_documents", lambda: docs)
+    monkeypatch.setattr(data, "DATA_DIR", tmp_path)
+    tok = _ByteTokenizer()
+    base = c4_calibration(tok, "fake", n=4, seqlen=128, seed=0)
+    (tmp_path / "fake_c4_calib_4x128_seed0_docs.json").unlink()  # a Phase 1 cache has no document list
+    d0 = c4_calibration_documents(tok, "fake", n=4, seqlen=128, seed=0)  # reproduced and checked against the cache
+    assert len(set(d0)) == 4 and all(docs[i].encode()[0] == int(base[k, 0]) for k, i in enumerate(d0))
+    assert (tmp_path / "fake_c4_calib_4x128_seed0_docs.json").exists()
+    d1 = c4_calibration_documents(tok, "fake", n=4, seqlen=128, seed=1)
+    excl = sorted(set(d0) | set(d1))
+    other = c4_calibration(tok, "fake", n=3, seqlen=128, seed=2, exclude_docs=excl)
+    d2 = c4_calibration_documents(tok, "fake", n=3, seqlen=128, seed=2, exclude_docs=excl)
+    assert not (set(d2) & set(excl)) and other.shape == (3, 128)
+    assert all(docs[i].encode()[0] == int(other[k, 0]) for k, i in enumerate(d2))
+    plain = c4_calibration_documents(tok, "fake", n=3, seqlen=128, seed=2)  # the same seed without the exclusion
+    assert plain != d2 or not (set(plain) & set(excl))
+    caches = sorted(p.name for p in tmp_path.glob("fake_c4_calib_3x128_seed2*.pt"))
+    assert len(caches) == 2 and any("_excl" in c for c in caches) and "fake_c4_calib_3x128_seed2.pt" in caches
+    with pytest.raises(RuntimeError):  # excluding too much leaves fewer than n documents
+        c4_calibration(tok, "fake", n=3, seqlen=128, seed=2, exclude_docs=list(range(10)))

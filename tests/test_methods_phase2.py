@@ -277,8 +277,9 @@ def test_add_xtx_f32_matches_f64():
 
 
 def test_hessian_f64_is_the_default_until_acceptance():
-    """Phase 1 names must reproduce their Phase 1 numbers by default: the f32 path is opt-in (runner flag / env)."""
-    assert gptq_mod.HESSIAN_F32 is False or os.environ.get("WCOMP_HESSIAN_F32") == "1"
+    """Phase 1 names must reproduce their Phase 1 numbers by default: the f32 path is opt-in (the runner flag for the
+    Phase 1 names, hessian_f32=True for the gptq32 names; the Phase 2 environment override is gone)."""
+    assert gptq_mod.HESSIAN_F32 is False
     acc = torch.zeros(4, 4, dtype=torch.float64)
     x = torch.randn(8, 4, generator=torch.Generator().manual_seed(0)).to(torch.bfloat16)
     add_xtx(acc, x)  # the module default

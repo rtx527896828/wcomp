@@ -1,0 +1,23 @@
+10:44:41 damage_c4: loading reference qwen3.5-0.8b
+W1108 10:44:42.272000 27652 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   6%|5         | 18/320 [00:00<00:01, 164.00it/s]Loading weights:  28%|##7       | 88/320 [00:00<00:00, 465.32it/s]Loading weights:  52%|#####2    | 167/320 [00:00<00:00, 594.88it/s]Loading weights:  77%|#######6  | 245/320 [00:00<00:00, 663.62it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 628.12it/s]
+10:44:44 damage_c4: C4 seed-2 windows (32, 2048), 242 calibration documents of seeds (0, 1) excluded
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+10:44:49 damage_c4: reference hidden states (32, 2048, 1024) in 5.4s; reference layers on the CPU
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  23%|##3       | 74/320 [00:00<00:00, 717.41it/s]Loading weights:  48%|####8     | 154/320 [00:00<00:00, 758.23it/s]Loading weights:  73%|#######3  | 235/320 [00:00<00:00, 777.27it/s]Loading weights:  98%|#########7| 313/320 [00:00<00:00, 773.50it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 781.14it/s]
+10:44:57 damage_c4: fp16: ppl 20.0389 kl 0.00e+00 (7.0s)
+10:45:05 damage_c4: rtn-sym-g128-4@all: ppl 23.8775 kl 0.17074 (7.8s)
+10:45:05 damage_c4: 11 units to measure (0 already in D:\repos\wcomp\results\phase3\qwen3.5-0.8b\damage_c4.jsonl)
+10:45:12 damage_c4: [1/11] type in_proj_qkv: numel 113246208 kl 0.01442 ppl 20.2232 (7.1s)
+10:45:19 damage_c4: [2/11] type in_proj_z: numel 37748736 kl 0.00763 ppl 20.2431 (7.0s)
+10:45:26 damage_c4: [3/11] type in_proj_ab: numel 589824 kl 0.00167 ppl 20.0499 (6.9s)
+10:45:32 damage_c4: [4/11] type out_proj: numel 37748736 kl 0.03739 ppl 21.0822 (6.9s)
+10:45:39 damage_c4: [5/11] type gate: numel 88080384 kl 0.01343 ppl 20.2861 (7.0s)
+10:45:47 damage_c4: [6/11] type up: numel 88080384 kl 0.02592 ppl 20.4571 (7.3s)
+10:45:54 damage_c4: [7/11] type down: numel 88080384 kl 0.02693 ppl 20.6579 (7.0s)
+10:46:01 damage_c4: [8/11] type q: numel 25165824 kl 0.00479 ppl 20.0673 (6.9s)
+10:46:08 damage_c4: [9/11] type k: numel 3145728 kl 0.00242 ppl 20.0385 (7.1s)
+10:46:15 damage_c4: [10/11] type v: numel 3145728 kl 0.00835 ppl 20.1927 (7.1s)
+10:46:22 damage_c4: [11/11] type o: numel 12582912 kl 0.02020 ppl 20.4152 (6.9s)
+10:46:22 damage_c4: wrote D:\repos\wcomp\results\phase3\qwen3.5-0.8b\damage_c4.jsonl

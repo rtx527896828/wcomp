@@ -1,0 +1,25 @@
+{
+ "fp16": {
+  "ppl": 11.569333545961024,
+  "kl": 0.0,
+  "top1_agree": 1.0,
+  "n_tokens": 4094,
+  "kl_tokens": 4094,
+  "time_s": 0.5
+ },
+ "rtn-sym-g128-4@all": {
+  "ppl": 13.833165877340825,
+  "kl": 0.1655533156152788,
+  "top1_agree": 0.8072789447972643,
+  "n_tokens": 4094,
+  "kl_tokens": 4094,
+  "numel": 497614848,
+  "time_s": 1.2
+ },
+ "model": "qwen3.5-0.8b",
+ "c4_seed": 2,
+ "windows": 2,
+ "bits": 4,
+ "git_or_code_version": "bf5b4e7+dirty/d129b77947",
+ "timestamp": "2026-11-08T13:51:13+00:00"
+}
