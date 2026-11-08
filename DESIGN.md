@@ -315,3 +315,136 @@ qwen3.5-2b: probe_weights; probe_acts (P5, P6a, P7, P2b; no Fisher); ablation: @
 minicpm5-2b: probe_weights; probe_acts (P5, P6a, P7); ablation: @only every type at 4 bits; +keepcols=1 at 4
   bits; +keepsuper at 4 bits.
 Everything appends; rerunning a finished item is never needed. Budget: stop and report if the total passes 4 h.
+
+## Phase 2 outcome (2026-11-08, see NOTES.md "Phase 2")
+
+Measured levers: type-level bit allocation from measured damage (0.15-0.24 bits/param, RTN, three models),
+Hadamard + GPTQ at 3 bits (0.23-0.26 bits/param, 0.8B, one seed), entropy coding of indices (~0.5 bits/param,
+0.44 of it generic). Refuted or negative: low rank (B), inter-layer coding (C), outlier-column protection by weight
+norm, super-weight protection, usage-frequency (F), Hessian-diagonal sensitivity proxy (anti-correlated with the
+measured damage; the Fisher diagonal predicts it, +0.96, post hoc). Noise: 4.4% PPL / 5% KL seed spread.
+
+## Phase 3 contract: methods (written 2026-11-08 before any Phase 3 code)
+
+Letters are the task statement's: A allocation, B low rank, C inter-layer, D rotation, E codebook + entropy coding,
+F usage-aware, G own ideas. B, C, F are dropped on Phase 2 evidence and get one line each in REPORT.md.
+
+### Rules that bind every Phase 3 row
+
+- No training, no distillation, no gradient step on model weights. Allowed: GPTQ error feedback, closed-form
+  codebook fitting on weights (Lloyd-Max iterations), measuring gradients (Fisher) on C4, water-filling on
+  calibration-measured damage. A gradient-trained rotation ("learned rotation" of the task's D) is therefore NOT
+  run; D is restricted to zero-bit rotations and one honestly-costed data-dependent rotation (see D).
+- Calibration / allocation signals come from C4 only (`c4_calibration`, seed = run seed; a disjoint seed-2 set for
+  damage measurement). WikiText-2 test is touched only by `evaluate` on the final model. Phase 2's `@only` KLs were
+  measured on WikiText and are therefore NOT used to set bits; they are re-measured on C4 (A1 below).
+- GPTQ in Phase 3 uses the f32 per-window Hessian product (`--hessian-f32`, explicit on every run; the env override
+  `WCOMP_HESSIAN_F32` is removed). The Phase 3 baseline is therefore re-run with the same path and two seeds, so
+  every comparison is like-for-like. Phase 1 rows are not compared against directly.
+- Every row records three bit figures for its block linears: `bits_blocks` (fixed-length indices, as before),
+  `bits_blocks_huff` (indices coded with a per-tensor Huffman code built from the tensor's exact symbol counts,
+  code-length table counted at `b * 2^b` bits per tensor; the best of single-symbol and pair-symbol (alphabet
+  2^(2b), table `2b * 2^(2b)` bits) codes per tensor, choice costs 1 bit per tensor), and `bits_blocks_shannon`
+  (the entropy bound, for the gap). All side information (scales, zero points, codebooks, allocation tables, masks,
+  rotation seeds = 0 bits, stored matrices at bf16) is in all three. `bits_all` as before, on the fixed figure.
+  Indices are recovered exactly from (W_hat, scale[, codebook]); the code asserts `W_hat == dequant(idx)`.
+- Reference curve per model: `gptq32-sym-g128-{4,3,2}` seeds 0 and 1 (MiniCPM: seed 0, plus seed 1 at 3 bits).
+  Between the seed-mean points, log(KL) and log(PPL - PPL_fp16) are interpolated linearly in `bits_blocks`.
+  A method **beats the baseline** at its bits if its KL is below the interpolated curve by more than 5% and its
+  dPPL is below by more than 4.4%, on both seeds where two exist. **Bits saved** = the curve's bits at the method's
+  KL minus the method's bits (reported for the fixed and the Huffman figure; the curve itself is read at fixed
+  bits, and a second curve with the baseline's own Huffman figure is drawn so coding gain is never double counted).
+- Shuffle controls: A and G permute the computed allocation across units (two permutations, seeds 1 and 2,
+  rebalanced to the same `bits_blocks` within 0.02); a claimed allocation gain needs the real assignment to beat
+  both permutations by > 5% KL. E's entropy gain is permutation invariant by construction (stated; its control is
+  the Gaussian index entropy of P1, the "generic" part). D's control is the random orthogonal rotation.
+- Seeds: 0.8B key rows at seeds 0 and 1 (calibration and rotation seed = run seed); 2B seeds 0 and 1 for the
+  baseline, A and the combination; MiniCPM seed 0. Output: `results/phase3/<model>/runs.jsonl` (run_baselines row
+  schema plus `bits_blocks_huff`, `bits_blocks_shannon`, `alloc` (per-type or per-tensor bits as a short string or
+  path), `rotation`), plots `results/rd3_<model>.png`, table `results/phase3/summary.md`.
+- Budget: ~2.5 min per 0.8B GPTQ row, ~6 min per 2B row, ~8 min per MiniCPM row; the run list below is ~5 h. If a
+  model's list passes 3 h, finish the current row and report.
+
+### Methods
+
+**A. Sensitivity-driven bit allocation.**
+A1 damage measurement on C4 (calibration-only): `rtn-sym-g128-4@only=<type>` for every type, evaluated with
+  `evaluate(model, ref, c4_ids_seed2[:32], kl_windows=32)` (PPL and KL on the 32 seed-2 C4 windows; never
+  WikiText), all three models; and per tensor where cheap (0.8B: 186 rows at ~8 s each on 32 windows = 25 min; do
+  it). Stored in `results/phase3/<model>/damage_c4.jsonl`. d_u = KL_u / n_u (nats per parameter).
+A2 allocation: minimize sum_u n_u d_u 2^(-2 (b_u - 4)) subject to the numel-weighted mean of b_u = target, b_u in
+  {2, 3, 4, 5, 6, 8}, by greedy marginal gain (exact for this convex objective); side information 3 bits per unit.
+  Units: weight types (11 / 7) from A1-type, or tensors (186 / ...) from A1-tensor (0.8B) or from the Fisher
+  per-tensor total (`fisher.json`, 0.8B; for the 2B compute per-tensor Fisher totals only, with 512-token windows
+  and scalar accumulators, if it fits in memory; else types only).
+A3 rows: `alloc-type-gptq32-avg{2.5,3,3.5,4}` (0.8B both seeds, 2B both seeds, MiniCPM avg 3 and 3.5 seed 0);
+  `alloc-tensor-gptq32-avg{3,3.5}` (0.8B; 2B if Fisher totals exist); `alloc-type-rtn-avg{3,3.5}` (0.8B, the RTN
+  gate that connects to Phase 2); shuffle controls `alloc-type-shuf{1,2}-gptq32-avg3` (0.8B seed 0, 2B seed 0).
+  "avg" is the target mean index width; the row reports the realized `bits_blocks`.
+
+**D. Rotation (zero-bit).** `had-gptq32-sym-g128-{4,3,2}` (0.8B both seeds, 2B both seeds, MiniCPM 3 seed 0);
+  `rnd-gptq32-sym-g128-3` (seeded random orthogonal per input width, 0 bits; 0.8B seeds 0 and 1);
+  `hadsign-gptq32-sym-g128-3` (Hadamard times a seeded random sign diagonal; 0.8B seed 0). One honestly costed
+  data-dependent rotation as an upper-bound probe: `eig-gptq32-sym-g128-3` (0.8B seed 0): per block linear the
+  input rotation R = eigenvectors of its calibration Hessian, R stored at bf16 and counted (16 K / N bits/param
+  per tensor, shared by linears with the same input where applicable); expected to lose on bits by a wide margin;
+  it is run once to put the number on the table and to show what a free data-dependent rotation would be worth.
+
+**E. Non-uniform codebook + entropy coding.**
+E1 `+huff` accounting on every row (rule above); the baseline's own Huffman figure defines the coded reference curve.
+E2 `lloyd-gptq32-g128-{4,3,2}`: per-tensor codebook of 2^b levels fitted by Lloyd-Max (k-means in 1-D, 50
+  iterations, init at Gaussian quantiles) on the group-normalized weights w / s_g with s_g = group RMS (f16, 16/128
+  bits); quantization in GPTQ = nearest codebook level; codebook cost 2^b * 16 bits per tensor. 0.8B both seeds,
+  2B seed 0 (3 bits), MiniCPM seed 0 (3 bits).
+E3 `nf-gptq32-g128-{4,3}`: fixed codebook = Gaussian quantiles (NF4-style, 0 table bits), same normalization; 0.8B
+  seed 0. Shows how much of E2 a fixed codebook captures.
+E4 RD-bound table: for every Phase 3 row, per weight type, the MSE of the group-normalized weights versus the
+  Gaussian rate-distortion bound R(D) = 0.5 log2(1 / D) at the row's three bit figures: "bits above the 6.02 dB/bit
+  bound" (fixed, Huffman, Shannon). Written to `results/phase3/<model>/rd_bound.jsonl` by the runner.
+
+**G. Own idea: within-tensor row allocation by Fisher row energy.** Gate first on RTN (0.8B): rows of each tensor
+  get b-1 / b / b+1 bits by water-filling on the Fisher row energy (`fisher.json` row sums r_i, d_i = r_i / K)
+  at a fixed per-tensor mean of 4 bits; 2 bits side information per row. `rowalloc-fisher-rtn-avg4` vs
+  `rtn-sym-g128-4` and the shuffled-row controls `rowalloc-shuf{1,2}-rtn-avg4` (seed 0). Gate: beats uniform by
+  > 10% KL and both controls by > 5%. If passed: `rowalloc-fisher-gptq32-avg{4,3}` (0.8B both seeds) and, combined
+  with A, in the combination rows. If failed: recorded as a negative result, no GPTQ rows.
+  Second own observation to test cheaply (0.8B, RTN, C4 eval): is damage per parameter ~ 1 / n_t because small
+  tensors have larger output scale? Correlate d_t with ||W_t X||^2 / n_t and with the output RMS; one table.
+
+**Combination.** `combo-gptq32-avg{2.5,3,3.5}` = Hadamard (if D beats at 3 bits) + type-level allocation (A) +
+  Lloyd codebook (only if E2 beat the uniform grid at 3 bits by > 5% KL on both seeds) + GPTQ + Huffman accounting;
+  G rows included only if its gate passed. 0.8B seeds 0 and 1; 2B seeds 0 and 1; MiniCPM avg 3 seed 0. The
+  combination's components are decided by the rules above after the single-method rows exist, and the decision is
+  written to NOTES.md before the combo rows run.
+
+### Pre-registered hypotheses (copied verbatim into NOTES.md before the runs)
+
+- H3-A. Type-level allocation from C4-measured damage beats uniform GPTQ by 15-30% KL at equal `bits_blocks` at
+  avg 3.5 and 3 on both Qwen models, both seeds; both shuffled allocations are no better than uniform (within 5%).
+  Tensor-level allocation adds < 10% KL on top of type-level. The C4-measured per-type damage ranks the types the
+  way the Phase 2 WikiText measurement did (Spearman > 0.9), so the allocation does not depend on the eval set.
+- H3-D. Hadamard + GPTQ beats GPTQ by > 20% KL at 3 bits on all three models; at 4 bits the gain is < 10% (noise
+  edge); at 2 bits it is the largest (> 40%). Random orthogonal equals Hadamard within 5% KL (the gain is generic
+  incoherence, not model-specific structure); the eigenbasis rotation costs > 1 bit/param stored and loses.
+- H3-E. Huffman coding of GPTQ indices saves 0.40-0.50 bits/param at 4 bits, 0.25-0.40 at 3, < 0.20 at 2 with
+  single-symbol codes (pair codes recover part of the 2-bit loss); the gap to the Shannon figure is < 0.05 bits at
+  4 bits. Lloyd-Max lowers KL by 10-25% at 3-4 bits for < 0.01 bits of table; the fixed Gaussian codebook captures
+  at least two thirds of that. All coders sit 1.0-1.5 bits above the Gaussian RD bound at equal MSE at 4 bits, and
+  the gap shrinks with fewer bits.
+- H3-G. Uncertain (the only tested proxy failed in Phase 2). Prior: the Fisher row split beats uniform RTN-4 by
+  10-20% KL at equal bits and the shuffled-row controls do not; if it fails, within-tensor allocation is dropped.
+- H3-combo. At avg 3.0 (fixed `bits_blocks` ~3.1, Huffman ~2.7-2.8) the combination reaches the KL of uniform
+  GPTQ-4 (fixed 4.125) on the 0.8B and the 2B, i.e. about 1.0-1.3 bits/param saved at equal quality against the
+  Phase 1 best coder, of which ~0.4 is entropy coding, ~0.25 rotation, ~0.2 allocation, the rest interaction.
+  At avg 2.5 the combination stays below +50% PPL (Phase 1's best 2-bit row was +655%).
+
+### Phase 3 run list (sequential on the one GPU, from `D:\repos\wcomp`)
+
+qwen3.5-0.8b: A1 damage (types and tensors, C4); baseline gptq32 4/3/2 seeds 0,1; D rows; E2/E3 rows; A3 rows
+  (incl. RTN gate and shuffles); G gate (RTN) and, if passed, G GPTQ rows; combo decision written to NOTES.md;
+  combo rows seeds 0,1; plots and summary.
+qwen3.5-2b: A1 damage (types); Fisher per-tensor totals if feasible; baseline 4/3/2 seeds 0,1; had 4/3/2 seeds 0,1;
+  lloyd 3 seed 0; alloc-type avg 2.5/3/3.5/4 seeds 0,1 (+ tensor-level if Fisher); shuffles avg 3 seed 0; combo
+  avg 2.5/3/3.5 seeds 0,1.
+minicpm5-2b: A1 damage (types); baseline 4/3 seed 0 and 3 seed 1; had 3; lloyd 3; alloc-type avg 3 and 3.5; combo
+  avg 3.
