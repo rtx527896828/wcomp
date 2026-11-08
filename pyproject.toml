@@ -1,0 +1,28 @@
+[project]
+name = "wcomp"
+version = "0.1.0"
+description = "Lossy compression of LLM weights as a probe for structure"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch>=2.9",
+    "transformers>=5.6",
+    "numpy",
+    "pyarrow",
+    "matplotlib",
+    "scipy",
+    "safetensors",
+    "huggingface-hub",
+    "tqdm",
+    "accelerate",
+]
+
+[tool.uv]
+package = false
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
