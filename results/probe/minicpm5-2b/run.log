@@ -1,0 +1,184 @@
+=== 2026-11-08T11:36:52Z STEP1 probe_weights --include-embedding start
+W1108 06:36:56.109000 33380 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|4         | 19/381 [00:00<00:02, 151.70it/s]Loading weights:  10%|#         | 39/381 [00:00<00:01, 174.84it/s]Loading weights:  16%|#6        | 61/381 [00:00<00:01, 186.51it/s]Loading weights:  21%|##        | 80/381 [00:00<00:01, 187.71it/s]Loading weights:  27%|##6       | 101/381 [00:00<00:01, 191.12it/s]Loading weights:  32%|###2      | 123/381 [00:00<00:01, 199.39it/s]Loading weights:  38%|###7      | 144/381 [00:00<00:01, 200.20it/s]Loading weights:  43%|####3     | 165/381 [00:00<00:01, 189.44it/s]Loading weights:  49%|####8     | 185/381 [00:01<00:01, 175.62it/s]Loading weights:  55%|#####4    | 208/381 [00:01<00:00, 178.27it/s]Loading weights:  61%|######1   | 234/381 [00:01<00:00, 184.13it/s]Loading weights:  67%|######7   | 257/381 [00:01<00:00, 195.08it/s]Loading weights:  73%|#######3  | 279/381 [00:01<00:00, 196.57it/s]Loading weights:  78%|#######8  | 299/381 [00:01<00:00, 185.80it/s]Loading weights:  84%|########3 | 319/381 [00:01<00:00, 186.69it/s]Loading weights:  89%|########8 | 338/381 [00:01<00:00, 187.13it/s]Loading weights:  94%|#########4| 360/381 [00:01<00:00, 179.78it/s]Loading weights: 100%|##########| 381/381 [00:02<00:00, 190.47it/s]
+06:36:59 probe_weights: loaded minicpm5-2b in 3.9s: 294 block linears + 2 embedding tensors
+06:37:00 probe_weights: P1 20/296 (model.layers.2.mlp.up_proj) 1.8s
+06:37:02 probe_weights: P1 40/296 (model.layers.5.mlp.gate_proj) 3.2s
+06:37:03 probe_weights: P1 60/296 (model.layers.8.self_attn.o_proj) 4.6s
+06:37:05 probe_weights: P1 80/296 (model.layers.11.self_attn.v_proj) 6.1s
+06:37:06 probe_weights: P1 100/296 (model.layers.14.self_attn.k_proj) 7.6s
+06:37:08 probe_weights: P1 120/296 (model.layers.17.self_attn.q_proj) 9.2s
+06:37:09 probe_weights: P1 140/296 (model.layers.19.mlp.down_proj) 10.7s
+06:37:11 probe_weights: P1 160/296 (model.layers.22.mlp.up_proj) 12.1s
+06:37:12 probe_weights: P1 180/296 (model.layers.25.mlp.gate_proj) 13.4s
+06:37:13 probe_weights: P1 200/296 (model.layers.28.self_attn.o_proj) 14.8s
+06:37:15 probe_weights: P1 220/296 (model.layers.31.self_attn.v_proj) 16.3s
+06:37:16 probe_weights: P1 240/296 (model.layers.34.self_attn.k_proj) 17.8s
+06:37:18 probe_weights: P1 260/296 (model.layers.37.self_attn.q_proj) 19.3s
+06:37:19 probe_weights: P1 280/296 (model.layers.39.mlp.down_proj) 20.8s
+06:37:33 probe_weights: P1 296/296 (lm_head) 34.0s
+06:37:33 probe_weights: P1 marginal: 296 records in 34.1s -> D:\repos\wcomp\results\probe\minicpm5-2b\marginal.json
+06:37:41 probe_weights: P2 20/296 (model.layers.2.mlp.up_proj) 8.0s
+06:37:48 probe_weights: P2 40/296 (model.layers.5.mlp.gate_proj) 15.4s
+06:37:56 probe_weights: P2 60/296 (model.layers.8.self_attn.o_proj) 22.8s
+06:38:03 probe_weights: P2 80/296 (model.layers.11.self_attn.v_proj) 30.3s
+06:38:11 probe_weights: P2 100/296 (model.layers.14.self_attn.k_proj) 38.2s
+06:38:19 probe_weights: P2 120/296 (model.layers.17.self_attn.q_proj) 46.2s
+06:38:26 probe_weights: P2 140/296 (model.layers.19.mlp.down_proj) 53.7s
+06:38:34 probe_weights: P2 160/296 (model.layers.22.mlp.up_proj) 61.1s
+06:38:41 probe_weights: P2 180/296 (model.layers.25.mlp.gate_proj) 68.5s
+06:38:49 probe_weights: P2 200/296 (model.layers.28.self_attn.o_proj) 75.9s
+06:38:56 probe_weights: P2 220/296 (model.layers.31.self_attn.v_proj) 83.4s
+06:39:04 probe_weights: P2 240/296 (model.layers.34.self_attn.k_proj) 91.4s
+06:39:12 probe_weights: P2 260/296 (model.layers.37.self_attn.q_proj) 99.3s
+06:39:20 probe_weights: P2 280/296 (model.layers.39.mlp.down_proj) 106.8s
+06:39:46 probe_weights: P2 296/296 (lm_head) 133.2s
+06:39:46 probe_weights: P2 lowrank: 296 records in 133.3s -> D:\repos\wcomp\results\probe\minicpm5-2b\lowrank.json
+06:39:52 probe_weights: P3 20/294 (model.layers.2.mlp.up_proj) 5.1s
+06:39:52 probe_weights: P3 40/294 (model.layers.5.mlp.gate_proj) 5.5s
+06:39:53 probe_weights: P3 60/294 (model.layers.8.self_attn.o_proj) 5.9s
+06:39:53 probe_weights: P3 80/294 (model.layers.11.self_attn.v_proj) 6.2s
+06:39:53 probe_weights: P3 100/294 (model.layers.14.self_attn.k_proj) 6.6s
+06:39:54 probe_weights: P3 120/294 (model.layers.17.self_attn.q_proj) 7.0s
+06:39:54 probe_weights: P3 140/294 (model.layers.19.mlp.down_proj) 7.4s
+06:39:54 probe_weights: P3 160/294 (model.layers.22.mlp.up_proj) 7.8s
+06:39:55 probe_weights: P3 180/294 (model.layers.25.mlp.gate_proj) 8.2s
+06:39:55 probe_weights: P3 200/294 (model.layers.28.self_attn.o_proj) 8.6s
+06:39:56 probe_weights: P3 220/294 (model.layers.31.self_attn.v_proj) 9.0s
+06:39:56 probe_weights: P3 240/294 (model.layers.34.self_attn.k_proj) 9.4s
+06:39:56 probe_weights: P3 260/294 (model.layers.37.self_attn.q_proj) 9.8s
+06:39:57 probe_weights: P3 280/294 (model.layers.39.mlp.down_proj) 10.2s
+06:39:57 probe_weights: P3 294/294 (model.layers.41.mlp.down_proj) 10.4s
+06:39:57 probe_weights: P3 outliers: 300 records in 10.6s -> D:\repos\wcomp\results\probe\minicpm5-2b\outliers.json
+06:46:54 probe_weights: P4 down:down_proj: 42 layers, 42 records (perm_axis 1) 417.0s
+06:53:46 probe_weights: P4 gate:gate_proj: 42 layers, 42 records (perm_axis 0) 411.9s
+06:53:57 probe_weights: P4 k:k_proj: 42 layers, 42 records (perm_axis None) 10.4s
+06:57:15 probe_weights: P4 o:o_proj: 42 layers, 42 records (perm_axis None) 198.7s
+07:00:33 probe_weights: P4 q:q_proj: 42 layers, 42 records (perm_axis None) 198.2s
+07:07:02 probe_weights: P4 up:up_proj: 42 layers, 42 records (perm_axis 0) 389.1s
+07:07:13 probe_weights: P4 v:v_proj: 42 layers, 42 records (perm_axis None) 10.5s
+07:07:13 probe_weights: P4 interlayer: 294 records in 1635.7s -> D:\repos\wcomp\results\probe\minicpm5-2b\interlayer.json
+07:07:13 probe_weights: done in 1818.3s
+=== 2026-11-08T12:07:13Z EXIT_STEP1 0
+=== 2026-11-08T12:07:29Z STEP2 probe_acts --probes p5,p6a,p7 (layer-chunk default 6, no full Hessian) start
+W1108 07:07:32.980000 29172 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   7%|7         | 28/381 [00:00<00:01, 261.09it/s]Loading weights:  14%|#4        | 55/381 [00:00<00:01, 252.99it/s]Loading weights:  21%|##1       | 81/381 [00:00<00:01, 236.89it/s]Loading weights:  28%|##8       | 108/381 [00:00<00:01, 239.68it/s]Loading weights:  35%|###5      | 135/381 [00:00<00:01, 241.57it/s]Loading weights:  43%|####2     | 163/381 [00:00<00:00, 252.97it/s]Loading weights:  50%|####9     | 189/381 [00:00<00:00, 254.48it/s]Loading weights:  56%|#####6    | 215/381 [00:00<00:00, 237.24it/s]Loading weights:  64%|######3   | 243/381 [00:00<00:00, 242.79it/s]Loading weights:  71%|#######1  | 271/381 [00:01<00:00, 243.73it/s]Loading weights:  78%|#######7  | 297/381 [00:01<00:00, 247.62it/s]Loading weights:  85%|########4 | 322/381 [00:01<00:00, 240.52it/s]Loading weights:  92%|#########2| 351/381 [00:01<00:00, 240.96it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 251.09it/s]
+07:07:35 probe_acts: loaded minicpm5-2b in 3.4s
+07:07:40 wcomp.probe.acts: input stats: layers 0-5 done (42 linears)
+07:07:46 wcomp.probe.acts: input stats: layers 6-11 done (42 linears)
+07:07:55 wcomp.probe.acts: input stats: layers 12-17 done (42 linears)
+07:08:06 wcomp.probe.acts: input stats: layers 18-23 done (42 linears)
+07:08:20 wcomp.probe.acts: input stats: layers 24-29 done (42 linears)
+07:08:37 wcomp.probe.acts: input stats: layers 30-35 done (42 linears)
+07:08:57 wcomp.probe.acts: input stats: layers 36-41 done (42 linears)
+07:09:01 wcomp.probe.acts: input stats: layers 0-5 done (42 linears)
+07:09:07 wcomp.probe.acts: input stats: layers 6-11 done (42 linears)
+07:09:16 wcomp.probe.acts: input stats: layers 12-17 done (42 linears)
+07:09:27 wcomp.probe.acts: input stats: layers 18-23 done (42 linears)
+07:09:41 wcomp.probe.acts: input stats: layers 24-29 done (42 linears)
+07:09:58 wcomp.probe.acts: input stats: layers 30-35 done (42 linears)
+07:10:18 wcomp.probe.acts: input stats: layers 36-41 done (42 linears)
+07:10:18 probe_acts: input stats: 161.5s, peak 5.77 GB, full_hessian=False
+07:10:18 probe_acts: wrote D:\repos\wcomp\results\probe\minicpm5-2b\acts.json (294 records)
+07:10:19 probe_acts: wrote D:\repos\wcomp\results\probe\minicpm5-2b\sensitivity.json (294 records)
+07:10:53 wcomp.probe.acts: P7 model.layers.7.mlp.down_proj[106,1460]=1.055 (spike): dPPL +205.59% KL 1.2415 | magnitude ctrl dPPL +0.08% | random ctrl dPPL +0.01%
+07:11:09 wcomp.probe.acts: P7 model.layers.40.mlp.down_proj[106,271]=0.9727 (spike): dPPL -0.14% KL 0.0014 | magnitude ctrl dPPL -0.13% | random ctrl dPPL +0.01%
+07:11:26 wcomp.probe.acts: P7 model.layers.41.mlp.down_proj[106,4621]=-0.8242 (spike_no_input): dPPL -0.01% KL 0.0002 | magnitude ctrl dPPL -0.08% | random ctrl dPPL +0.00%
+07:11:43 wcomp.probe.acts: P7 model.layers.40.mlp.gate_proj[1331,106]=2.188 (top16): dPPL +0.02% KL 0.0009 | magnitude ctrl dPPL -0.20% | random ctrl dPPL +0.01%
+07:12:00 wcomp.probe.acts: P7 model.layers.40.mlp.up_proj[271,750]=1.984 (top16): dPPL +0.25% KL 0.0027 | magnitude ctrl dPPL +0.06% | random ctrl dPPL +0.01%
+07:12:17 wcomp.probe.acts: P7 model.layers.7.mlp.gate_proj[4426,1108]=-1.844 (top16): dPPL +1.23% KL 0.0118 | magnitude ctrl dPPL +0.11% | random ctrl dPPL -0.00%
+07:12:34 wcomp.probe.acts: P7 model.layers.41.mlp.gate_proj[5497,106]=-1.836 (top16): dPPL -0.03% KL 0.0002 | magnitude ctrl dPPL +1.26% | random ctrl dPPL -0.00%
+07:12:51 wcomp.probe.acts: P7 model.layers.31.mlp.gate_proj[4411,106]=-1.828 (top16): dPPL +0.33% KL 0.0008 | magnitude ctrl dPPL +0.01% | random ctrl dPPL +0.02%
+07:13:08 wcomp.probe.acts: P7 model.layers.41.mlp.up_proj[5497,106]=1.797 (top16): dPPL +0.05% KL 0.0002 | magnitude ctrl dPPL -0.08% | random ctrl dPPL -0.00%
+07:13:08 wcomp.probe.acts: P7 model.layers.40.mlp.up_proj[1331,106]=1.742 (top16): dPPL +0.06% KL 0.0008 | magnitude ctrl dPPL +0.25% | random ctrl dPPL +0.01%
+07:13:13 wcomp.probe.acts: P7 model.layers.40.mlp.up_proj[1290,106]=1.734 (top16): dPPL +3.02% KL 0.0100 | magnitude ctrl dPPL +0.25% | random ctrl dPPL +0.01%
+07:13:13 wcomp.probe.acts: P7 model.layers.40.mlp.gate_proj[271,106]=1.711 (top16): dPPL -0.20% KL 0.0014 | magnitude ctrl dPPL +0.02% | random ctrl dPPL +0.01%
+07:13:13 wcomp.probe.acts: P7 model.layers.7.mlp.gate_proj[3516,1108]=-1.68 (top16): dPPL +0.11% KL 0.0019 | magnitude ctrl dPPL +1.23% | random ctrl dPPL -0.00%
+07:13:19 wcomp.probe.acts: P7 model.layers.7.mlp.gate_proj[3919,1108]=-1.617 (top16): dPPL +0.11% KL 0.0012 | magnitude ctrl dPPL +1.23% | random ctrl dPPL -0.00%
+07:13:36 wcomp.probe.acts: P7 model.layers.28.mlp.down_proj[106,4293]=1.617 (top16): dPPL +0.01% KL 0.0007 | magnitude ctrl dPPL +0.03% | random ctrl dPPL +0.01%
+07:13:53 wcomp.probe.acts: P7 model.layers.22.mlp.up_proj[3256,106]=-1.602 (top16): dPPL +0.06% KL 0.0008 | magnitude ctrl dPPL +0.00% | random ctrl dPPL +0.02%
+07:14:10 wcomp.probe.acts: P7 model.layers.14.mlp.down_proj[106,1564]=1.562 (top16): dPPL +0.15% KL 0.0008 | magnitude ctrl dPPL +0.01% | random ctrl dPPL +0.04%
+07:14:27 wcomp.probe.acts: P7 model.layers.7.mlp.up_proj[3127,1108]=1.531 (top16): dPPL +0.02% KL 0.0011 | magnitude ctrl dPPL +0.06% | random ctrl dPPL +0.04%
+07:14:44 wcomp.probe.acts: P7 model.layers.36.mlp.down_proj[106,3611]=-1.516 (top16): dPPL +0.07% KL 0.0006 | magnitude ctrl dPPL -0.00% | random ctrl dPPL -0.00%
+07:14:47 probe_acts: wrote D:\repos\wcomp\results\probe\minicpm5-2b\superweight.json (19 records)
+07:14:47 probe_acts: done in 435.2s
+=== 2026-11-08T12:14:47Z EXIT_STEP2 0
+=== 2026-11-08T12:15:11Z STEP3-only4 start
+07:15:13 run_baselines: loading reference minicpm5-2b
+W1108 07:15:14.794000 21924 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   7%|7         | 28/381 [00:00<00:01, 265.49it/s]Loading weights:  14%|#4        | 55/381 [00:00<00:01, 253.39it/s]Loading weights:  21%|##1       | 81/381 [00:00<00:01, 249.03it/s]Loading weights:  28%|##8       | 108/381 [00:00<00:01, 256.83it/s]Loading weights:  35%|###5      | 135/381 [00:00<00:00, 247.20it/s]Loading weights:  43%|####2     | 162/381 [00:00<00:00, 251.02it/s]Loading weights:  50%|####9     | 190/381 [00:00<00:00, 255.61it/s]Loading weights:  57%|#####7    | 218/381 [00:00<00:00, 255.80it/s]Loading weights:  64%|######4   | 244/381 [00:00<00:00, 252.53it/s]Loading weights:  71%|#######1  | 271/381 [00:01<00:00, 251.78it/s]Loading weights:  78%|#######7  | 297/381 [00:01<00:00, 245.67it/s]Loading weights:  85%|########5 | 324/381 [00:01<00:00, 243.04it/s]Loading weights:  92%|#########2| 352/381 [00:01<00:00, 248.21it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 255.42it/s]
+07:15:17 run_baselines: eval windows (139, 2048)
+07:15:29 run_baselines: reference hidden states (32, 2048, 2048) in 11.7s; reference layers moved to the CPU
+07:15:29 run_baselines: === rtn-sym-g128-4@only=q ===
+07:15:29 run_baselines: gpu memory: 10.60 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   5%|4         | 19/381 [00:00<00:02, 178.62it/s]Loading weights:  12%|#1        | 44/381 [00:00<00:01, 212.42it/s]Loading weights:  19%|#8        | 72/381 [00:00<00:01, 238.15it/s]Loading weights:  26%|##6       | 100/381 [00:00<00:01, 236.02it/s]Loading weights:  33%|###3      | 127/381 [00:00<00:01, 241.37it/s]Loading weights:  40%|####      | 154/381 [00:00<00:00, 241.31it/s]Loading weights:  48%|####7     | 181/381 [00:00<00:00, 248.29it/s]Loading weights:  55%|#####4    | 209/381 [00:00<00:00, 254.06it/s]Loading weights:  62%|######1   | 236/381 [00:00<00:00, 251.29it/s]Loading weights:  69%|######8   | 262/381 [00:01<00:00, 246.23it/s]Loading weights:  76%|#######5  | 288/381 [00:01<00:00, 244.19it/s]Loading weights:  83%|########2 | 315/381 [00:01<00:00, 243.46it/s]Loading weights:  90%|######### | 343/381 [00:01<00:00, 244.90it/s]Loading weights:  97%|#########6| 369/381 [00:01<00:00, 238.81it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 245.33it/s]
+07:16:17 run_baselines: rtn-sym-g128-4@only=q: ppl 14 kl 0.02365 top1 0.9243 bits_blocks 14.9444 bits_all 15.1688 time 48.1s (method 0.1s)
+07:16:17 run_baselines: === rtn-sym-g128-4@only=k ===
+07:16:17 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   3%|2         | 10/381 [00:00<00:03, 97.16it/s]Loading weights:  10%|9         | 37/381 [00:00<00:01, 194.93it/s]Loading weights:  16%|#5        | 60/381 [00:00<00:01, 209.85it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 231.13it/s]Loading weights:  30%|##9       | 113/381 [00:00<00:01, 227.67it/s]Loading weights:  37%|###7      | 141/381 [00:00<00:00, 242.83it/s]Loading weights:  45%|####4     | 171/381 [00:00<00:00, 255.69it/s]Loading weights:  52%|#####1    | 197/381 [00:00<00:00, 253.49it/s]Loading weights:  59%|#####8    | 223/381 [00:00<00:00, 242.95it/s]Loading weights:  66%|######6   | 252/381 [00:01<00:00, 255.48it/s]Loading weights:  73%|#######3  | 279/381 [00:01<00:00, 242.78it/s]Loading weights:  81%|########  | 307/381 [00:01<00:00, 248.32it/s]Loading weights:  87%|########7 | 333/381 [00:01<00:00, 250.56it/s]Loading weights:  94%|#########4| 359/381 [00:01<00:00, 243.56it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 241.90it/s]
+07:17:05 run_baselines: rtn-sym-g128-4@only=k: ppl 13.87 kl 0.01171 top1 0.9453 bits_blocks 15.8681 bits_all 15.8961 time 48.0s (method 0.0s)
+07:17:05 run_baselines: === rtn-sym-g128-4@only=v ===
+07:17:05 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|4         | 16/381 [00:00<00:02, 138.14it/s]Loading weights:  12%|#2        | 46/381 [00:00<00:01, 215.83it/s]Loading weights:  18%|#8        | 70/381 [00:00<00:01, 223.69it/s]Loading weights:  26%|##5       | 99/381 [00:00<00:01, 243.43it/s]Loading weights:  33%|###2      | 124/381 [00:00<00:01, 233.21it/s]Loading weights:  40%|####      | 153/381 [00:00<00:00, 246.19it/s]Loading weights:  47%|####7     | 180/381 [00:00<00:00, 246.67it/s]Loading weights:  54%|#####4    | 207/381 [00:00<00:00, 248.06it/s]Loading weights:  62%|######1   | 235/381 [00:00<00:00, 256.72it/s]Loading weights:  69%|######8   | 261/381 [00:01<00:00, 250.85it/s]Loading weights:  76%|#######5  | 289/381 [00:01<00:00, 248.24it/s]Loading weights:  83%|########2 | 315/381 [00:01<00:00, 242.38it/s]Loading weights:  90%|######### | 343/381 [00:01<00:00, 251.15it/s]Loading weights:  97%|#########6| 369/381 [00:01<00:00, 234.58it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 245.24it/s]
+07:17:53 run_baselines: rtn-sym-g128-4@only=v: ppl 14.28 kl 0.03176 top1 0.9132 bits_blocks 15.8681 bits_all 15.8961 time 48.0s (method 0.0s)
+07:17:53 run_baselines: === rtn-sym-g128-4@only=o ===
+07:17:53 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 15/381 [00:00<00:02, 147.76it/s]Loading weights:  10%|#         | 40/381 [00:00<00:01, 198.82it/s]Loading weights:  17%|#7        | 65/381 [00:00<00:01, 219.13it/s]Loading weights:  24%|##3       | 91/381 [00:00<00:01, 226.63it/s]Loading weights:  31%|###       | 117/381 [00:00<00:01, 222.08it/s]Loading weights:  37%|###7      | 142/381 [00:00<00:01, 230.63it/s]Loading weights:  45%|####5     | 172/381 [00:00<00:00, 249.41it/s]Loading weights:  52%|#####1    | 198/381 [00:00<00:00, 252.19it/s]Loading weights:  59%|#####9    | 226/381 [00:00<00:00, 249.69it/s]Loading weights:  67%|######6   | 254/381 [00:01<00:00, 251.55it/s]Loading weights:  74%|#######3  | 281/381 [00:01<00:00, 248.88it/s]Loading weights:  81%|########  | 307/381 [00:01<00:00, 250.35it/s]Loading weights:  87%|########7 | 333/381 [00:01<00:00, 250.67it/s]Loading weights:  94%|#########4| 359/381 [00:01<00:00, 235.94it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 241.55it/s]
+07:18:41 run_baselines: rtn-sym-g128-4@only=o: ppl 14.21 kl 0.03552 top1 0.9051 bits_blocks 14.9444 bits_all 15.1688 time 48.0s (method 0.0s)
+07:18:41 run_baselines: === rtn-sym-g128-4@only=gate ===
+07:18:41 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   3%|3         | 12/381 [00:00<00:03, 119.89it/s]Loading weights:  10%|9         | 37/381 [00:00<00:01, 185.93it/s]Loading weights:  17%|#6        | 63/381 [00:00<00:01, 211.72it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 233.41it/s]Loading weights:  30%|##9       | 114/381 [00:00<00:01, 235.43it/s]Loading weights:  37%|###6      | 140/381 [00:00<00:01, 240.95it/s]Loading weights:  45%|####4     | 171/381 [00:00<00:00, 256.00it/s]Loading weights:  52%|#####1    | 197/381 [00:00<00:00, 257.15it/s]Loading weights:  59%|#####8    | 223/381 [00:00<00:00, 250.73it/s]Loading weights:  65%|######5   | 249/381 [00:01<00:00, 249.43it/s]Loading weights:  72%|#######1  | 274/381 [00:01<00:00, 247.04it/s]Loading weights:  78%|#######8  | 299/381 [00:01<00:00, 246.05it/s]Loading weights:  85%|########5 | 324/381 [00:01<00:00, 243.32it/s]Loading weights:  92%|#########1| 349/381 [00:01<00:00, 244.48it/s]Loading weights:  98%|#########8| 374/381 [00:01<00:00, 245.78it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 243.58it/s]
+07:19:29 run_baselines: rtn-sym-g128-4@only=gate: ppl 14.12 kl 0.03056 top1 0.9123 bits_blocks 12.8333 bits_all 13.5064 time 48.0s (method 0.1s)
+07:19:29 run_baselines: === rtn-sym-g128-4@only=up ===
+07:19:29 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 15/381 [00:00<00:02, 145.13it/s]Loading weights:  10%|#         | 40/381 [00:00<00:01, 204.77it/s]Loading weights:  17%|#7        | 65/381 [00:00<00:01, 220.64it/s]Loading weights:  24%|##3       | 91/381 [00:00<00:01, 222.51it/s]Loading weights:  31%|###1      | 120/381 [00:00<00:01, 244.07it/s]Loading weights:  39%|###8      | 148/381 [00:00<00:00, 250.23it/s]Loading weights:  46%|####5     | 174/381 [00:00<00:00, 252.02it/s]Loading weights:  52%|#####2    | 200/381 [00:00<00:00, 249.13it/s]Loading weights:  59%|#####9    | 226/381 [00:00<00:00, 243.93it/s]Loading weights:  66%|######6   | 253/381 [00:01<00:00, 248.54it/s]Loading weights:  73%|#######2  | 278/381 [00:01<00:00, 243.83it/s]Loading weights:  80%|#######9  | 303/381 [00:01<00:00, 239.71it/s]Loading weights:  87%|########7 | 333/381 [00:01<00:00, 247.09it/s]Loading weights:  95%|#########4| 361/381 [00:01<00:00, 249.34it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 246.59it/s]
+07:20:17 run_baselines: rtn-sym-g128-4@only=up: ppl 14.25 kl 0.04610 top1 0.8896 bits_blocks 12.8333 bits_all 13.5064 time 48.1s (method 0.1s)
+07:20:17 run_baselines: === rtn-sym-g128-4@only=down ===
+07:20:17 run_baselines: gpu memory: 10.59 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   3%|3         | 13/381 [00:00<00:03, 117.18it/s]Loading weights:  10%|#         | 40/381 [00:00<00:01, 202.60it/s]Loading weights:  16%|#6        | 61/381 [00:00<00:01, 192.54it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 227.96it/s]Loading weights:  31%|###       | 117/381 [00:00<00:01, 233.57it/s]Loading weights:  38%|###8      | 145/381 [00:00<00:00, 246.28it/s]Loading weights:  45%|####5     | 172/381 [00:00<00:00, 248.52it/s]Loading weights:  52%|#####2    | 200/381 [00:00<00:00, 252.39it/s]Loading weights:  59%|#####9    | 226/381 [00:00<00:00, 252.75it/s]Loading weights:  66%|######6   | 252/381 [00:01<00:00, 248.21it/s]Loading weights:  73%|#######3  | 279/381 [00:01<00:00, 244.31it/s]Loading weights:  81%|########  | 307/381 [00:01<00:00, 242.35it/s]Loading weights:  87%|########7 | 332/381 [00:01<00:00, 242.90it/s]Loading weights:  94%|#########3| 357/381 [00:01<00:00, 243.18it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 241.89it/s]
+07:21:05 run_baselines: rtn-sym-g128-4@only=down: ppl 14.81 kl 0.08193 top1 0.8567 bits_blocks 12.8333 bits_all 13.5064 time 48.1s (method 0.1s)
+07:21:05 run_baselines: wrote D:\repos\wcomp\results\probe\minicpm5-2b\ablation.jsonl
+=== 2026-11-08T12:21:06Z EXIT_STEP3-only4 0
+=== 2026-11-08T12:21:06Z STEP3-keepcols start
+07:21:08 run_baselines: loading reference minicpm5-2b
+W1108 07:21:09.266000 9288 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   7%|7         | 27/381 [00:00<00:01, 248.68it/s]Loading weights:  15%|#4        | 56/381 [00:00<00:01, 271.20it/s]Loading weights:  22%|##2       | 84/381 [00:00<00:01, 260.44it/s]Loading weights:  30%|##9       | 113/381 [00:00<00:00, 268.28it/s]Loading weights:  37%|###6      | 140/381 [00:00<00:00, 263.38it/s]Loading weights:  44%|####4     | 168/381 [00:00<00:00, 266.62it/s]Loading weights:  51%|#####1    | 195/381 [00:00<00:00, 267.26it/s]Loading weights:  58%|#####8    | 222/381 [00:00<00:00, 250.00it/s]Loading weights:  65%|######5   | 248/381 [00:00<00:00, 230.13it/s]Loading weights:  72%|#######2  | 275/381 [00:01<00:00, 239.16it/s]Loading weights:  80%|#######9  | 303/381 [00:01<00:00, 249.27it/s]Loading weights:  87%|########6 | 330/381 [00:01<00:00, 248.04it/s]Loading weights:  94%|#########3| 357/381 [00:01<00:00, 251.87it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 259.32it/s]
+07:21:11 run_baselines: eval windows (139, 2048)
+07:21:22 run_baselines: reference hidden states (32, 2048, 2048) in 10.8s; reference layers moved to the CPU
+07:21:22 run_baselines: === rtn-sym-g128-4+keepcols=1 ===
+07:21:22 run_baselines: gpu memory: 10.60 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 15/381 [00:00<00:02, 149.88it/s]Loading weights:  10%|9         | 37/381 [00:00<00:01, 190.93it/s]Loading weights:  17%|#6        | 63/381 [00:00<00:01, 213.77it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 233.14it/s]Loading weights:  31%|###       | 118/381 [00:00<00:01, 235.56it/s]Loading weights:  38%|###7      | 144/381 [00:00<00:00, 238.36it/s]Loading weights:  45%|####4     | 170/381 [00:00<00:00, 243.65it/s]Loading weights:  52%|#####1    | 198/381 [00:00<00:00, 254.33it/s]Loading weights:  59%|#####8    | 224/381 [00:00<00:00, 247.68it/s]Loading weights:  65%|######5   | 249/381 [00:01<00:00, 246.60it/s]Loading weights:  72%|#######2  | 275/381 [00:01<00:00, 243.47it/s]Loading weights:  80%|#######9  | 303/381 [00:01<00:00, 253.00it/s]Loading weights:  86%|########6 | 329/381 [00:01<00:00, 247.01it/s]Loading weights:  93%|#########2| 354/381 [00:01<00:00, 247.49it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 244.63it/s]
+07:22:11 run_baselines: rtn-sym-g128-4+keepcols=1: ppl 16.59 kl 0.22265 top1 0.7767 bits_blocks 4.2431 bits_all 6.7421 time 48.5s (method 0.6s)
+07:22:11 run_baselines: wrote D:\repos\wcomp\results\probe\minicpm5-2b\ablation.jsonl
+=== 2026-11-08T12:22:12Z EXIT_STEP3-keepcols 0
+=== 2026-11-08T12:22:12Z STEP3-keepsuper start
+07:22:14 run_baselines: loading reference minicpm5-2b
+W1108 07:22:15.152000 14048 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   8%|7         | 30/381 [00:00<00:01, 299.99it/s]Loading weights:  16%|#5        | 60/381 [00:00<00:01, 283.30it/s]Loading weights:  23%|##3       | 89/381 [00:00<00:01, 269.08it/s]Loading weights:  31%|###       | 117/381 [00:00<00:01, 259.95it/s]Loading weights:  38%|###8      | 145/381 [00:00<00:00, 264.01it/s]Loading weights:  45%|####5     | 172/381 [00:00<00:00, 265.23it/s]Loading weights:  52%|#####2    | 199/381 [00:00<00:00, 263.57it/s]Loading weights:  59%|#####9    | 226/381 [00:00<00:00, 260.75it/s]Loading weights:  66%|######6   | 253/381 [00:00<00:00, 242.19it/s]Loading weights:  73%|#######2  | 278/381 [00:01<00:00, 239.92it/s]Loading weights:  80%|########  | 306/381 [00:01<00:00, 245.46it/s]Loading weights:  87%|########7 | 333/381 [00:01<00:00, 243.88it/s]Loading weights:  95%|#########4| 361/381 [00:01<00:00, 253.69it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 261.88it/s]
+07:22:17 run_baselines: eval windows (139, 2048)
+07:22:28 run_baselines: reference hidden states (32, 2048, 2048) in 11.1s; reference layers moved to the CPU
+07:22:28 run_baselines: === rtn-sym-g128-4+keepsuper=results/probe/minicpm5-2b/superweight.json ===
+07:22:28 run_baselines: gpu memory: 10.60 GB free of 17.07 GB, loading 5.03 GB
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 14/381 [00:00<00:02, 138.72it/s]Loading weights:  10%|9         | 37/381 [00:00<00:01, 186.74it/s]Loading weights:  17%|#6        | 64/381 [00:00<00:01, 220.67it/s]Loading weights:  24%|##3       | 90/381 [00:00<00:01, 216.16it/s]Loading weights:  31%|###       | 117/381 [00:00<00:01, 230.37it/s]Loading weights:  38%|###8      | 145/381 [00:00<00:00, 240.19it/s]Loading weights:  45%|####5     | 172/381 [00:00<00:00, 240.57it/s]Loading weights:  52%|#####1    | 198/381 [00:00<00:00, 234.16it/s]Loading weights:  59%|#####9    | 225/381 [00:00<00:00, 241.48it/s]Loading weights:  66%|######5   | 250/381 [00:01<00:00, 239.39it/s]Loading weights:  73%|#######2  | 277/381 [00:01<00:00, 246.09it/s]Loading weights:  80%|########  | 306/381 [00:01<00:00, 246.27it/s]Loading weights:  87%|########7 | 333/381 [00:01<00:00, 244.92it/s]Loading weights:  95%|#########4| 361/381 [00:01<00:00, 244.99it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 240.74it/s]
+07:23:16 run_baselines: rtn-sym-g128-4+keepsuper=results/probe/minicpm5-2b/superweight.json: ppl 17.32 kl 0.26742 top1 0.7578 bits_blocks 4.1250 bits_all 6.6491 time 48.0s (method 0.3s)
+07:23:16 run_baselines: wrote D:\repos\wcomp\results\probe\minicpm5-2b\ablation.jsonl
+=== 2026-11-08T12:23:17Z EXIT_STEP3-keepsuper 0
+SWEEP3_DONE
+=== 2026-11-08T12:23:38Z STEP4 probe_acts --probes p6a recheck (prediction_check from ablation rows) start
+W1108 07:23:42.029000 10788 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/381 [00:00<?, ?it/s]Loading weights:   4%|3         | 14/381 [00:00<00:02, 133.31it/s]Loading weights:  10%|#         | 40/381 [00:00<00:01, 204.01it/s]Loading weights:  18%|#7        | 68/381 [00:00<00:01, 238.04it/s]Loading weights:  24%|##4       | 92/381 [00:00<00:01, 211.34it/s]Loading weights:  31%|###1      | 120/381 [00:00<00:01, 233.24it/s]Loading weights:  38%|###7      | 144/381 [00:00<00:01, 234.49it/s]Loading weights:  45%|####4     | 171/381 [00:00<00:00, 245.21it/s]Loading weights:  52%|#####2    | 199/381 [00:00<00:00, 253.56it/s]Loading weights:  59%|#####9    | 226/381 [00:00<00:00, 254.80it/s]Loading weights:  67%|######6   | 254/381 [00:01<00:00, 260.86it/s]Loading weights:  74%|#######3  | 281/381 [00:01<00:00, 257.06it/s]Loading weights:  81%|########  | 307/381 [00:01<00:00, 257.49it/s]Loading weights:  87%|########7 | 333/381 [00:01<00:00, 226.93it/s]Loading weights:  94%|#########4| 360/381 [00:01<00:00, 231.77it/s]Loading weights: 100%|##########| 381/381 [00:01<00:00, 242.97it/s]
+07:23:44 probe_acts: loaded minicpm5-2b in 3.4s
+07:23:48 wcomp.probe.acts: input stats: layers 0-5 done (42 linears)
+07:23:54 wcomp.probe.acts: input stats: layers 6-11 done (42 linears)
+07:24:02 wcomp.probe.acts: input stats: layers 12-17 done (42 linears)
+07:24:14 wcomp.probe.acts: input stats: layers 18-23 done (42 linears)
+07:24:28 wcomp.probe.acts: input stats: layers 24-29 done (42 linears)
+07:24:45 wcomp.probe.acts: input stats: layers 30-35 done (42 linears)
+07:25:04 wcomp.probe.acts: input stats: layers 36-41 done (42 linears)
+07:25:04 probe_acts: input stats: 80.4s, peak 5.77 GB, full_hessian=False
+07:25:05 probe_acts: wrote D:\repos\wcomp\results\probe\minicpm5-2b\sensitivity.json (294 records)
+07:25:06 probe_acts: done in 84.9s
+=== 2026-11-08T12:25:06Z EXIT_STEP4 0
+=== 2026-11-08T12:25:34Z STEP5 plots
+EXIT_STEP5-plot_probe 0
+EXIT_STEP5-plot_rd 0

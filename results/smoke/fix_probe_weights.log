@@ -1,0 +1,15 @@
+W1108 02:58:09.773000 32184 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  12%|#1        | 37/320 [00:00<00:00, 359.76it/s]Loading weights:  36%|###6      | 116/320 [00:00<00:00, 599.18it/s]Loading weights:  60%|######    | 193/320 [00:00<00:00, 672.32it/s]Loading weights:  82%|########2 | 264/320 [00:00<00:00, 686.65it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 663.66it/s]
+02:58:11 probe_weights: loaded qwen3.5-0.8b in 2.3s: 12 block linears + 1 embedding tensors
+02:58:21 probe_weights: P1 13/13 (model.embed_tokens) 10.7s
+02:58:21 probe_weights: P1 marginal: 13 records in 10.7s -> results\smoke\probe\qwen3.5-0.8b\marginal.json
+02:58:37 probe_weights: P2 13/13 (model.embed_tokens) 15.7s
+02:58:37 probe_weights: P2 lowrank: 13 records in 15.7s -> results\smoke\probe\qwen3.5-0.8b\lowrank.json
+02:58:38 probe_weights: P3 12/12 (model.layers.1.linear_attn.in_proj_a) 0.4s
+02:58:38 probe_weights: P3 outliers: 17 records in 0.5s -> results\smoke\probe\qwen3.5-0.8b\outliers.json
+02:58:39 probe_weights: P4 in_proj_ab:in_proj_a: 2 layers, 1 records (perm_axis None) 0.5s
+02:58:39 probe_weights: P4 in_proj_ab:in_proj_b: 2 layers, 1 records (perm_axis None) 0.0s
+02:58:39 probe_weights: P4 in_proj_qkv:in_proj_qkv: 2 layers, 1 records (perm_axis None) 0.5s
+02:58:39 probe_weights: P4 in_proj_z:in_proj_z: 2 layers, 1 records (perm_axis None) 0.3s
+02:58:39 probe_weights: P4 interlayer: 4 records in 1.3s -> results\smoke\probe\qwen3.5-0.8b\interlayer.json
+02:58:40 probe_weights: done in 31.2s

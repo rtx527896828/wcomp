@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 import math
+import os
 import time
 
 import torch
@@ -20,6 +21,91 @@ from wcomp.bits import BitAccount
 from wcomp.quant.rtn import SCALE_BITS, group_grid
 
 log = logging.getLogger(__name__)
+
+# Hessian accumulation path (DESIGN.md "GPTQ speed"): True forms each window's x^T x in f32 and adds it into
+# the f64 accumulator; False is the Phase 1 path (x cast to f64, addmm_ in f64; 1/64 f32 rate on consumer
+# Blackwell). The Phase 1 path stays the default until the acceptance row (gptq-sym-g128-3 on the 0.8B, seed 0:
+# PPL 24.45 within 0.5%, KL 0.3131 within 2%) is recorded in NOTES.md, so the Phase 1 method names keep producing
+# their Phase 1 numbers; the f32 path is selected per run by scripts/run_baselines.py --hessian-f32 (or the env
+# override WCOMP_HESSIAN_F32=1). A tensor note of the f32 path ends in " hessian-f32" (hessian_note); the default
+# path leaves the Phase 1 note unchanged, so a Phase 1 method name rerun on the default path reproduces its Phase 1
+# row note byte-for-byte (the readers scripts/plot_rd.hessian_tag and scripts/probe_io.hessian_tag treat a missing
+# token and the older "hessian-f64" token alike).
+HESSIAN_F32: bool = os.environ.get("WCOMP_HESSIAN_F32", "0") == "1"
+
+
+def hessian_note(note: str, f32: bool | None = None) -> str:
+    """note + " hessian-f32" when the f32-product path ran; unchanged (the Phase 1 note) on the default f64 path."""
+    if f32 is None:
+        f32 = HESSIAN_F32
+    return note + " hessian-f32" if f32 else note
+
+
+def add_xtx(acc: Tensor, x: Tensor, f32: bool | None = None) -> None:
+    """acc [K, K] f64 += x^T x for x [n, K] (any float dtype). f32 defaults to the module flag HESSIAN_F32."""
+    if f32 is None:
+        f32 = HESSIAN_F32
+    if f32:
+        x32 = x.to(torch.float32)
+        acc.add_((x32.T @ x32).to(torch.float64))
+    else:
+        x64 = x.to(torch.float64)
+        acc.addmm_(x64.T, x64)
+
+
+@torch.no_grad()
+def accumulate_hessian_paths(acc: tuple[Tensor, Tensor, list[int]] | None, x: Tensor, K: int | None = None) -> tuple[Tensor, Tensor, list[int]]:
+    """Add one window x [n, K] into (H32 sum, H64 sum, [rows]) through both paths (f32 products / f64 addmm_); a new
+    accumulator is created from x when acc is None. Lets a hook keep two K x K f64 sums per linear instead of x."""
+    x = x.reshape(-1, x.shape[-1]) if K is None else x.reshape(-1, K)
+    if acc is None:
+        K = x.shape[1]
+        acc = (torch.zeros(K, K, dtype=torch.float64, device=x.device), torch.zeros(K, K, dtype=torch.float64, device=x.device), [0])
+    add_xtx(acc[0], x, f32=True)
+    add_xtx(acc[1], x, f32=False)
+    acc[2][0] += x.shape[0]
+    return acc
+
+
+@torch.no_grad()
+def hessian_path_check(W: Tensor, windows: list[Tensor] | None, bits: int, group: int = 128, sym: bool = True,
+                       hessians: tuple[Tensor, Tensor, list[int] | int] | None = None) -> dict:
+    """What the acceptance rule cannot separate on its own: the f32-product and f64 Hessians of the same windows
+    are numerically indistinguishable (relative Frobenius ~1e-7 .. 1e-6), yet GPTQ's rounding decisions are
+    chaotic in H, so the two paths yield different index sets of equal objective value. Returns
+    {"rel_frob": ||H32 - H64||_F / ||H64||_F, "max_rel_diag": max_j |H32_jj - H64_jj| / H64_jj,
+     "frac_changed": fraction of weights whose quantized value differs between the two paths,
+     "objective_ratio": tr(dW32 H64 dW32^T) / tr(dW64 H64 dW64^T), "objective_f64": the latter}.
+    A PPL / KL miss of the acceptance row together with frac_changed > 0 and objective_ratio ~ 1 is rounding
+    chaos (to be read against the 4.4% seed spread), not an f32 precision defect.
+    `hessians` = (H32 sum, H64 sum, rows) from accumulate_hessian_paths replaces `windows` (no x kept)."""
+    K = W.shape[1]
+    dev = W.device
+    if hessians is not None:
+        H32, H64, rows = hessians
+        rows = rows[0] if isinstance(rows, list) else int(rows)
+        H32 = H32.to(dev, torch.float64) / rows
+        H64 = H64.to(dev, torch.float64) / rows
+    else:
+        acc = None
+        for x in windows:
+            acc = accumulate_hessian_paths(acc, x.to(dev), K)
+        H32, H64, rows = acc[0] / acc[2][0], acc[1] / acc[2][0], acc[2][0]
+    W32 = W.float()
+    Q32, _ = gptq_quantize(W32, H32, bits, group, sym)
+    Q64, _ = gptq_quantize(W32, H64, bits, group, sym)
+    d32 = (W32 - Q32).double()
+    d64 = (W32 - Q64).double()
+    obj32 = float(((d32 @ H64) * d32).sum())
+    obj64 = float(((d64 @ H64) * d64).sum())
+    return {
+        "rel_frob": float((H32 - H64).norm() / H64.norm()),
+        "max_rel_diag": float(((H32.diagonal() - H64.diagonal()).abs() / H64.diagonal().clamp_min(1e-300)).max()),
+        "frac_changed": float((Q32 != Q64).double().mean()),
+        "objective_ratio": obj32 / obj64 if obj64 > 0 else 1.0,
+        "objective_f64": obj64,
+        "n_rows": rows,
+    }
 
 
 def grid_params(w: Tensor, bits: int, sym: bool) -> tuple[Tensor, Tensor]:
@@ -257,8 +343,8 @@ def gptq_model(
 
         def make_hook(name: str):
             def hook(mod, args):
-                x = args[0].reshape(-1, args[0].shape[-1]).to(torch.float64)
-                hess[name][0].addmm_(x.T, x)
+                x = args[0].reshape(-1, args[0].shape[-1])
+                add_xtx(hess[name][0], x)
                 hess[name][1] += x.shape[0]
 
             return hook
@@ -276,7 +362,8 @@ def gptq_model(
             H /= rows
             W_hat, info = gptq_quantize(m.weight.float(), H, bits, group, sym, block, damp, act_order)
             m.weight.data.copy_(W_hat.to(m.weight.dtype))
-            account.add(f"{prefix}.{i}.{n}", m.weight.numel(), info["index_bits"], info["aux_bits"], info["note"])
+            note = hessian_note(info["note"])  # the f32 path is marked; the default path keeps the Phase 1 note
+            account.add(f"{prefix}.{i}.{n}", m.weight.numel(), info["index_bits"], info["aux_bits"], note)
         del hess
         t_q = time.time() - t_q
 

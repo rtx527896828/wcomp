@@ -1,0 +1,18 @@
+04:26:30 run_baselines: rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json: the P7 JSON has no co-occurring spike candidate; running anyway (--keepsuper-any-kind): the row restores {'top16': 16} only, i.e. it undoes the sym grid's positive-amax clip on those groups, and is not a super-weight test; the row note records the kinds
+04:26:30 run_baselines: loading reference qwen3.5-0.8b
+W1108 04:26:31.747000 31432 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  13%|#2        | 41/320 [00:00<00:00, 384.73it/s]Loading weights:  39%|###8      | 124/320 [00:00<00:00, 636.05it/s]Loading weights:  62%|######1   | 197/320 [00:00<00:00, 676.13it/s]Loading weights:  86%|########5 | 274/320 [00:00<00:00, 711.08it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 685.02it/s]
+04:26:33 run_baselines: eval windows (4, 2048)
+04:26:33 run_baselines: smoke run (limit-windows 4; kl-windows 4)
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+04:26:37 run_baselines: reference hidden states (4, 2048, 1024) in 4.6s; reference layers moved to the CPU
+04:26:37 run_baselines: === rtn-sym-g128-4@only=down ===
+04:26:37 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  23%|##3       | 74/320 [00:00<00:00, 724.76it/s]Loading weights:  47%|####6     | 150/320 [00:00<00:00, 741.19it/s]Loading weights:  72%|#######1  | 230/320 [00:00<00:00, 748.89it/s]Loading weights:  95%|#########5| 305/320 [00:00<00:00, 710.57it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 742.92it/s]
+04:26:42 run_baselines: rtn-sym-g128-4@only=down: ppl 20.54 kl 0.03088 top1 0.9029 bits_blocks 13.8981 bits_all 14.6098 time 4.4s (method 0.1s)
+04:26:42 run_baselines: === rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json ===
+04:26:42 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  14%|#4        | 46/320 [00:00<00:00, 456.52it/s]Loading weights:  40%|####      | 128/320 [00:00<00:00, 650.53it/s]Loading weights:  62%|######2   | 200/320 [00:00<00:00, 663.77it/s]Loading weights:  87%|########6 | 278/320 [00:00<00:00, 706.08it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 677.01it/s]
+04:26:46 run_baselines: rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json: ppl 24.15 kl 0.19957 top1 0.7767 bits_blocks 4.1250 bits_all 8.1462 time 4.4s (method 0.5s)
+04:26:46 run_baselines: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\ablation.jsonl

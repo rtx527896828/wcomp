@@ -1,0 +1,5524 @@
+{
+ "model": "qwen3.5-0.8b",
+ "probe": "P5",
+ "code_version": "72c7eff+dirty/9662cc2cfa",
+ "timestamp": "2026-11-08T09:28:56+00:00",
+ "params": {
+  "windows": 32,
+  "seqlen": 2048,
+  "calib_seed": 0,
+  "layer_chunk": 6,
+  "smoke": [],
+  "split_half_seed": 2,
+  "tau_fraction": 0.05,
+  "primary_types": [
+   "down",
+   "o",
+   "out_proj"
+  ],
+  "time_s": 45.8,
+  "peak_gb": 2.50131712
+ },
+ "records": [
+  {
+   "tensor": "model.layers.0.linear_attn.in_proj_qkv",
+   "layer": 0,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.18885630758894378,
+    "frac_channels_50": 0.3671875,
+    "frac_channels_90": 0.8486328125,
+    "energy_share_top20pct": 0.326870139241215,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9616667628288269,
+    "energy_max_over_median": 7.360818708789301,
+    "rms": 1.2406675528427995,
+    "tau": 0.06203337764213998,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.996962004237894
+   },
+   "control": {
+    "spearman_split_half": 0.996962004237894,
+    "gini_half2": 0.18920304016725553,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.0.linear_attn.in_proj_z",
+   "layer": 0,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.18885630758894378,
+    "frac_channels_50": 0.3671875,
+    "frac_channels_90": 0.8486328125,
+    "energy_share_top20pct": 0.326870139241215,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9616667628288269,
+    "energy_max_over_median": 7.360818708789301,
+    "rms": 1.2406675528427995,
+    "tau": 0.06203337764213998,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.996962004237894
+   },
+   "control": {
+    "spearman_split_half": 0.996962004237894,
+    "gini_half2": 0.18920304016725553,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.0.linear_attn.in_proj_b",
+   "layer": 0,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.18885630758894378,
+    "frac_channels_50": 0.3671875,
+    "frac_channels_90": 0.8486328125,
+    "energy_share_top20pct": 0.326870139241215,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9616667628288269,
+    "energy_max_over_median": 7.360818708789301,
+    "rms": 1.2406675528427995,
+    "tau": 0.06203337764213998,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.996962004237894
+   },
+   "control": {
+    "spearman_split_half": 0.996962004237894,
+    "gini_half2": 0.18920304016725553,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.0.linear_attn.in_proj_a",
+   "layer": 0,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.18885630758894378,
+    "frac_channels_50": 0.3671875,
+    "frac_channels_90": 0.8486328125,
+    "energy_share_top20pct": 0.326870139241215,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9616667628288269,
+    "energy_max_over_median": 7.360818708789301,
+    "rms": 1.2406675528427995,
+    "tau": 0.06203337764213998,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.996962004237894
+   },
+   "control": {
+    "spearman_split_half": 0.996962004237894,
+    "gini_half2": 0.18920304016725553,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.0.linear_attn.out_proj",
+   "layer": 0,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.8899112021673761,
+    "frac_channels_50": 0.001953125,
+    "frac_channels_90": 0.17919921875,
+    "energy_share_top20pct": 0.906597171517857,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.674108199775219,
+    "energy_max_over_median": 2748.368742893537,
+    "rms": 0.11399502162614152,
+    "tau": 0.005699751081307076,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9899571462804727
+   },
+   "control": {
+    "spearman_split_half": 0.9899571462804727,
+    "gini_half2": 0.8902248860678086,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.0.mlp.gate_proj",
+   "layer": 0,
+   "type": "gate",
+   "stat": {
+    "gini": 0.4235879958161133,
+    "frac_channels_50": 0.1630859375,
+    "frac_channels_90": 0.7998046875,
+    "energy_share_top20pct": 0.5343914956959062,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9459665715694427,
+    "energy_max_over_median": 289.9886682565956,
+    "rms": 0.9102635136213836,
+    "tau": 0.04551317568106918,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9896158849510048
+   },
+   "control": {
+    "spearman_split_half": 0.9896158849510048,
+    "gini_half2": 0.42739944050379175,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.0.mlp.up_proj",
+   "layer": 0,
+   "type": "up",
+   "stat": {
+    "gini": 0.4235879958161133,
+    "frac_channels_50": 0.1630859375,
+    "frac_channels_90": 0.7998046875,
+    "energy_share_top20pct": 0.5343914956959062,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9459665715694427,
+    "energy_max_over_median": 289.9886682565956,
+    "rms": 0.9102635136213836,
+    "tau": 0.04551317568106918,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9896158849510048
+   },
+   "control": {
+    "spearman_split_half": 0.9896158849510048,
+    "gini_half2": 0.42739944050379175,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.0.mlp.down_proj",
+   "layer": 0,
+   "type": "down",
+   "stat": {
+    "gini": 0.36617892834659505,
+    "frac_channels_50": 0.22795758928571427,
+    "frac_channels_90": 0.7904575892857143,
+    "energy_share_top20pct": 0.4715382416780738,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8602837238992963,
+    "energy_max_over_median": 80.42243284396484,
+    "rms": 0.04024436035794485,
+    "tau": 0.0020122180178972424,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9378474156219367
+   },
+   "control": {
+    "spearman_split_half": 0.9378474156219367,
+    "gini_half2": 0.35782870750312945,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.1.linear_attn.in_proj_qkv",
+   "layer": 1,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.4650046020864478,
+    "frac_channels_50": 0.1337890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5706583282246968,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946251705288887,
+    "energy_max_over_median": 240.20754029312243,
+    "rms": 1.363854099360018,
+    "tau": 0.0681927049680009,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9899774805986694
+   },
+   "control": {
+    "spearman_split_half": 0.9899774805986694,
+    "gini_half2": 0.4703282021413999,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.1.linear_attn.in_proj_z",
+   "layer": 1,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.4650046020864478,
+    "frac_channels_50": 0.1337890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5706583282246968,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946251705288887,
+    "energy_max_over_median": 240.20754029312243,
+    "rms": 1.363854099360018,
+    "tau": 0.0681927049680009,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9899774805986694
+   },
+   "control": {
+    "spearman_split_half": 0.9899774805986694,
+    "gini_half2": 0.4703282021413999,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.1.linear_attn.in_proj_b",
+   "layer": 1,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4650046020864478,
+    "frac_channels_50": 0.1337890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5706583282246968,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946251705288887,
+    "energy_max_over_median": 240.20754029312243,
+    "rms": 1.363854099360018,
+    "tau": 0.0681927049680009,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9899774805986694
+   },
+   "control": {
+    "spearman_split_half": 0.9899774805986694,
+    "gini_half2": 0.4703282021413999,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.1.linear_attn.in_proj_a",
+   "layer": 1,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4650046020864478,
+    "frac_channels_50": 0.1337890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5706583282246968,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946251705288887,
+    "energy_max_over_median": 240.20754029312243,
+    "rms": 1.363854099360018,
+    "tau": 0.0681927049680009,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9899774805986694
+   },
+   "control": {
+    "spearman_split_half": 0.9899774805986694,
+    "gini_half2": 0.4703282021413999,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.1.linear_attn.out_proj",
+   "layer": 1,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.8740171045978364,
+    "frac_channels_50": 0.00048828125,
+    "frac_channels_90": 0.228515625,
+    "energy_share_top20pct": 0.8896245009747129,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.49801135063171387,
+    "energy_max_over_median": 7863.129038091074,
+    "rms": 0.06121284559789918,
+    "tau": 0.0030606422798949593,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9559806955336203
+   },
+   "control": {
+    "spearman_split_half": 0.9559806955336203,
+    "gini_half2": 0.8742339203206841,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.1.mlp.gate_proj",
+   "layer": 1,
+   "type": "gate",
+   "stat": {
+    "gini": 0.4118123112578598,
+    "frac_channels_50": 0.171875,
+    "frac_channels_90": 0.810546875,
+    "energy_share_top20pct": 0.5251009115798563,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9480155259370804,
+    "energy_max_over_median": 321.17833641231147,
+    "rms": 0.9964197859398766,
+    "tau": 0.04982098929699383,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9772210611723052
+   },
+   "control": {
+    "spearman_split_half": 0.9772210611723052,
+    "gini_half2": 0.41795608753096203,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.1.mlp.up_proj",
+   "layer": 1,
+   "type": "up",
+   "stat": {
+    "gini": 0.4118123112578598,
+    "frac_channels_50": 0.171875,
+    "frac_channels_90": 0.810546875,
+    "energy_share_top20pct": 0.5251009115798563,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9480155259370804,
+    "energy_max_over_median": 321.17833641231147,
+    "rms": 0.9964197859398766,
+    "tau": 0.04982098929699383,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9772210611723052
+   },
+   "control": {
+    "spearman_split_half": 0.9772210611723052,
+    "gini_half2": 0.41795608753096203,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.1.mlp.down_proj",
+   "layer": 1,
+   "type": "down",
+   "stat": {
+    "gini": 0.312784977603239,
+    "frac_channels_50": 0.27176339285714285,
+    "frac_channels_90": 0.8175223214285714,
+    "energy_share_top20pct": 0.4317406090760459,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8689113216740745,
+    "energy_max_over_median": 370.81213195985407,
+    "rms": 0.04781709547424372,
+    "tau": 0.002390854773712186,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9304255287658783
+   },
+   "control": {
+    "spearman_split_half": 0.9304255287658783,
+    "gini_half2": 0.31506924411940695,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.2.linear_attn.in_proj_qkv",
+   "layer": 2,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.4682109605922995,
+    "frac_channels_50": 0.12890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5651321175432877,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473463147878647,
+    "energy_max_over_median": 281.313154265499,
+    "rms": 1.4104027360972904,
+    "tau": 0.07052013680486452,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9902916569809027
+   },
+   "control": {
+    "spearman_split_half": 0.9902916569809027,
+    "gini_half2": 0.47421995029754793,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.2.linear_attn.in_proj_z",
+   "layer": 2,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.4682109605922995,
+    "frac_channels_50": 0.12890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5651321175432877,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473463147878647,
+    "energy_max_over_median": 281.313154265499,
+    "rms": 1.4104027360972904,
+    "tau": 0.07052013680486452,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9902916569809027
+   },
+   "control": {
+    "spearman_split_half": 0.9902916569809027,
+    "gini_half2": 0.47421995029754793,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.2.linear_attn.in_proj_b",
+   "layer": 2,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4682109605922995,
+    "frac_channels_50": 0.12890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5651321175432877,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473463147878647,
+    "energy_max_over_median": 281.313154265499,
+    "rms": 1.4104027360972904,
+    "tau": 0.07052013680486452,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9902916569809027
+   },
+   "control": {
+    "spearman_split_half": 0.9902916569809027,
+    "gini_half2": 0.47421995029754793,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.2.linear_attn.in_proj_a",
+   "layer": 2,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4682109605922995,
+    "frac_channels_50": 0.12890625,
+    "frac_channels_90": 0.78125,
+    "energy_share_top20pct": 0.5651321175432877,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473463147878647,
+    "energy_max_over_median": 281.313154265499,
+    "rms": 1.4104027360972904,
+    "tau": 0.07052013680486452,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9902916569809027
+   },
+   "control": {
+    "spearman_split_half": 0.9902916569809027,
+    "gini_half2": 0.47421995029754793,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.2.linear_attn.out_proj",
+   "layer": 2,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.8637237762488865,
+    "frac_channels_50": 0.00048828125,
+    "frac_channels_90": 0.2509765625,
+    "energy_share_top20pct": 0.8818964944905772,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.6150577589869499,
+    "energy_max_over_median": 6363.335168953316,
+    "rms": 0.08045321228884231,
+    "tau": 0.004022660614442115,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9569172477077837
+   },
+   "control": {
+    "spearman_split_half": 0.9569172477077837,
+    "gini_half2": 0.8684185499485313,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.2.mlp.gate_proj",
+   "layer": 2,
+   "type": "gate",
+   "stat": {
+    "gini": 0.42615193180122257,
+    "frac_channels_50": 0.158203125,
+    "frac_channels_90": 0.8056640625,
+    "energy_share_top20pct": 0.5327436930990339,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9481327086687088,
+    "energy_max_over_median": 346.03903302009365,
+    "rms": 1.073561255638235,
+    "tau": 0.053678062781911756,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9794399206959443
+   },
+   "control": {
+    "spearman_split_half": 0.9794399206959443,
+    "gini_half2": 0.4337585861001514,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.2.mlp.up_proj",
+   "layer": 2,
+   "type": "up",
+   "stat": {
+    "gini": 0.42615193180122257,
+    "frac_channels_50": 0.158203125,
+    "frac_channels_90": 0.8056640625,
+    "energy_share_top20pct": 0.5327436930990339,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9481327086687088,
+    "energy_max_over_median": 346.03903302009365,
+    "rms": 1.073561255638235,
+    "tau": 0.053678062781911756,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9794399206959443
+   },
+   "control": {
+    "spearman_split_half": 0.9794399206959443,
+    "gini_half2": 0.4337585861001514,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.2.mlp.down_proj",
+   "layer": 2,
+   "type": "down",
+   "stat": {
+    "gini": 0.3054576854006903,
+    "frac_channels_50": 0.28152901785714285,
+    "frac_channels_90": 0.8069196428571429,
+    "energy_share_top20pct": 0.41737505418737697,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9003599796976361,
+    "energy_max_over_median": 94.80994129665126,
+    "rms": 0.06126386679418588,
+    "tau": 0.003063193339709294,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.8690632403314518
+   },
+   "control": {
+    "spearman_split_half": 0.8690632403314518,
+    "gini_half2": 0.30336894165327033,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.3.self_attn.q_proj",
+   "layer": 3,
+   "type": "q",
+   "stat": {
+    "gini": 0.47511213039418787,
+    "frac_channels_50": 0.1259765625,
+    "frac_channels_90": 0.771484375,
+    "energy_share_top20pct": 0.5670353758682268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473805576562881,
+    "energy_max_over_median": 213.1678437955925,
+    "rms": 1.3432918033538057,
+    "tau": 0.06716459016769029,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9919892622130034
+   },
+   "control": {
+    "spearman_split_half": 0.9919892622130034,
+    "gini_half2": 0.4798856974245018,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 4194304
+  },
+  {
+   "tensor": "model.layers.3.self_attn.k_proj",
+   "layer": 3,
+   "type": "k",
+   "stat": {
+    "gini": 0.47511213039418787,
+    "frac_channels_50": 0.1259765625,
+    "frac_channels_90": 0.771484375,
+    "energy_share_top20pct": 0.5670353758682268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473805576562881,
+    "energy_max_over_median": 213.1678437955925,
+    "rms": 1.3432918033538057,
+    "tau": 0.06716459016769029,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9919892622130034
+   },
+   "control": {
+    "spearman_split_half": 0.9919892622130034,
+    "gini_half2": 0.4798856974245018,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.3.self_attn.v_proj",
+   "layer": 3,
+   "type": "v",
+   "stat": {
+    "gini": 0.47511213039418787,
+    "frac_channels_50": 0.1259765625,
+    "frac_channels_90": 0.771484375,
+    "energy_share_top20pct": 0.5670353758682268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9473805576562881,
+    "energy_max_over_median": 213.1678437955925,
+    "rms": 1.3432918033538057,
+    "tau": 0.06716459016769029,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9919892622130034
+   },
+   "control": {
+    "spearman_split_half": 0.9919892622130034,
+    "gini_half2": 0.4798856974245018,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.3.self_attn.o_proj",
+   "layer": 3,
+   "type": "o",
+   "stat": {
+    "gini": 0.7432834384460707,
+    "frac_channels_50": 0.03857421875,
+    "frac_channels_90": 0.40771484375,
+    "energy_share_top20pct": 0.7597770914551567,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.722654215991497,
+    "energy_max_over_median": 1054.2751451164631,
+    "rms": 0.07369057100046615,
+    "tau": 0.0036845285500233076,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9524184151730636
+   },
+   "control": {
+    "spearman_split_half": 0.9524184151730636,
+    "gini_half2": 0.7378428316429151,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.3.mlp.gate_proj",
+   "layer": 3,
+   "type": "gate",
+   "stat": {
+    "gini": 0.3872654951828831,
+    "frac_channels_50": 0.1982421875,
+    "frac_channels_90": 0.81640625,
+    "energy_share_top20pct": 0.5017287451677043,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9505594670772552,
+    "energy_max_over_median": 175.7609592372289,
+    "rms": 1.108260548622946,
+    "tau": 0.0554130274311473,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9724077207460124
+   },
+   "control": {
+    "spearman_split_half": 0.9724077207460124,
+    "gini_half2": 0.38864143859332345,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.3.mlp.up_proj",
+   "layer": 3,
+   "type": "up",
+   "stat": {
+    "gini": 0.3872654951828831,
+    "frac_channels_50": 0.1982421875,
+    "frac_channels_90": 0.81640625,
+    "energy_share_top20pct": 0.5017287451677043,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9505594670772552,
+    "energy_max_over_median": 175.7609592372289,
+    "rms": 1.108260548622946,
+    "tau": 0.0554130274311473,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9724077207460124
+   },
+   "control": {
+    "spearman_split_half": 0.9724077207460124,
+    "gini_half2": 0.38864143859332345,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.3.mlp.down_proj",
+   "layer": 3,
+   "type": "down",
+   "stat": {
+    "gini": 0.2318389456807406,
+    "frac_channels_50": 0.3392857142857143,
+    "frac_channels_90": 0.8314732142857143,
+    "energy_share_top20pct": 0.3587688827124446,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9105127879551479,
+    "energy_max_over_median": 30.507256628723948,
+    "rms": 0.05924284486152055,
+    "tau": 0.0029621422430760277,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.8117793867490004
+   },
+   "control": {
+    "spearman_split_half": 0.8117793867490004,
+    "gini_half2": 0.2241238499385405,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.4.linear_attn.in_proj_qkv",
+   "layer": 4,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.4804192104523972,
+    "frac_channels_50": 0.125,
+    "frac_channels_90": 0.7646484375,
+    "energy_share_top20pct": 0.5692159636555268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9472331404685974,
+    "energy_max_over_median": 195.66256093242458,
+    "rms": 1.4281913558268873,
+    "tau": 0.07140956779134437,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906884678313425
+   },
+   "control": {
+    "spearman_split_half": 0.9906884678313425,
+    "gini_half2": 0.4840753966808542,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.4.linear_attn.in_proj_z",
+   "layer": 4,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.4804192104523972,
+    "frac_channels_50": 0.125,
+    "frac_channels_90": 0.7646484375,
+    "energy_share_top20pct": 0.5692159636555268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9472331404685974,
+    "energy_max_over_median": 195.66256093242458,
+    "rms": 1.4281913558268873,
+    "tau": 0.07140956779134437,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906884678313425
+   },
+   "control": {
+    "spearman_split_half": 0.9906884678313425,
+    "gini_half2": 0.4840753966808542,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.4.linear_attn.in_proj_b",
+   "layer": 4,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4804192104523972,
+    "frac_channels_50": 0.125,
+    "frac_channels_90": 0.7646484375,
+    "energy_share_top20pct": 0.5692159636555268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9472331404685974,
+    "energy_max_over_median": 195.66256093242458,
+    "rms": 1.4281913558268873,
+    "tau": 0.07140956779134437,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906884678313425
+   },
+   "control": {
+    "spearman_split_half": 0.9906884678313425,
+    "gini_half2": 0.4840753966808542,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.4.linear_attn.in_proj_a",
+   "layer": 4,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4804192104523972,
+    "frac_channels_50": 0.125,
+    "frac_channels_90": 0.7646484375,
+    "energy_share_top20pct": 0.5692159636555268,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9472331404685974,
+    "energy_max_over_median": 195.66256093242458,
+    "rms": 1.4281913558268873,
+    "tau": 0.07140956779134437,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906884678313425
+   },
+   "control": {
+    "spearman_split_half": 0.9906884678313425,
+    "gini_half2": 0.4840753966808542,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.4.linear_attn.out_proj",
+   "layer": 4,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.6976912003122129,
+    "frac_channels_50": 0.04736328125,
+    "frac_channels_90": 0.47900390625,
+    "energy_share_top20pct": 0.7244975333040683,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7244173362851143,
+    "energy_max_over_median": 299.9096828267335,
+    "rms": 0.059128100978984945,
+    "tau": 0.0029564050489492475,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9554486582939109
+   },
+   "control": {
+    "spearman_split_half": 0.9554486582939109,
+    "gini_half2": 0.6914913706730106,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.4.mlp.gate_proj",
+   "layer": 4,
+   "type": "gate",
+   "stat": {
+    "gini": 0.42688635881622394,
+    "frac_channels_50": 0.16015625,
+    "frac_channels_90": 0.7998046875,
+    "energy_share_top20pct": 0.5323832110844001,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9492562562227249,
+    "energy_max_over_median": 189.5289461210951,
+    "rms": 1.1031305502084614,
+    "tau": 0.055156527510423076,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9786398364818767
+   },
+   "control": {
+    "spearman_split_half": 0.9786398364818767,
+    "gini_half2": 0.42828772537335547,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.4.mlp.up_proj",
+   "layer": 4,
+   "type": "up",
+   "stat": {
+    "gini": 0.42688635881622394,
+    "frac_channels_50": 0.16015625,
+    "frac_channels_90": 0.7998046875,
+    "energy_share_top20pct": 0.5323832110844001,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9492562562227249,
+    "energy_max_over_median": 189.5289461210951,
+    "rms": 1.1031305502084614,
+    "tau": 0.055156527510423076,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9786398364818767
+   },
+   "control": {
+    "spearman_split_half": 0.9786398364818767,
+    "gini_half2": 0.42828772537335547,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.4.mlp.down_proj",
+   "layer": 4,
+   "type": "down",
+   "stat": {
+    "gini": 0.2437122093016164,
+    "frac_channels_50": 0.3286830357142857,
+    "frac_channels_90": 0.8253348214285714,
+    "energy_share_top20pct": 0.3671548939332662,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9139509413923536,
+    "energy_max_over_median": 20.433113966724566,
+    "rms": 0.05969921611218533,
+    "tau": 0.002984960805609267,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.884339834704669
+   },
+   "control": {
+    "spearman_split_half": 0.884339834704669,
+    "gini_half2": 0.2396706390539456,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.5.linear_attn.in_proj_qkv",
+   "layer": 5,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5099606324956518,
+    "frac_channels_50": 0.095703125,
+    "frac_channels_90": 0.7470703125,
+    "energy_share_top20pct": 0.5956749925957133,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9455657303333282,
+    "energy_max_over_median": 189.45198602770427,
+    "rms": 1.3726269878987591,
+    "tau": 0.06863134939493797,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9927893100457762
+   },
+   "control": {
+    "spearman_split_half": 0.9927893100457762,
+    "gini_half2": 0.5119457222458894,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.5.linear_attn.in_proj_z",
+   "layer": 5,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5099606324956518,
+    "frac_channels_50": 0.095703125,
+    "frac_channels_90": 0.7470703125,
+    "energy_share_top20pct": 0.5956749925957133,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9455657303333282,
+    "energy_max_over_median": 189.45198602770427,
+    "rms": 1.3726269878987591,
+    "tau": 0.06863134939493797,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9927893100457762
+   },
+   "control": {
+    "spearman_split_half": 0.9927893100457762,
+    "gini_half2": 0.5119457222458894,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.5.linear_attn.in_proj_b",
+   "layer": 5,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5099606324956518,
+    "frac_channels_50": 0.095703125,
+    "frac_channels_90": 0.7470703125,
+    "energy_share_top20pct": 0.5956749925957133,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9455657303333282,
+    "energy_max_over_median": 189.45198602770427,
+    "rms": 1.3726269878987591,
+    "tau": 0.06863134939493797,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9927893100457762
+   },
+   "control": {
+    "spearman_split_half": 0.9927893100457762,
+    "gini_half2": 0.5119457222458894,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.5.linear_attn.in_proj_a",
+   "layer": 5,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5099606324956518,
+    "frac_channels_50": 0.095703125,
+    "frac_channels_90": 0.7470703125,
+    "energy_share_top20pct": 0.5956749925957133,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9455657303333282,
+    "energy_max_over_median": 189.45198602770427,
+    "rms": 1.3726269878987591,
+    "tau": 0.06863134939493797,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9927893100457762
+   },
+   "control": {
+    "spearman_split_half": 0.9927893100457762,
+    "gini_half2": 0.5119457222458894,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.5.linear_attn.out_proj",
+   "layer": 5,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7428837864388458,
+    "frac_channels_50": 0.0185546875,
+    "frac_channels_90": 0.45068359375,
+    "energy_share_top20pct": 0.771871964324184,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7651673704385757,
+    "energy_max_over_median": 445.40036719645997,
+    "rms": 0.068261457887514,
+    "tau": 0.0034130728943757003,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9563210860995559
+   },
+   "control": {
+    "spearman_split_half": 0.9563210860995559,
+    "gini_half2": 0.7427888058744059,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.5.mlp.gate_proj",
+   "layer": 5,
+   "type": "gate",
+   "stat": {
+    "gini": 0.4318872627463721,
+    "frac_channels_50": 0.1533203125,
+    "frac_channels_90": 0.796875,
+    "energy_share_top20pct": 0.5380460294167707,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9492909908294678,
+    "energy_max_over_median": 179.1400173520475,
+    "rms": 1.0607095105429316,
+    "tau": 0.05303547552714658,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9767541104892353
+   },
+   "control": {
+    "spearman_split_half": 0.9767541104892353,
+    "gini_half2": 0.43306028791271745,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.5.mlp.up_proj",
+   "layer": 5,
+   "type": "up",
+   "stat": {
+    "gini": 0.4318872627463721,
+    "frac_channels_50": 0.1533203125,
+    "frac_channels_90": 0.796875,
+    "energy_share_top20pct": 0.5380460294167707,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9492909908294678,
+    "energy_max_over_median": 179.1400173520475,
+    "rms": 1.0607095105429316,
+    "tau": 0.05303547552714658,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9767541104892353
+   },
+   "control": {
+    "spearman_split_half": 0.9767541104892353,
+    "gini_half2": 0.43306028791271745,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.5.mlp.down_proj",
+   "layer": 5,
+   "type": "down",
+   "stat": {
+    "gini": 0.2358556118011197,
+    "frac_channels_50": 0.33426339285714285,
+    "frac_channels_90": 0.8236607142857143,
+    "energy_share_top20pct": 0.3570927205256614,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9092378318309784,
+    "energy_max_over_median": 12.93862731033137,
+    "rms": 0.05407419845570124,
+    "tau": 0.0027037099227850622,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.879625319665122
+   },
+   "control": {
+    "spearman_split_half": 0.879625319665122,
+    "gini_half2": 0.23159614584289612,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.6.linear_attn.in_proj_qkv",
+   "layer": 6,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5387486627654263,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.728515625,
+    "energy_share_top20pct": 0.6202644496366941,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9443106055259705,
+    "energy_max_over_median": 226.34429533397588,
+    "rms": 1.3020358064242847,
+    "tau": 0.06510179032121424,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9923017175094772
+   },
+   "control": {
+    "spearman_split_half": 0.9923017175094772,
+    "gini_half2": 0.5402642784095215,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.6.linear_attn.in_proj_z",
+   "layer": 6,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5387486627654263,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.728515625,
+    "energy_share_top20pct": 0.6202644496366941,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9443106055259705,
+    "energy_max_over_median": 226.34429533397588,
+    "rms": 1.3020358064242847,
+    "tau": 0.06510179032121424,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9923017175094772
+   },
+   "control": {
+    "spearman_split_half": 0.9923017175094772,
+    "gini_half2": 0.5402642784095215,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.6.linear_attn.in_proj_b",
+   "layer": 6,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5387486627654263,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.728515625,
+    "energy_share_top20pct": 0.6202644496366941,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9443106055259705,
+    "energy_max_over_median": 226.34429533397588,
+    "rms": 1.3020358064242847,
+    "tau": 0.06510179032121424,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9923017175094772
+   },
+   "control": {
+    "spearman_split_half": 0.9923017175094772,
+    "gini_half2": 0.5402642784095215,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.6.linear_attn.in_proj_a",
+   "layer": 6,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5387486627654263,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.728515625,
+    "energy_share_top20pct": 0.6202644496366941,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9443106055259705,
+    "energy_max_over_median": 226.34429533397588,
+    "rms": 1.3020358064242847,
+    "tau": 0.06510179032121424,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9923017175094772
+   },
+   "control": {
+    "spearman_split_half": 0.9923017175094772,
+    "gini_half2": 0.5402642784095215,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.6.linear_attn.out_proj",
+   "layer": 6,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.6714024582636897,
+    "frac_channels_50": 0.04296875,
+    "frac_channels_90": 0.53271484375,
+    "energy_share_top20pct": 0.7036061629654684,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7554794922471046,
+    "energy_max_over_median": 485.63600723172596,
+    "rms": 0.06305520989347327,
+    "tau": 0.0031527604946736637,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9619947470551387
+   },
+   "control": {
+    "spearman_split_half": 0.9619947470551387,
+    "gini_half2": 0.6697984509778394,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.6.mlp.gate_proj",
+   "layer": 6,
+   "type": "gate",
+   "stat": {
+    "gini": 0.44800130488000245,
+    "frac_channels_50": 0.1416015625,
+    "frac_channels_90": 0.787109375,
+    "energy_share_top20pct": 0.5496577252858647,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9489996880292892,
+    "energy_max_over_median": 210.34297666370057,
+    "rms": 1.0768723882022475,
+    "tau": 0.05384361941011238,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.983240469208211
+   },
+   "control": {
+    "spearman_split_half": 0.983240469208211,
+    "gini_half2": 0.44894137012943225,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.6.mlp.up_proj",
+   "layer": 6,
+   "type": "up",
+   "stat": {
+    "gini": 0.44800130488000245,
+    "frac_channels_50": 0.1416015625,
+    "frac_channels_90": 0.787109375,
+    "energy_share_top20pct": 0.5496577252858647,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9489996880292892,
+    "energy_max_over_median": 210.34297666370057,
+    "rms": 1.0768723882022475,
+    "tau": 0.05384361941011238,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.983240469208211
+   },
+   "control": {
+    "spearman_split_half": 0.983240469208211,
+    "gini_half2": 0.44894137012943225,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.6.mlp.down_proj",
+   "layer": 6,
+   "type": "down",
+   "stat": {
+    "gini": 0.33857826352108367,
+    "frac_channels_50": 0.25753348214285715,
+    "frac_channels_90": 0.79296875,
+    "energy_share_top20pct": 0.4404337147366657,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8982087884630475,
+    "energy_max_over_median": 167.47408825317586,
+    "rms": 0.05720116280855043,
+    "tau": 0.0028600581404275216,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9138055058379813
+   },
+   "control": {
+    "spearman_split_half": 0.9138055058379813,
+    "gini_half2": 0.3371389730138059,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.7.self_attn.q_proj",
+   "layer": 7,
+   "type": "q",
+   "stat": {
+    "gini": 0.5200504466877274,
+    "frac_channels_50": 0.099609375,
+    "frac_channels_90": 0.732421875,
+    "energy_share_top20pct": 0.6010159095549084,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9461949169635773,
+    "energy_max_over_median": 209.953814568504,
+    "rms": 1.1132557113127455,
+    "tau": 0.05566278556563728,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9930847472492935
+   },
+   "control": {
+    "spearman_split_half": 0.9930847472492935,
+    "gini_half2": 0.5221074517338038,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 4194304
+  },
+  {
+   "tensor": "model.layers.7.self_attn.k_proj",
+   "layer": 7,
+   "type": "k",
+   "stat": {
+    "gini": 0.5200504466877274,
+    "frac_channels_50": 0.099609375,
+    "frac_channels_90": 0.732421875,
+    "energy_share_top20pct": 0.6010159095549084,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9461949169635773,
+    "energy_max_over_median": 209.953814568504,
+    "rms": 1.1132557113127455,
+    "tau": 0.05566278556563728,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9930847472492935
+   },
+   "control": {
+    "spearman_split_half": 0.9930847472492935,
+    "gini_half2": 0.5221074517338038,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.7.self_attn.v_proj",
+   "layer": 7,
+   "type": "v",
+   "stat": {
+    "gini": 0.5200504466877274,
+    "frac_channels_50": 0.099609375,
+    "frac_channels_90": 0.732421875,
+    "energy_share_top20pct": 0.6010159095549084,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9461949169635773,
+    "energy_max_over_median": 209.953814568504,
+    "rms": 1.1132557113127455,
+    "tau": 0.05566278556563728,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9930847472492935
+   },
+   "control": {
+    "spearman_split_half": 0.9930847472492935,
+    "gini_half2": 0.5221074517338038,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.7.self_attn.o_proj",
+   "layer": 7,
+   "type": "o",
+   "stat": {
+    "gini": 0.6211821725156357,
+    "frac_channels_50": 0.08984375,
+    "frac_channels_90": 0.5537109375,
+    "energy_share_top20pct": 0.6598430660231764,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8835237920284271,
+    "energy_max_over_median": 255.30278065057166,
+    "rms": 0.08897526948977252,
+    "tau": 0.004448763474488626,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9871434468857222
+   },
+   "control": {
+    "spearman_split_half": 0.9871434468857222,
+    "gini_half2": 0.6116838626730605,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.7.mlp.gate_proj",
+   "layer": 7,
+   "type": "gate",
+   "stat": {
+    "gini": 0.4567062829069446,
+    "frac_channels_50": 0.1298828125,
+    "frac_channels_90": 0.7841796875,
+    "energy_share_top20pct": 0.5579205308460554,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.948541060090065,
+    "energy_max_over_median": 144.27975623642405,
+    "rms": 1.0379750577432636,
+    "tau": 0.05189875288716318,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9849008140512122
+   },
+   "control": {
+    "spearman_split_half": 0.9849008140512122,
+    "gini_half2": 0.4561059490848498,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.7.mlp.up_proj",
+   "layer": 7,
+   "type": "up",
+   "stat": {
+    "gini": 0.4567062829069446,
+    "frac_channels_50": 0.1298828125,
+    "frac_channels_90": 0.7841796875,
+    "energy_share_top20pct": 0.5579205308460554,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.948541060090065,
+    "energy_max_over_median": 144.27975623642405,
+    "rms": 1.0379750577432636,
+    "tau": 0.05189875288716318,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9849008140512122
+   },
+   "control": {
+    "spearman_split_half": 0.9849008140512122,
+    "gini_half2": 0.4561059490848498,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.7.mlp.down_proj",
+   "layer": 7,
+   "type": "down",
+   "stat": {
+    "gini": 0.2789668230611517,
+    "frac_channels_50": 0.3021763392857143,
+    "frac_channels_90": 0.8010602678571429,
+    "energy_share_top20pct": 0.38279622514894884,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8992235234805516,
+    "energy_max_over_median": 27.435390520617595,
+    "rms": 0.051020008567296216,
+    "tau": 0.002551000428364811,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9598662519628873
+   },
+   "control": {
+    "spearman_split_half": 0.9598662519628873,
+    "gini_half2": 0.27940826656960915,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.8.linear_attn.in_proj_qkv",
+   "layer": 8,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5307057761927783,
+    "frac_channels_50": 0.0703125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6188029451546598,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9445549696683884,
+    "energy_max_over_median": 239.47900053381574,
+    "rms": 1.285899078054711,
+    "tau": 0.06429495390273555,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9921407848151061
+   },
+   "control": {
+    "spearman_split_half": 0.9921407848151061,
+    "gini_half2": 0.5316778034024907,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.8.linear_attn.in_proj_z",
+   "layer": 8,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5307057761927783,
+    "frac_channels_50": 0.0703125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6188029451546598,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9445549696683884,
+    "energy_max_over_median": 239.47900053381574,
+    "rms": 1.285899078054711,
+    "tau": 0.06429495390273555,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9921407848151061
+   },
+   "control": {
+    "spearman_split_half": 0.9921407848151061,
+    "gini_half2": 0.5316778034024907,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.8.linear_attn.in_proj_b",
+   "layer": 8,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5307057761927783,
+    "frac_channels_50": 0.0703125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6188029451546598,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9445549696683884,
+    "energy_max_over_median": 239.47900053381574,
+    "rms": 1.285899078054711,
+    "tau": 0.06429495390273555,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9921407848151061
+   },
+   "control": {
+    "spearman_split_half": 0.9921407848151061,
+    "gini_half2": 0.5316778034024907,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.8.linear_attn.in_proj_a",
+   "layer": 8,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5307057761927783,
+    "frac_channels_50": 0.0703125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6188029451546598,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9445549696683884,
+    "energy_max_over_median": 239.47900053381574,
+    "rms": 1.285899078054711,
+    "tau": 0.06429495390273555,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9921407848151061
+   },
+   "control": {
+    "spearman_split_half": 0.9921407848151061,
+    "gini_half2": 0.5316778034024907,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.8.linear_attn.out_proj",
+   "layer": 8,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7194616686327568,
+    "frac_channels_50": 0.021484375,
+    "frac_channels_90": 0.4833984375,
+    "energy_share_top20pct": 0.7499410792341596,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7797732204198837,
+    "energy_max_over_median": 489.6395014826198,
+    "rms": 0.058806521810914385,
+    "tau": 0.0029403260905457194,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9802110776622184
+   },
+   "control": {
+    "spearman_split_half": 0.9802110776622184,
+    "gini_half2": 0.7116733465048302,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.8.mlp.gate_proj",
+   "layer": 8,
+   "type": "gate",
+   "stat": {
+    "gini": 0.46113854516940256,
+    "frac_channels_50": 0.1220703125,
+    "frac_channels_90": 0.783203125,
+    "energy_share_top20pct": 0.5641451702243462,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.94831582903862,
+    "energy_max_over_median": 133.68807081629555,
+    "rms": 1.0053851444842892,
+    "tau": 0.050269257224214464,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.985621669587297
+   },
+   "control": {
+    "spearman_split_half": 0.985621669587297,
+    "gini_half2": 0.4599803956494728,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.8.mlp.up_proj",
+   "layer": 8,
+   "type": "up",
+   "stat": {
+    "gini": 0.46113854516940256,
+    "frac_channels_50": 0.1220703125,
+    "frac_channels_90": 0.783203125,
+    "energy_share_top20pct": 0.5641451702243462,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.94831582903862,
+    "energy_max_over_median": 133.68807081629555,
+    "rms": 1.0053851444842892,
+    "tau": 0.050269257224214464,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.985621669587297
+   },
+   "control": {
+    "spearman_split_half": 0.985621669587297,
+    "gini_half2": 0.4599803956494728,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.8.mlp.down_proj",
+   "layer": 8,
+   "type": "down",
+   "stat": {
+    "gini": 0.2971183550133367,
+    "frac_channels_50": 0.28738839285714285,
+    "frac_channels_90": 0.7971540178571429,
+    "energy_share_top20pct": 0.3987121701239811,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8905664001192365,
+    "energy_max_over_median": 81.33623343886542,
+    "rms": 0.04509083444735854,
+    "tau": 0.0022545417223679273,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9685207933617258
+   },
+   "control": {
+    "spearman_split_half": 0.9685207933617258,
+    "gini_half2": 0.29625200260520157,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.9.linear_attn.in_proj_qkv",
+   "layer": 9,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5240708540145846,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.75,
+    "energy_share_top20pct": 0.6172420774762737,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450717717409134,
+    "energy_max_over_median": 181.2649274192181,
+    "rms": 1.2390189876348408,
+    "tau": 0.06195094938174204,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913300751913311
+   },
+   "control": {
+    "spearman_split_half": 0.9913300751913311,
+    "gini_half2": 0.523794497485748,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.9.linear_attn.in_proj_z",
+   "layer": 9,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5240708540145846,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.75,
+    "energy_share_top20pct": 0.6172420774762737,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450717717409134,
+    "energy_max_over_median": 181.2649274192181,
+    "rms": 1.2390189876348408,
+    "tau": 0.06195094938174204,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913300751913311
+   },
+   "control": {
+    "spearman_split_half": 0.9913300751913311,
+    "gini_half2": 0.523794497485748,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.9.linear_attn.in_proj_b",
+   "layer": 9,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5240708540145846,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.75,
+    "energy_share_top20pct": 0.6172420774762737,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450717717409134,
+    "energy_max_over_median": 181.2649274192181,
+    "rms": 1.2390189876348408,
+    "tau": 0.06195094938174204,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913300751913311
+   },
+   "control": {
+    "spearman_split_half": 0.9913300751913311,
+    "gini_half2": 0.523794497485748,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.9.linear_attn.in_proj_a",
+   "layer": 9,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5240708540145846,
+    "frac_channels_50": 0.0732421875,
+    "frac_channels_90": 0.75,
+    "energy_share_top20pct": 0.6172420774762737,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450717717409134,
+    "energy_max_over_median": 181.2649274192181,
+    "rms": 1.2390189876348408,
+    "tau": 0.06195094938174204,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913300751913311
+   },
+   "control": {
+    "spearman_split_half": 0.9913300751913311,
+    "gini_half2": 0.523794497485748,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.9.linear_attn.out_proj",
+   "layer": 9,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.6513782665215577,
+    "frac_channels_50": 0.0595703125,
+    "frac_channels_90": 0.55029296875,
+    "energy_share_top20pct": 0.6950549298329981,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7858333215117455,
+    "energy_max_over_median": 186.98473309964947,
+    "rms": 0.05257214210332197,
+    "tau": 0.0026286071051660987,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9738459426952167
+   },
+   "control": {
+    "spearman_split_half": 0.9738459426952167,
+    "gini_half2": 0.6494963270465564,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.9.mlp.gate_proj",
+   "layer": 9,
+   "type": "gate",
+   "stat": {
+    "gini": 0.46240550799971114,
+    "frac_channels_50": 0.1181640625,
+    "frac_channels_90": 0.7841796875,
+    "energy_share_top20pct": 0.5674555824092614,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9482174217700958,
+    "energy_max_over_median": 153.51210418693864,
+    "rms": 0.9904799297981801,
+    "tau": 0.04952399648990901,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9835271082182963
+   },
+   "control": {
+    "spearman_split_half": 0.9835271082182963,
+    "gini_half2": 0.46117414685645386,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.9.mlp.up_proj",
+   "layer": 9,
+   "type": "up",
+   "stat": {
+    "gini": 0.46240550799971114,
+    "frac_channels_50": 0.1181640625,
+    "frac_channels_90": 0.7841796875,
+    "energy_share_top20pct": 0.5674555824092614,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9482174217700958,
+    "energy_max_over_median": 153.51210418693864,
+    "rms": 0.9904799297981801,
+    "tau": 0.04952399648990901,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9835271082182963
+   },
+   "control": {
+    "spearman_split_half": 0.9835271082182963,
+    "gini_half2": 0.46117414685645386,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.9.mlp.down_proj",
+   "layer": 9,
+   "type": "down",
+   "stat": {
+    "gini": 0.34630044880626576,
+    "frac_channels_50": 0.251953125,
+    "frac_channels_90": 0.7776227678571429,
+    "energy_share_top20pct": 0.44095577653285145,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8819063774177006,
+    "energy_max_over_median": 36.81573140851208,
+    "rms": 0.043248153719960575,
+    "tau": 0.0021624076859980287,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9775986045131139
+   },
+   "control": {
+    "spearman_split_half": 0.9775986045131139,
+    "gini_half2": 0.34684430273565936,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.10.linear_attn.in_proj_qkv",
+   "layer": 10,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5434448605847852,
+    "frac_channels_50": 0.056640625,
+    "frac_channels_90": 0.7421875,
+    "energy_share_top20pct": 0.6336801440255357,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9441086649894714,
+    "energy_max_over_median": 255.09248628446855,
+    "rms": 1.221879852753586,
+    "tau": 0.0610939926376793,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906072722316425
+   },
+   "control": {
+    "spearman_split_half": 0.9906072722316425,
+    "gini_half2": 0.5440943947542873,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.10.linear_attn.in_proj_z",
+   "layer": 10,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5434448605847852,
+    "frac_channels_50": 0.056640625,
+    "frac_channels_90": 0.7421875,
+    "energy_share_top20pct": 0.6336801440255357,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9441086649894714,
+    "energy_max_over_median": 255.09248628446855,
+    "rms": 1.221879852753586,
+    "tau": 0.0610939926376793,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906072722316425
+   },
+   "control": {
+    "spearman_split_half": 0.9906072722316425,
+    "gini_half2": 0.5440943947542873,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.10.linear_attn.in_proj_b",
+   "layer": 10,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5434448605847852,
+    "frac_channels_50": 0.056640625,
+    "frac_channels_90": 0.7421875,
+    "energy_share_top20pct": 0.6336801440255357,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9441086649894714,
+    "energy_max_over_median": 255.09248628446855,
+    "rms": 1.221879852753586,
+    "tau": 0.0610939926376793,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906072722316425
+   },
+   "control": {
+    "spearman_split_half": 0.9906072722316425,
+    "gini_half2": 0.5440943947542873,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.10.linear_attn.in_proj_a",
+   "layer": 10,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5434448605847852,
+    "frac_channels_50": 0.056640625,
+    "frac_channels_90": 0.7421875,
+    "energy_share_top20pct": 0.6336801440255357,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9441086649894714,
+    "energy_max_over_median": 255.09248628446855,
+    "rms": 1.221879852753586,
+    "tau": 0.0610939926376793,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9906072722316425
+   },
+   "control": {
+    "spearman_split_half": 0.9906072722316425,
+    "gini_half2": 0.5440943947542873,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.10.linear_attn.out_proj",
+   "layer": 10,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.6729763544126588,
+    "frac_channels_50": 0.05029296875,
+    "frac_channels_90": 0.529296875,
+    "energy_share_top20pct": 0.7159301663963402,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8266931176185608,
+    "energy_max_over_median": 413.57069398235484,
+    "rms": 0.057700581732904876,
+    "tau": 0.002885029086645244,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9860982554416671
+   },
+   "control": {
+    "spearman_split_half": 0.9860982554416671,
+    "gini_half2": 0.6697680758609152,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.10.mlp.gate_proj",
+   "layer": 10,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5045910937194282,
+    "frac_channels_50": 0.0869140625,
+    "frac_channels_90": 0.76171875,
+    "energy_share_top20pct": 0.601245024835795,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9465036988258362,
+    "energy_max_over_median": 233.90444256503,
+    "rms": 0.9956862569811618,
+    "tau": 0.04978431284905809,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9843105458532744
+   },
+   "control": {
+    "spearman_split_half": 0.9843105458532744,
+    "gini_half2": 0.5039515767941585,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.10.mlp.up_proj",
+   "layer": 10,
+   "type": "up",
+   "stat": {
+    "gini": 0.5045910937194282,
+    "frac_channels_50": 0.0869140625,
+    "frac_channels_90": 0.76171875,
+    "energy_share_top20pct": 0.601245024835795,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9465036988258362,
+    "energy_max_over_median": 233.90444256503,
+    "rms": 0.9956862569811618,
+    "tau": 0.04978431284905809,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9843105458532744
+   },
+   "control": {
+    "spearman_split_half": 0.9843105458532744,
+    "gini_half2": 0.5039515767941585,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.10.mlp.down_proj",
+   "layer": 10,
+   "type": "down",
+   "stat": {
+    "gini": 0.37056850319928447,
+    "frac_channels_50": 0.234375,
+    "frac_channels_90": 0.7645089285714286,
+    "energy_share_top20pct": 0.46100126288582727,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8855740427970886,
+    "energy_max_over_median": 41.42240394789667,
+    "rms": 0.04408311883697964,
+    "tau": 0.0022041559418489822,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9749841308469518
+   },
+   "control": {
+    "spearman_split_half": 0.9749841308469518,
+    "gini_half2": 0.37006195236977635,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.11.self_attn.q_proj",
+   "layer": 11,
+   "type": "q",
+   "stat": {
+    "gini": 0.5344593430135747,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.6218561909844098,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453612118959427,
+    "energy_max_over_median": 221.6702329749218,
+    "rms": 1.0756561649823737,
+    "tau": 0.053782808249118685,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913574532830198
+   },
+   "control": {
+    "spearman_split_half": 0.9913574532830198,
+    "gini_half2": 0.5355664807935125,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 4194304
+  },
+  {
+   "tensor": "model.layers.11.self_attn.k_proj",
+   "layer": 11,
+   "type": "k",
+   "stat": {
+    "gini": 0.5344593430135747,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.6218561909844098,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453612118959427,
+    "energy_max_over_median": 221.6702329749218,
+    "rms": 1.0756561649823737,
+    "tau": 0.053782808249118685,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913574532830198
+   },
+   "control": {
+    "spearman_split_half": 0.9913574532830198,
+    "gini_half2": 0.5355664807935125,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.11.self_attn.v_proj",
+   "layer": 11,
+   "type": "v",
+   "stat": {
+    "gini": 0.5344593430135747,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.6218561909844098,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453612118959427,
+    "energy_max_over_median": 221.6702329749218,
+    "rms": 1.0756561649823737,
+    "tau": 0.053782808249118685,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9913574532830198
+   },
+   "control": {
+    "spearman_split_half": 0.9913574532830198,
+    "gini_half2": 0.5355664807935125,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.11.self_attn.o_proj",
+   "layer": 11,
+   "type": "o",
+   "stat": {
+    "gini": 0.6456266787338971,
+    "frac_channels_50": 0.0703125,
+    "frac_channels_90": 0.55029296875,
+    "energy_share_top20pct": 0.6924566938662673,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.878429114818573,
+    "energy_max_over_median": 220.55805812220578,
+    "rms": 0.08834566102239728,
+    "tau": 0.0044172830511198646,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9854592832527836
+   },
+   "control": {
+    "spearman_split_half": 0.9854592832527836,
+    "gini_half2": 0.6398803586028778,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.11.mlp.gate_proj",
+   "layer": 11,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5025105504101395,
+    "frac_channels_50": 0.0908203125,
+    "frac_channels_90": 0.7607421875,
+    "energy_share_top20pct": 0.5987566208044474,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9466143548488617,
+    "energy_max_over_median": 155.9291011841118,
+    "rms": 1.035636703986805,
+    "tau": 0.05178183519934026,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9859820582397539
+   },
+   "control": {
+    "spearman_split_half": 0.9859820582397539,
+    "gini_half2": 0.5004897671421351,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.11.mlp.up_proj",
+   "layer": 11,
+   "type": "up",
+   "stat": {
+    "gini": 0.5025105504101395,
+    "frac_channels_50": 0.0908203125,
+    "frac_channels_90": 0.7607421875,
+    "energy_share_top20pct": 0.5987566208044474,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9466143548488617,
+    "energy_max_over_median": 155.9291011841118,
+    "rms": 1.035636703986805,
+    "tau": 0.05178183519934026,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9859820582397539
+   },
+   "control": {
+    "spearman_split_half": 0.9859820582397539,
+    "gini_half2": 0.5004897671421351,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.11.mlp.down_proj",
+   "layer": 11,
+   "type": "down",
+   "stat": {
+    "gini": 0.38695177772880296,
+    "frac_channels_50": 0.22544642857142858,
+    "frac_channels_90": 0.7491629464285714,
+    "energy_share_top20pct": 0.46891292117634314,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.883730947971344,
+    "energy_max_over_median": 34.536054734116085,
+    "rms": 0.04836120518809381,
+    "tau": 0.0024180602594046905,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9805034958179016
+   },
+   "control": {
+    "spearman_split_half": 0.9805034958179016,
+    "gini_half2": 0.3857551949507636,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.12.linear_attn.in_proj_qkv",
+   "layer": 12,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5335544988500418,
+    "frac_channels_50": 0.0751953125,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.624459559663646,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450572729110718,
+    "energy_max_over_median": 173.663134898352,
+    "rms": 1.410000779307265,
+    "tau": 0.07050003896536326,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9914171911880407
+   },
+   "control": {
+    "spearman_split_half": 0.9914171911880407,
+    "gini_half2": 0.532895987055243,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.12.linear_attn.in_proj_z",
+   "layer": 12,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5335544988500418,
+    "frac_channels_50": 0.0751953125,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.624459559663646,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450572729110718,
+    "energy_max_over_median": 173.663134898352,
+    "rms": 1.410000779307265,
+    "tau": 0.07050003896536326,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9914171911880407
+   },
+   "control": {
+    "spearman_split_half": 0.9914171911880407,
+    "gini_half2": 0.532895987055243,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.12.linear_attn.in_proj_b",
+   "layer": 12,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5335544988500418,
+    "frac_channels_50": 0.0751953125,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.624459559663646,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450572729110718,
+    "energy_max_over_median": 173.663134898352,
+    "rms": 1.410000779307265,
+    "tau": 0.07050003896536326,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9914171911880407
+   },
+   "control": {
+    "spearman_split_half": 0.9914171911880407,
+    "gini_half2": 0.532895987055243,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.12.linear_attn.in_proj_a",
+   "layer": 12,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5335544988500418,
+    "frac_channels_50": 0.0751953125,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.624459559663646,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9450572729110718,
+    "energy_max_over_median": 173.663134898352,
+    "rms": 1.410000779307265,
+    "tau": 0.07050003896536326,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9914171911880407
+   },
+   "control": {
+    "spearman_split_half": 0.9914171911880407,
+    "gini_half2": 0.532895987055243,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.12.linear_attn.out_proj",
+   "layer": 12,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7678839305893355,
+    "frac_channels_50": 0.0205078125,
+    "frac_channels_90": 0.38720703125,
+    "energy_share_top20pct": 0.7919217989601155,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7309499233961105,
+    "energy_max_over_median": 702.2027122194996,
+    "rms": 0.05744621400062206,
+    "tau": 0.0028723107000311033,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.979516681522383
+   },
+   "control": {
+    "spearman_split_half": 0.979516681522383,
+    "gini_half2": 0.7643565351441464,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.12.mlp.gate_proj",
+   "layer": 12,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5265909558105202,
+    "frac_channels_50": 0.0830078125,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.6141551357446462,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453939497470856,
+    "energy_max_over_median": 172.8282462635404,
+    "rms": 1.0695217023469308,
+    "tau": 0.05347608511734654,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9902593586832128
+   },
+   "control": {
+    "spearman_split_half": 0.9902593586832128,
+    "gini_half2": 0.5249343838805562,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.12.mlp.up_proj",
+   "layer": 12,
+   "type": "up",
+   "stat": {
+    "gini": 0.5265909558105202,
+    "frac_channels_50": 0.0830078125,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.6141551357446462,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453939497470856,
+    "energy_max_over_median": 172.8282462635404,
+    "rms": 1.0695217023469308,
+    "tau": 0.05347608511734654,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9902593586832128
+   },
+   "control": {
+    "spearman_split_half": 0.9902593586832128,
+    "gini_half2": 0.5249343838805562,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.12.mlp.down_proj",
+   "layer": 12,
+   "type": "down",
+   "stat": {
+    "gini": 0.4117923814858284,
+    "frac_channels_50": 0.21205357142857142,
+    "frac_channels_90": 0.732421875,
+    "energy_share_top20pct": 0.48581615904663816,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8839448477540698,
+    "energy_max_over_median": 74.52028707885037,
+    "rms": 0.05477756751734275,
+    "tau": 0.002738878375867138,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9831385049364745
+   },
+   "control": {
+    "spearman_split_half": 0.9831385049364745,
+    "gini_half2": 0.4131048625692906,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.13.linear_attn.in_proj_qkv",
+   "layer": 13,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5278139779181585,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7451171875,
+    "energy_share_top20pct": 0.6227066622836922,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9452188611030579,
+    "energy_max_over_median": 201.72134030114188,
+    "rms": 1.3575971970439877,
+    "tau": 0.0678798598521994,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9896559951899004
+   },
+   "control": {
+    "spearman_split_half": 0.9896559951899004,
+    "gini_half2": 0.5282985443796351,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.13.linear_attn.in_proj_z",
+   "layer": 13,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5278139779181585,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7451171875,
+    "energy_share_top20pct": 0.6227066622836922,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9452188611030579,
+    "energy_max_over_median": 201.72134030114188,
+    "rms": 1.3575971970439877,
+    "tau": 0.0678798598521994,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9896559951899004
+   },
+   "control": {
+    "spearman_split_half": 0.9896559951899004,
+    "gini_half2": 0.5282985443796351,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.13.linear_attn.in_proj_b",
+   "layer": 13,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5278139779181585,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7451171875,
+    "energy_share_top20pct": 0.6227066622836922,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9452188611030579,
+    "energy_max_over_median": 201.72134030114188,
+    "rms": 1.3575971970439877,
+    "tau": 0.0678798598521994,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9896559951899004
+   },
+   "control": {
+    "spearman_split_half": 0.9896559951899004,
+    "gini_half2": 0.5282985443796351,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.13.linear_attn.in_proj_a",
+   "layer": 13,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5278139779181585,
+    "frac_channels_50": 0.078125,
+    "frac_channels_90": 0.7451171875,
+    "energy_share_top20pct": 0.6227066622836922,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9452188611030579,
+    "energy_max_over_median": 201.72134030114188,
+    "rms": 1.3575971970439877,
+    "tau": 0.0678798598521994,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9896559951899004
+   },
+   "control": {
+    "spearman_split_half": 0.9896559951899004,
+    "gini_half2": 0.5282985443796351,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.13.linear_attn.out_proj",
+   "layer": 13,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.6872766404238866,
+    "frac_channels_50": 0.048828125,
+    "frac_channels_90": 0.5029296875,
+    "energy_share_top20pct": 0.7241076458410967,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7518876940011978,
+    "energy_max_over_median": 417.4326958955224,
+    "rms": 0.05945127350208766,
+    "tau": 0.002972563675104383,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9774499384008203
+   },
+   "control": {
+    "spearman_split_half": 0.9774499384008203,
+    "gini_half2": 0.6883681501483732,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.13.mlp.gate_proj",
+   "layer": 13,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5232213803420487,
+    "frac_channels_50": 0.0859375,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.6129466711565787,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9456869512796402,
+    "energy_max_over_median": 181.9462518943293,
+    "rms": 1.1034403277339047,
+    "tau": 0.055172016386695236,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9917590725806451
+   },
+   "control": {
+    "spearman_split_half": 0.9917590725806451,
+    "gini_half2": 0.5235476400802308,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.13.mlp.up_proj",
+   "layer": 13,
+   "type": "up",
+   "stat": {
+    "gini": 0.5232213803420487,
+    "frac_channels_50": 0.0859375,
+    "frac_channels_90": 0.73828125,
+    "energy_share_top20pct": 0.6129466711565787,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9456869512796402,
+    "energy_max_over_median": 181.9462518943293,
+    "rms": 1.1034403277339047,
+    "tau": 0.055172016386695236,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9917590725806451
+   },
+   "control": {
+    "spearman_split_half": 0.9917590725806451,
+    "gini_half2": 0.5235476400802308,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.13.mlp.down_proj",
+   "layer": 13,
+   "type": "down",
+   "stat": {
+    "gini": 0.47137901797181714,
+    "frac_channels_50": 0.16266741071428573,
+    "frac_channels_90": 0.7059151785714286,
+    "energy_share_top20pct": 0.5444280838583897,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8792782468455178,
+    "energy_max_over_median": 85.22552967082838,
+    "rms": 0.06572264539944861,
+    "tau": 0.0032861322699724305,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9828928208274647
+   },
+   "control": {
+    "spearman_split_half": 0.9828928208274647,
+    "gini_half2": 0.46816057818516543,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.14.linear_attn.in_proj_qkv",
+   "layer": 14,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5270809570704491,
+    "frac_channels_50": 0.0830078125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6230495440481961,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453906416893005,
+    "energy_max_over_median": 222.22816610166672,
+    "rms": 1.3355478532759104,
+    "tau": 0.06677739266379552,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9904092607824905
+   },
+   "control": {
+    "spearman_split_half": 0.9904092607824905,
+    "gini_half2": 0.5291986943138238,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.14.linear_attn.in_proj_z",
+   "layer": 14,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5270809570704491,
+    "frac_channels_50": 0.0830078125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6230495440481961,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453906416893005,
+    "energy_max_over_median": 222.22816610166672,
+    "rms": 1.3355478532759104,
+    "tau": 0.06677739266379552,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9904092607824905
+   },
+   "control": {
+    "spearman_split_half": 0.9904092607824905,
+    "gini_half2": 0.5291986943138238,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.14.linear_attn.in_proj_b",
+   "layer": 14,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5270809570704491,
+    "frac_channels_50": 0.0830078125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6230495440481961,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453906416893005,
+    "energy_max_over_median": 222.22816610166672,
+    "rms": 1.3355478532759104,
+    "tau": 0.06677739266379552,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9904092607824905
+   },
+   "control": {
+    "spearman_split_half": 0.9904092607824905,
+    "gini_half2": 0.5291986943138238,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.14.linear_attn.in_proj_a",
+   "layer": 14,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5270809570704491,
+    "frac_channels_50": 0.0830078125,
+    "frac_channels_90": 0.7431640625,
+    "energy_share_top20pct": 0.6230495440481961,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9453906416893005,
+    "energy_max_over_median": 222.22816610166672,
+    "rms": 1.3355478532759104,
+    "tau": 0.06677739266379552,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9904092607824905
+   },
+   "control": {
+    "spearman_split_half": 0.9904092607824905,
+    "gini_half2": 0.5291986943138238,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.14.linear_attn.out_proj",
+   "layer": 14,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7318901360997658,
+    "frac_channels_50": 0.0576171875,
+    "frac_channels_90": 0.39794921875,
+    "energy_share_top20pct": 0.7771246324356583,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7843198776245117,
+    "energy_max_over_median": 368.5537399152523,
+    "rms": 0.0774356259020321,
+    "tau": 0.003871781295101605,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9869716290056121
+   },
+   "control": {
+    "spearman_split_half": 0.9869716290056121,
+    "gini_half2": 0.7312577204902986,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.14.mlp.gate_proj",
+   "layer": 14,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5231415163821576,
+    "frac_channels_50": 0.0966796875,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.6084279476396721,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9462558031082153,
+    "energy_max_over_median": 164.6945949832013,
+    "rms": 1.1591396823012001,
+    "tau": 0.057956984115060006,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.989100520349045
+   },
+   "control": {
+    "spearman_split_half": 0.989100520349045,
+    "gini_half2": 0.5235405112416367,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.14.mlp.up_proj",
+   "layer": 14,
+   "type": "up",
+   "stat": {
+    "gini": 0.5231415163821576,
+    "frac_channels_50": 0.0966796875,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.6084279476396721,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9462558031082153,
+    "energy_max_over_median": 164.6945949832013,
+    "rms": 1.1591396823012001,
+    "tau": 0.057956984115060006,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.989100520349045
+   },
+   "control": {
+    "spearman_split_half": 0.989100520349045,
+    "gini_half2": 0.5235405112416367,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.14.mlp.down_proj",
+   "layer": 14,
+   "type": "down",
+   "stat": {
+    "gini": 0.6481766332730732,
+    "frac_channels_50": 0.06110491071428571,
+    "frac_channels_90": 0.56640625,
+    "energy_share_top20pct": 0.7063428856781369,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8559295066765377,
+    "energy_max_over_median": 537.0864759344918,
+    "rms": 0.10453344836826356,
+    "tau": 0.005226672418413178,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9866005382101741
+   },
+   "control": {
+    "spearman_split_half": 0.9866005382101741,
+    "gini_half2": 0.6494429798876147,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.15.self_attn.q_proj",
+   "layer": 15,
+   "type": "q",
+   "stat": {
+    "gini": 0.5049073151115848,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.736328125,
+    "energy_share_top20pct": 0.5922916340860085,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9468608647584915,
+    "energy_max_over_median": 131.03811369762607,
+    "rms": 1.16607221149793,
+    "tau": 0.058303610574896504,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.99368561574637
+   },
+   "control": {
+    "spearman_split_half": 0.99368561574637,
+    "gini_half2": 0.5062792476587104,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 4194304
+  },
+  {
+   "tensor": "model.layers.15.self_attn.k_proj",
+   "layer": 15,
+   "type": "k",
+   "stat": {
+    "gini": 0.5049073151115848,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.736328125,
+    "energy_share_top20pct": 0.5922916340860085,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9468608647584915,
+    "energy_max_over_median": 131.03811369762607,
+    "rms": 1.16607221149793,
+    "tau": 0.058303610574896504,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.99368561574637
+   },
+   "control": {
+    "spearman_split_half": 0.99368561574637,
+    "gini_half2": 0.5062792476587104,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.15.self_attn.v_proj",
+   "layer": 15,
+   "type": "v",
+   "stat": {
+    "gini": 0.5049073151115848,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.736328125,
+    "energy_share_top20pct": 0.5922916340860085,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9468608647584915,
+    "energy_max_over_median": 131.03811369762607,
+    "rms": 1.16607221149793,
+    "tau": 0.058303610574896504,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.99368561574637
+   },
+   "control": {
+    "spearman_split_half": 0.99368561574637,
+    "gini_half2": 0.5062792476587104,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.15.self_attn.o_proj",
+   "layer": 15,
+   "type": "o",
+   "stat": {
+    "gini": 0.7869530536490688,
+    "frac_channels_50": 0.0078125,
+    "frac_channels_90": 0.38818359375,
+    "energy_share_top20pct": 0.8140041076181916,
+    "frac_active_lt_1pct": 0.0009765625,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7942180335521698,
+    "energy_max_over_median": 512.6567984585281,
+    "rms": 0.12166376698589794,
+    "tau": 0.0060831883492948975,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9837006757290783
+   },
+   "control": {
+    "spearman_split_half": 0.9837006757290783,
+    "gini_half2": 0.782322564992703,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.15.mlp.gate_proj",
+   "layer": 15,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5247581284840905,
+    "frac_channels_50": 0.1083984375,
+    "frac_channels_90": 0.724609375,
+    "energy_share_top20pct": 0.6119236890533037,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9455283135175705,
+    "energy_max_over_median": 105.63326633085677,
+    "rms": 1.214835752601917,
+    "tau": 0.06074178763009585,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.989484590694514
+   },
+   "control": {
+    "spearman_split_half": 0.989484590694514,
+    "gini_half2": 0.5246179949145557,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.15.mlp.up_proj",
+   "layer": 15,
+   "type": "up",
+   "stat": {
+    "gini": 0.5247581284840905,
+    "frac_channels_50": 0.1083984375,
+    "frac_channels_90": 0.724609375,
+    "energy_share_top20pct": 0.6119236890533037,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9455283135175705,
+    "energy_max_over_median": 105.63326633085677,
+    "rms": 1.214835752601917,
+    "tau": 0.06074178763009585,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.989484590694514
+   },
+   "control": {
+    "spearman_split_half": 0.989484590694514,
+    "gini_half2": 0.5246179949145557,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.15.mlp.down_proj",
+   "layer": 15,
+   "type": "down",
+   "stat": {
+    "gini": 0.5179345336792802,
+    "frac_channels_50": 0.13504464285714285,
+    "frac_channels_90": 0.6635044642857143,
+    "energy_share_top20pct": 0.5834542487455477,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8843294084072113,
+    "energy_max_over_median": 64.07230995537729,
+    "rms": 0.11154004532358852,
+    "tau": 0.005577002266179427,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9519610171204296
+   },
+   "control": {
+    "spearman_split_half": 0.9519610171204296,
+    "gini_half2": 0.5127933441670149,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.16.linear_attn.in_proj_qkv",
+   "layer": 16,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5036971035573383,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.5875417956470689,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464733302593231,
+    "energy_max_over_median": 84.24977378955951,
+    "rms": 1.518845273392934,
+    "tau": 0.07594226366964671,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9931903900829696
+   },
+   "control": {
+    "spearman_split_half": 0.9931903900829696,
+    "gini_half2": 0.5062979615555638,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.16.linear_attn.in_proj_z",
+   "layer": 16,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5036971035573383,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.5875417956470689,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464733302593231,
+    "energy_max_over_median": 84.24977378955951,
+    "rms": 1.518845273392934,
+    "tau": 0.07594226366964671,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9931903900829696
+   },
+   "control": {
+    "spearman_split_half": 0.9931903900829696,
+    "gini_half2": 0.5062979615555638,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.16.linear_attn.in_proj_b",
+   "layer": 16,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5036971035573383,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.5875417956470689,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464733302593231,
+    "energy_max_over_median": 84.24977378955951,
+    "rms": 1.518845273392934,
+    "tau": 0.07594226366964671,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9931903900829696
+   },
+   "control": {
+    "spearman_split_half": 0.9931903900829696,
+    "gini_half2": 0.5062979615555638,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.16.linear_attn.in_proj_a",
+   "layer": 16,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5036971035573383,
+    "frac_channels_50": 0.1171875,
+    "frac_channels_90": 0.7333984375,
+    "energy_share_top20pct": 0.5875417956470689,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464733302593231,
+    "energy_max_over_median": 84.24977378955951,
+    "rms": 1.518845273392934,
+    "tau": 0.07594226366964671,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9931903900829696
+   },
+   "control": {
+    "spearman_split_half": 0.9931903900829696,
+    "gini_half2": 0.5062979615555638,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.16.linear_attn.out_proj",
+   "layer": 16,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7599158464654094,
+    "frac_channels_50": 0.0322265625,
+    "frac_channels_90": 0.39111328125,
+    "energy_share_top20pct": 0.788776286414685,
+    "frac_active_lt_1pct": 0.0009765625,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7370773032307625,
+    "energy_max_over_median": 1536.612345667019,
+    "rms": 0.11584869394050819,
+    "tau": 0.0057924346970254096,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9702732464205018
+   },
+   "control": {
+    "spearman_split_half": 0.9702732464205018,
+    "gini_half2": 0.7608860310894472,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.16.mlp.gate_proj",
+   "layer": 16,
+   "type": "gate",
+   "stat": {
+    "gini": 0.5035320993288634,
+    "frac_channels_50": 0.119140625,
+    "frac_channels_90": 0.734375,
+    "energy_share_top20pct": 0.5885108369467986,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9465584605932236,
+    "energy_max_over_median": 97.02139367400886,
+    "rms": 1.2461661673522686,
+    "tau": 0.06230830836761343,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9895051990200987
+   },
+   "control": {
+    "spearman_split_half": 0.9895051990200987,
+    "gini_half2": 0.5057558096712109,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.16.mlp.up_proj",
+   "layer": 16,
+   "type": "up",
+   "stat": {
+    "gini": 0.5035320993288634,
+    "frac_channels_50": 0.119140625,
+    "frac_channels_90": 0.734375,
+    "energy_share_top20pct": 0.5885108369467986,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9465584605932236,
+    "energy_max_over_median": 97.02139367400886,
+    "rms": 1.2461661673522686,
+    "tau": 0.06230830836761343,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9895051990200987
+   },
+   "control": {
+    "spearman_split_half": 0.9895051990200987,
+    "gini_half2": 0.5057558096712109,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.16.mlp.down_proj",
+   "layer": 16,
+   "type": "down",
+   "stat": {
+    "gini": 0.47973443809081506,
+    "frac_channels_50": 0.15150669642857142,
+    "frac_channels_90": 0.7123325892857143,
+    "energy_share_top20pct": 0.5592149568024203,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8916303643158504,
+    "energy_max_over_median": 52.16090876688007,
+    "rms": 0.10899493297683564,
+    "tau": 0.0054497466488417825,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.911716291818029
+   },
+   "control": {
+    "spearman_split_half": 0.911716291818029,
+    "gini_half2": 0.47289695897724116,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.17.linear_attn.in_proj_qkv",
+   "layer": 17,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.4751571372110781,
+    "frac_channels_50": 0.1376953125,
+    "frac_channels_90": 0.751953125,
+    "energy_share_top20pct": 0.56384623589511,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9478334188461304,
+    "energy_max_over_median": 90.53000177881587,
+    "rms": 1.6285386802851243,
+    "tau": 0.08142693401425621,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9908382777039997
+   },
+   "control": {
+    "spearman_split_half": 0.9908382777039997,
+    "gini_half2": 0.4782344333511046,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.17.linear_attn.in_proj_z",
+   "layer": 17,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.4751571372110781,
+    "frac_channels_50": 0.1376953125,
+    "frac_channels_90": 0.751953125,
+    "energy_share_top20pct": 0.56384623589511,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9478334188461304,
+    "energy_max_over_median": 90.53000177881587,
+    "rms": 1.6285386802851243,
+    "tau": 0.08142693401425621,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9908382777039997
+   },
+   "control": {
+    "spearman_split_half": 0.9908382777039997,
+    "gini_half2": 0.4782344333511046,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.17.linear_attn.in_proj_b",
+   "layer": 17,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4751571372110781,
+    "frac_channels_50": 0.1376953125,
+    "frac_channels_90": 0.751953125,
+    "energy_share_top20pct": 0.56384623589511,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9478334188461304,
+    "energy_max_over_median": 90.53000177881587,
+    "rms": 1.6285386802851243,
+    "tau": 0.08142693401425621,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9908382777039997
+   },
+   "control": {
+    "spearman_split_half": 0.9908382777039997,
+    "gini_half2": 0.4782344333511046,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.17.linear_attn.in_proj_a",
+   "layer": 17,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4751571372110781,
+    "frac_channels_50": 0.1376953125,
+    "frac_channels_90": 0.751953125,
+    "energy_share_top20pct": 0.56384623589511,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9478334188461304,
+    "energy_max_over_median": 90.53000177881587,
+    "rms": 1.6285386802851243,
+    "tau": 0.08142693401425621,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9908382777039997
+   },
+   "control": {
+    "spearman_split_half": 0.9908382777039997,
+    "gini_half2": 0.4782344333511046,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.17.linear_attn.out_proj",
+   "layer": 17,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.778035437295618,
+    "frac_channels_50": 0.02880859375,
+    "frac_channels_90": 0.36181640625,
+    "energy_share_top20pct": 0.8017897836101188,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7506144046783447,
+    "energy_max_over_median": 1473.2993699332212,
+    "rms": 0.1109791271258461,
+    "tau": 0.005548956356292305,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.953306923663777
+   },
+   "control": {
+    "spearman_split_half": 0.953306923663777,
+    "gini_half2": 0.7716949777043411,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.17.mlp.gate_proj",
+   "layer": 17,
+   "type": "gate",
+   "stat": {
+    "gini": 0.46869251613586127,
+    "frac_channels_50": 0.1357421875,
+    "frac_channels_90": 0.7607421875,
+    "energy_share_top20pct": 0.5648598488128153,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9480587095022202,
+    "energy_max_over_median": 86.85806793411311,
+    "rms": 1.2809268264716687,
+    "tau": 0.06404634132358343,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9861260147700449
+   },
+   "control": {
+    "spearman_split_half": 0.9861260147700449,
+    "gini_half2": 0.471545901239933,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.17.mlp.up_proj",
+   "layer": 17,
+   "type": "up",
+   "stat": {
+    "gini": 0.46869251613586127,
+    "frac_channels_50": 0.1357421875,
+    "frac_channels_90": 0.7607421875,
+    "energy_share_top20pct": 0.5648598488128153,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9480587095022202,
+    "energy_max_over_median": 86.85806793411311,
+    "rms": 1.2809268264716687,
+    "tau": 0.06404634132358343,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9861260147700449
+   },
+   "control": {
+    "spearman_split_half": 0.9861260147700449,
+    "gini_half2": 0.471545901239933,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.17.mlp.down_proj",
+   "layer": 17,
+   "type": "down",
+   "stat": {
+    "gini": 0.4643481374690368,
+    "frac_channels_50": 0.15680803571428573,
+    "frac_channels_90": 0.7338169642857143,
+    "energy_share_top20pct": 0.5494939676108447,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9055395552090236,
+    "energy_max_over_median": 157.3179783382237,
+    "rms": 0.1094655178130077,
+    "tau": 0.005473275890650386,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9136704816978765
+   },
+   "control": {
+    "spearman_split_half": 0.9136704816978765,
+    "gini_half2": 0.46136266537409165,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.18.linear_attn.in_proj_qkv",
+   "layer": 18,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.47696597180335987,
+    "frac_channels_50": 0.1416015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5630805957401311,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9475961029529572,
+    "energy_max_over_median": 113.80854874995238,
+    "rms": 1.6862337518563844,
+    "tau": 0.08431168759281922,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9888212685966669
+   },
+   "control": {
+    "spearman_split_half": 0.9888212685966669,
+    "gini_half2": 0.4809497923678163,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.18.linear_attn.in_proj_z",
+   "layer": 18,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.47696597180335987,
+    "frac_channels_50": 0.1416015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5630805957401311,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9475961029529572,
+    "energy_max_over_median": 113.80854874995238,
+    "rms": 1.6862337518563844,
+    "tau": 0.08431168759281922,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9888212685966669
+   },
+   "control": {
+    "spearman_split_half": 0.9888212685966669,
+    "gini_half2": 0.4809497923678163,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.18.linear_attn.in_proj_b",
+   "layer": 18,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.47696597180335987,
+    "frac_channels_50": 0.1416015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5630805957401311,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9475961029529572,
+    "energy_max_over_median": 113.80854874995238,
+    "rms": 1.6862337518563844,
+    "tau": 0.08431168759281922,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9888212685966669
+   },
+   "control": {
+    "spearman_split_half": 0.9888212685966669,
+    "gini_half2": 0.4809497923678163,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.18.linear_attn.in_proj_a",
+   "layer": 18,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.47696597180335987,
+    "frac_channels_50": 0.1416015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5630805957401311,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9475961029529572,
+    "energy_max_over_median": 113.80854874995238,
+    "rms": 1.6862337518563844,
+    "tau": 0.08431168759281922,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9888212685966669
+   },
+   "control": {
+    "spearman_split_half": 0.9888212685966669,
+    "gini_half2": 0.4809497923678163,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.18.linear_attn.out_proj",
+   "layer": 18,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.677241233526908,
+    "frac_channels_50": 0.0693359375,
+    "frac_channels_90": 0.47802734375,
+    "energy_share_top20pct": 0.7015974159907993,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8338332325220108,
+    "energy_max_over_median": 285.8087665328732,
+    "rms": 0.11241377632337456,
+    "tau": 0.0056206888161687285,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9529571691127823
+   },
+   "control": {
+    "spearman_split_half": 0.9529571691127823,
+    "gini_half2": 0.6665378539610523,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.18.mlp.gate_proj",
+   "layer": 18,
+   "type": "gate",
+   "stat": {
+    "gini": 0.45966434030156744,
+    "frac_channels_50": 0.1396484375,
+    "frac_channels_90": 0.7685546875,
+    "energy_share_top20pct": 0.5593814526782235,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9481224715709686,
+    "energy_max_over_median": 129.72324856698566,
+    "rms": 1.3186972404158936,
+    "tau": 0.06593486202079468,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9854321489879122
+   },
+   "control": {
+    "spearman_split_half": 0.9854321489879122,
+    "gini_half2": 0.4620381333846877,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.18.mlp.up_proj",
+   "layer": 18,
+   "type": "up",
+   "stat": {
+    "gini": 0.45966434030156744,
+    "frac_channels_50": 0.1396484375,
+    "frac_channels_90": 0.7685546875,
+    "energy_share_top20pct": 0.5593814526782235,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9481224715709686,
+    "energy_max_over_median": 129.72324856698566,
+    "rms": 1.3186972404158936,
+    "tau": 0.06593486202079468,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9854321489879122
+   },
+   "control": {
+    "spearman_split_half": 0.9854321489879122,
+    "gini_half2": 0.4620381333846877,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.18.mlp.down_proj",
+   "layer": 18,
+   "type": "down",
+   "stat": {
+    "gini": 0.5582783511185481,
+    "frac_channels_50": 0.08872767857142858,
+    "frac_channels_90": 0.6794084821428571,
+    "energy_share_top20pct": 0.6306911559109569,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9064403176307678,
+    "energy_max_over_median": 301.1454516438352,
+    "rms": 0.13072937891376066,
+    "tau": 0.006536468945688033,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9368365801810503
+   },
+   "control": {
+    "spearman_split_half": 0.9368365801810503,
+    "gini_half2": 0.5528881911230592,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.19.self_attn.q_proj",
+   "layer": 19,
+   "type": "q",
+   "stat": {
+    "gini": 0.5118107019816247,
+    "frac_channels_50": 0.126953125,
+    "frac_channels_90": 0.720703125,
+    "energy_share_top20pct": 0.5880292158907064,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9457036405801773,
+    "energy_max_over_median": 199.2315641951039,
+    "rms": 1.1938581407706796,
+    "tau": 0.059692907038533985,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9924205506580357
+   },
+   "control": {
+    "spearman_split_half": 0.9924205506580357,
+    "gini_half2": 0.5119458680953053,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 4194304
+  },
+  {
+   "tensor": "model.layers.19.self_attn.k_proj",
+   "layer": 19,
+   "type": "k",
+   "stat": {
+    "gini": 0.5118107019816247,
+    "frac_channels_50": 0.126953125,
+    "frac_channels_90": 0.720703125,
+    "energy_share_top20pct": 0.5880292158907064,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9457036405801773,
+    "energy_max_over_median": 199.2315641951039,
+    "rms": 1.1938581407706796,
+    "tau": 0.059692907038533985,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9924205506580357
+   },
+   "control": {
+    "spearman_split_half": 0.9924205506580357,
+    "gini_half2": 0.5119458680953053,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.19.self_attn.v_proj",
+   "layer": 19,
+   "type": "v",
+   "stat": {
+    "gini": 0.5118107019816247,
+    "frac_channels_50": 0.126953125,
+    "frac_channels_90": 0.720703125,
+    "energy_share_top20pct": 0.5880292158907064,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9457036405801773,
+    "energy_max_over_median": 199.2315641951039,
+    "rms": 1.1938581407706796,
+    "tau": 0.059692907038533985,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9924205506580357
+   },
+   "control": {
+    "spearman_split_half": 0.9924205506580357,
+    "gini_half2": 0.5119458680953053,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.19.self_attn.o_proj",
+   "layer": 19,
+   "type": "o",
+   "stat": {
+    "gini": 0.8737480752618969,
+    "frac_channels_50": 0.005859375,
+    "frac_channels_90": 0.20849609375,
+    "energy_share_top20pct": 0.8980773734775882,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7385988235473633,
+    "energy_max_over_median": 930.9123896486732,
+    "rms": 0.17637487417983036,
+    "tau": 0.008818743708991519,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9175888048455396
+   },
+   "control": {
+    "spearman_split_half": 0.9175888048455396,
+    "gini_half2": 0.866823351730651,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.19.mlp.gate_proj",
+   "layer": 19,
+   "type": "gate",
+   "stat": {
+    "gini": 0.4677447599852613,
+    "frac_channels_50": 0.1318359375,
+    "frac_channels_90": 0.7666015625,
+    "energy_share_top20pct": 0.5660091338662746,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9478826075792313,
+    "energy_max_over_median": 171.1344216496704,
+    "rms": 1.2823699150516363,
+    "tau": 0.06411849575258181,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9804687388241182
+   },
+   "control": {
+    "spearman_split_half": 0.9804687388241182,
+    "gini_half2": 0.4668197935221543,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.19.mlp.up_proj",
+   "layer": 19,
+   "type": "up",
+   "stat": {
+    "gini": 0.4677447599852613,
+    "frac_channels_50": 0.1318359375,
+    "frac_channels_90": 0.7666015625,
+    "energy_share_top20pct": 0.5660091338662746,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9478826075792313,
+    "energy_max_over_median": 171.1344216496704,
+    "rms": 1.2823699150516363,
+    "tau": 0.06411849575258181,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9804687388241182
+   },
+   "control": {
+    "spearman_split_half": 0.9804687388241182,
+    "gini_half2": 0.4668197935221543,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.19.mlp.down_proj",
+   "layer": 19,
+   "type": "down",
+   "stat": {
+    "gini": 0.6385884262867418,
+    "frac_channels_50": 0.039341517857142856,
+    "frac_channels_90": 0.6283482142857143,
+    "energy_share_top20pct": 0.7003451014360474,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8905456747327533,
+    "energy_max_over_median": 2485.1721163779803,
+    "rms": 0.14715590818569307,
+    "tau": 0.007357795409284654,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9173475554864731
+   },
+   "control": {
+    "spearman_split_half": 0.9173475554864731,
+    "gini_half2": 0.6362946012593593,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.20.linear_attn.in_proj_qkv",
+   "layer": 20,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.4806616603344114,
+    "frac_channels_50": 0.134765625,
+    "frac_channels_90": 0.7509765625,
+    "energy_share_top20pct": 0.5689509815622866,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474209100008011,
+    "energy_max_over_median": 142.02755421131806,
+    "rms": 1.5873921305135148,
+    "tau": 0.07936960652567575,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.984053738108862
+   },
+   "control": {
+    "spearman_split_half": 0.984053738108862,
+    "gini_half2": 0.47968359904071844,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.20.linear_attn.in_proj_z",
+   "layer": 20,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.4806616603344114,
+    "frac_channels_50": 0.134765625,
+    "frac_channels_90": 0.7509765625,
+    "energy_share_top20pct": 0.5689509815622866,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474209100008011,
+    "energy_max_over_median": 142.02755421131806,
+    "rms": 1.5873921305135148,
+    "tau": 0.07936960652567575,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.984053738108862
+   },
+   "control": {
+    "spearman_split_half": 0.984053738108862,
+    "gini_half2": 0.47968359904071844,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.20.linear_attn.in_proj_b",
+   "layer": 20,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4806616603344114,
+    "frac_channels_50": 0.134765625,
+    "frac_channels_90": 0.7509765625,
+    "energy_share_top20pct": 0.5689509815622866,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474209100008011,
+    "energy_max_over_median": 142.02755421131806,
+    "rms": 1.5873921305135148,
+    "tau": 0.07936960652567575,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.984053738108862
+   },
+   "control": {
+    "spearman_split_half": 0.984053738108862,
+    "gini_half2": 0.47968359904071844,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.20.linear_attn.in_proj_a",
+   "layer": 20,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4806616603344114,
+    "frac_channels_50": 0.134765625,
+    "frac_channels_90": 0.7509765625,
+    "energy_share_top20pct": 0.5689509815622866,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474209100008011,
+    "energy_max_over_median": 142.02755421131806,
+    "rms": 1.5873921305135148,
+    "tau": 0.07936960652567575,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.984053738108862
+   },
+   "control": {
+    "spearman_split_half": 0.984053738108862,
+    "gini_half2": 0.47968359904071844,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.20.linear_attn.out_proj",
+   "layer": 20,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7743429603692049,
+    "frac_channels_50": 0.02294921875,
+    "frac_channels_90": 0.37646484375,
+    "energy_share_top20pct": 0.7956481881078531,
+    "frac_active_lt_1pct": 0.00048828125,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7863375172019005,
+    "energy_max_over_median": 717.8328294132834,
+    "rms": 0.151235215276273,
+    "tau": 0.007561760763813651,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9464665039399872
+   },
+   "control": {
+    "spearman_split_half": 0.9464665039399872,
+    "gini_half2": 0.7595189901605952,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.20.mlp.gate_proj",
+   "layer": 20,
+   "type": "gate",
+   "stat": {
+    "gini": 0.49316951252517893,
+    "frac_channels_50": 0.1064453125,
+    "frac_channels_90": 0.7578125,
+    "energy_share_top20pct": 0.591948736467537,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9462388902902603,
+    "energy_max_over_median": 174.8138512324134,
+    "rms": 1.2855129964253869,
+    "tau": 0.06427564982126935,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9721647235533937
+   },
+   "control": {
+    "spearman_split_half": 0.9721647235533937,
+    "gini_half2": 0.49311389047852594,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.20.mlp.up_proj",
+   "layer": 20,
+   "type": "up",
+   "stat": {
+    "gini": 0.49316951252517893,
+    "frac_channels_50": 0.1064453125,
+    "frac_channels_90": 0.7578125,
+    "energy_share_top20pct": 0.591948736467537,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9462388902902603,
+    "energy_max_over_median": 174.8138512324134,
+    "rms": 1.2855129964253869,
+    "tau": 0.06427564982126935,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9721647235533937
+   },
+   "control": {
+    "spearman_split_half": 0.9721647235533937,
+    "gini_half2": 0.49311389047852594,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.20.mlp.down_proj",
+   "layer": 20,
+   "type": "down",
+   "stat": {
+    "gini": 0.46949430949907134,
+    "frac_channels_50": 0.15011160714285715,
+    "frac_channels_90": 0.7352120535714286,
+    "energy_share_top20pct": 0.5582163347961716,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9026422287736621,
+    "energy_max_over_median": 62.659561084390916,
+    "rms": 0.12301301382138782,
+    "tau": 0.0061506506910693915,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.8633471024070299
+   },
+   "control": {
+    "spearman_split_half": 0.8633471024070299,
+    "gini_half2": 0.4533091005205099,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.21.linear_attn.in_proj_qkv",
+   "layer": 21,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.4876445431766476,
+    "frac_channels_50": 0.119140625,
+    "frac_channels_90": 0.75390625,
+    "energy_share_top20pct": 0.5815383256367165,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474573880434036,
+    "energy_max_over_median": 155.45206467022535,
+    "rms": 1.635268194501253,
+    "tau": 0.08176340972506266,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9780940539839782
+   },
+   "control": {
+    "spearman_split_half": 0.9780940539839782,
+    "gini_half2": 0.48765842143663973,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.21.linear_attn.in_proj_z",
+   "layer": 21,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.4876445431766476,
+    "frac_channels_50": 0.119140625,
+    "frac_channels_90": 0.75390625,
+    "energy_share_top20pct": 0.5815383256367165,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474573880434036,
+    "energy_max_over_median": 155.45206467022535,
+    "rms": 1.635268194501253,
+    "tau": 0.08176340972506266,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9780940539839782
+   },
+   "control": {
+    "spearman_split_half": 0.9780940539839782,
+    "gini_half2": 0.48765842143663973,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.21.linear_attn.in_proj_b",
+   "layer": 21,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4876445431766476,
+    "frac_channels_50": 0.119140625,
+    "frac_channels_90": 0.75390625,
+    "energy_share_top20pct": 0.5815383256367165,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474573880434036,
+    "energy_max_over_median": 155.45206467022535,
+    "rms": 1.635268194501253,
+    "tau": 0.08176340972506266,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9780940539839782
+   },
+   "control": {
+    "spearman_split_half": 0.9780940539839782,
+    "gini_half2": 0.48765842143663973,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.21.linear_attn.in_proj_a",
+   "layer": 21,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.4876445431766476,
+    "frac_channels_50": 0.119140625,
+    "frac_channels_90": 0.75390625,
+    "energy_share_top20pct": 0.5815383256367165,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9474573880434036,
+    "energy_max_over_median": 155.45206467022535,
+    "rms": 1.635268194501253,
+    "tau": 0.08176340972506266,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9780940539839782
+   },
+   "control": {
+    "spearman_split_half": 0.9780940539839782,
+    "gini_half2": 0.48765842143663973,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.21.linear_attn.out_proj",
+   "layer": 21,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.7845774899015889,
+    "frac_channels_50": 0.03271484375,
+    "frac_channels_90": 0.3310546875,
+    "energy_share_top20pct": 0.8082529789980037,
+    "frac_active_lt_1pct": 0.00146484375,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7694334164261818,
+    "energy_max_over_median": 420.0895487367236,
+    "rms": 0.1312249471959382,
+    "tau": 0.00656124735979691,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9569223774337479
+   },
+   "control": {
+    "spearman_split_half": 0.9569223774337479,
+    "gini_half2": 0.7726999224312745,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.21.mlp.gate_proj",
+   "layer": 21,
+   "type": "gate",
+   "stat": {
+    "gini": 0.481486787305331,
+    "frac_channels_50": 0.11328125,
+    "frac_channels_90": 0.763671875,
+    "energy_share_top20pct": 0.5831260083274541,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9472709000110626,
+    "energy_max_over_median": 167.41336264629777,
+    "rms": 1.3091564278270003,
+    "tau": 0.06545782139135002,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.967468931049281
+   },
+   "control": {
+    "spearman_split_half": 0.967468931049281,
+    "gini_half2": 0.480644094156635,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.21.mlp.up_proj",
+   "layer": 21,
+   "type": "up",
+   "stat": {
+    "gini": 0.481486787305331,
+    "frac_channels_50": 0.11328125,
+    "frac_channels_90": 0.763671875,
+    "energy_share_top20pct": 0.5831260083274541,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9472709000110626,
+    "energy_max_over_median": 167.41336264629777,
+    "rms": 1.3091564278270003,
+    "tau": 0.06545782139135002,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.967468931049281
+   },
+   "control": {
+    "spearman_split_half": 0.967468931049281,
+    "gini_half2": 0.480644094156635,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.21.mlp.down_proj",
+   "layer": 21,
+   "type": "down",
+   "stat": {
+    "gini": 0.5158689423423288,
+    "frac_channels_50": 0.12137276785714286,
+    "frac_channels_90": 0.7067522321428571,
+    "energy_share_top20pct": 0.5948504280859734,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8987977845328194,
+    "energy_max_over_median": 846.2408167665351,
+    "rms": 0.1351987934014772,
+    "tau": 0.0067599396700738605,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.8857838320890525
+   },
+   "control": {
+    "spearman_split_half": 0.8857838320890525,
+    "gini_half2": 0.5052307602863606,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.22.linear_attn.in_proj_qkv",
+   "layer": 22,
+   "type": "in_proj_qkv",
+   "stat": {
+    "gini": 0.5047364015377906,
+    "frac_channels_50": 0.1015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5971014360985856,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464750289916992,
+    "energy_max_over_median": 215.8738930967188,
+    "rms": 1.4618893546728446,
+    "tau": 0.07309446773364224,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9724909698877048
+   },
+   "control": {
+    "spearman_split_half": 0.9724909698877048,
+    "gini_half2": 0.5037298976292452,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 6291456
+  },
+  {
+   "tensor": "model.layers.22.linear_attn.in_proj_z",
+   "layer": 22,
+   "type": "in_proj_z",
+   "stat": {
+    "gini": 0.5047364015377906,
+    "frac_channels_50": 0.1015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5971014360985856,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464750289916992,
+    "energy_max_over_median": 215.8738930967188,
+    "rms": 1.4618893546728446,
+    "tau": 0.07309446773364224,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9724909698877048
+   },
+   "control": {
+    "spearman_split_half": 0.9724909698877048,
+    "gini_half2": 0.5037298976292452,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.22.linear_attn.in_proj_b",
+   "layer": 22,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5047364015377906,
+    "frac_channels_50": 0.1015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5971014360985856,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464750289916992,
+    "energy_max_over_median": 215.8738930967188,
+    "rms": 1.4618893546728446,
+    "tau": 0.07309446773364224,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9724909698877048
+   },
+   "control": {
+    "spearman_split_half": 0.9724909698877048,
+    "gini_half2": 0.5037298976292452,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.22.linear_attn.in_proj_a",
+   "layer": 22,
+   "type": "in_proj_ab",
+   "stat": {
+    "gini": 0.5047364015377906,
+    "frac_channels_50": 0.1015625,
+    "frac_channels_90": 0.7490234375,
+    "energy_share_top20pct": 0.5971014360985856,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9464750289916992,
+    "energy_max_over_median": 215.8738930967188,
+    "rms": 1.4618893546728446,
+    "tau": 0.07309446773364224,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9724909698877048
+   },
+   "control": {
+    "spearman_split_half": 0.9724909698877048,
+    "gini_half2": 0.5037298976292452,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 16384
+  },
+  {
+   "tensor": "model.layers.22.linear_attn.out_proj",
+   "layer": 22,
+   "type": "out_proj",
+   "stat": {
+    "gini": 0.8620461265395021,
+    "frac_channels_50": 0.0068359375,
+    "frac_channels_90": 0.22802734375,
+    "energy_share_top20pct": 0.8875356509937485,
+    "frac_active_lt_1pct": 0.00048828125,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.751230850815773,
+    "energy_max_over_median": 2711.449938301769,
+    "rms": 0.16705952229327506,
+    "tau": 0.008352976114663754,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9562182722537571
+   },
+   "control": {
+    "spearman_split_half": 0.9562182722537571,
+    "gini_half2": 0.8577234365486706,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.22.mlp.gate_proj",
+   "layer": 22,
+   "type": "gate",
+   "stat": {
+    "gini": 0.47358372452349884,
+    "frac_channels_50": 0.1201171875,
+    "frac_channels_90": 0.767578125,
+    "energy_share_top20pct": 0.5742878161584396,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9479363858699799,
+    "energy_max_over_median": 225.86025380833271,
+    "rms": 1.3056682623693672,
+    "tau": 0.06528341311846836,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9655343524247193
+   },
+   "control": {
+    "spearman_split_half": 0.9655343524247193,
+    "gini_half2": 0.4714080489599626,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.22.mlp.up_proj",
+   "layer": 22,
+   "type": "up",
+   "stat": {
+    "gini": 0.47358372452349884,
+    "frac_channels_50": 0.1201171875,
+    "frac_channels_90": 0.767578125,
+    "energy_share_top20pct": 0.5742878161584396,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9479363858699799,
+    "energy_max_over_median": 225.86025380833271,
+    "rms": 1.3056682623693672,
+    "tau": 0.06528341311846836,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9655343524247193
+   },
+   "control": {
+    "spearman_split_half": 0.9655343524247193,
+    "gini_half2": 0.4714080489599626,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.22.mlp.down_proj",
+   "layer": 22,
+   "type": "down",
+   "stat": {
+    "gini": 0.7144920659677347,
+    "frac_channels_50": 0.013392857142857142,
+    "frac_channels_90": 0.5298549107142857,
+    "energy_share_top20pct": 0.760857539624656,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8702866051878247,
+    "energy_max_over_median": 2547.494545037991,
+    "rms": 0.18818814723701732,
+    "tau": 0.009409407361850867,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.8999747888559149
+   },
+   "control": {
+    "spearman_split_half": 0.8999747888559149,
+    "gini_half2": 0.7071123105700943,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.23.self_attn.q_proj",
+   "layer": 23,
+   "type": "q",
+   "stat": {
+    "gini": 0.4612730288232596,
+    "frac_channels_50": 0.150390625,
+    "frac_channels_90": 0.7548828125,
+    "energy_share_top20pct": 0.5530307910952508,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.949456661939621,
+    "energy_max_over_median": 192.6470222191939,
+    "rms": 1.2555788002610015,
+    "tau": 0.06277894001305008,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9799182037229094
+   },
+   "control": {
+    "spearman_split_half": 0.9799182037229094,
+    "gini_half2": 0.4588054576415741,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 4194304
+  },
+  {
+   "tensor": "model.layers.23.self_attn.k_proj",
+   "layer": 23,
+   "type": "k",
+   "stat": {
+    "gini": 0.4612730288232596,
+    "frac_channels_50": 0.150390625,
+    "frac_channels_90": 0.7548828125,
+    "energy_share_top20pct": 0.5530307910952508,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.949456661939621,
+    "energy_max_over_median": 192.6470222191939,
+    "rms": 1.2555788002610015,
+    "tau": 0.06277894001305008,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9799182037229094
+   },
+   "control": {
+    "spearman_split_half": 0.9799182037229094,
+    "gini_half2": 0.4588054576415741,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.23.self_attn.v_proj",
+   "layer": 23,
+   "type": "v",
+   "stat": {
+    "gini": 0.4612730288232596,
+    "frac_channels_50": 0.150390625,
+    "frac_channels_90": 0.7548828125,
+    "energy_share_top20pct": 0.5530307910952508,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.949456661939621,
+    "energy_max_over_median": 192.6470222191939,
+    "rms": 1.2555788002610015,
+    "tau": 0.06277894001305008,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9799182037229094
+   },
+   "control": {
+    "spearman_split_half": 0.9799182037229094,
+    "gini_half2": 0.4588054576415741,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 524288
+  },
+  {
+   "tensor": "model.layers.23.self_attn.o_proj",
+   "layer": 23,
+   "type": "o",
+   "stat": {
+    "gini": 0.7865133961615289,
+    "frac_channels_50": 0.046875,
+    "frac_channels_90": 0.294921875,
+    "energy_share_top20pct": 0.8215427136551356,
+    "frac_active_lt_1pct": 0.00146484375,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7987874001264572,
+    "energy_max_over_median": 662.5518976203907,
+    "rms": 0.3223957954842212,
+    "tau": 0.016119789774211062,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.97732282575326
+   },
+   "control": {
+    "spearman_split_half": 0.97732282575326,
+    "gini_half2": 0.7786126292577658,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 2097152
+  },
+  {
+   "tensor": "model.layers.23.mlp.gate_proj",
+   "layer": 23,
+   "type": "gate",
+   "stat": {
+    "gini": 0.41862836857422936,
+    "frac_channels_50": 0.173828125,
+    "frac_channels_90": 0.7880859375,
+    "energy_share_top20pct": 0.5246920761545835,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9515306800603867,
+    "energy_max_over_median": 253.9058786500105,
+    "rms": 1.200853010824244,
+    "tau": 0.060042650541212196,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9575232458336312
+   },
+   "control": {
+    "spearman_split_half": 0.9575232458336312,
+    "gini_half2": 0.4154180503695106,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.23.mlp.up_proj",
+   "layer": 23,
+   "type": "up",
+   "stat": {
+    "gini": 0.41862836857422936,
+    "frac_channels_50": 0.173828125,
+    "frac_channels_90": 0.7880859375,
+    "energy_share_top20pct": 0.5246920761545835,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9515306800603867,
+    "energy_max_over_median": 253.9058786500105,
+    "rms": 1.200853010824244,
+    "tau": 0.060042650541212196,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9575232458336312
+   },
+   "control": {
+    "spearman_split_half": 0.9575232458336312,
+    "gini_half2": 0.4154180503695106,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  },
+  {
+   "tensor": "model.layers.23.mlp.down_proj",
+   "layer": 23,
+   "type": "down",
+   "stat": {
+    "gini": 0.8624461843549251,
+    "frac_channels_50": 0.010044642857142858,
+    "frac_channels_90": 0.20228794642857142,
+    "energy_share_top20pct": 0.8991398128216499,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8118667687688556,
+    "energy_max_over_median": 1497.9824483838206,
+    "rms": 0.33123689404494944,
+    "tau": 0.01656184470224747,
+    "n_tokens": 65536,
+    "spearman_split_half": 0.9486259993562282
+   },
+   "control": {
+    "spearman_split_half": 0.9486259993562282,
+    "gini_half2": 0.8579818076973007,
+    "n_tokens_half2": 65536
+   },
+   "gain_bits": null,
+   "gain_bits_control": null,
+   "note": "primary (P5 target type); Gini is permutation invariant: control = split-half Spearman of channel energy (C4 seeds 0 vs 2)",
+   "numel": 3670016
+  }
+ ],
+ "aggregate": {
+  "in_proj_qkv": {
+   "n_records": 18,
+   "n_excluded": 0,
+   "numel": 113246208,
+   "stat": {
+    "gini": 0.48704078434625503,
+    "frac_channels_50": 0.11735026041666667,
+    "frac_channels_90": 0.7556423611111112,
+    "energy_share_top20pct": 0.5805453496738353,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9469462566905551,
+    "energy_max_over_median": 178.65173596648714,
+    "rms": 1.4158827595412442,
+    "tau": 0.0707941379770622,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9892255508314862
+   },
+   "control": {
+    "spearman_split_half": 0.9892255508314862,
+    "gini_half2": 0.4886972564841547,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "in_proj_z": {
+   "n_records": 18,
+   "n_excluded": 0,
+   "numel": 37748736,
+   "stat": {
+    "gini": 0.487040784346255,
+    "frac_channels_50": 0.11735026041666667,
+    "frac_channels_90": 0.7556423611111112,
+    "energy_share_top20pct": 0.5805453496738352,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9469462566905551,
+    "energy_max_over_median": 178.65173596648714,
+    "rms": 1.4158827595412444,
+    "tau": 0.0707941379770622,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9892255508314862
+   },
+   "control": {
+    "spearman_split_half": 0.9892255508314862,
+    "gini_half2": 0.48869725648415474,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "in_proj_ab": {
+   "n_records": 36,
+   "n_excluded": 0,
+   "numel": 589824,
+   "stat": {
+    "gini": 0.48704078434625475,
+    "frac_channels_50": 0.11735026041666667,
+    "frac_channels_90": 0.7556423611111112,
+    "energy_share_top20pct": 0.5805453496738355,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9469462566905551,
+    "energy_max_over_median": 178.65173596648714,
+    "rms": 1.4158827595412438,
+    "tau": 0.0707941379770622,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9892255508314864
+   },
+   "control": {
+    "spearman_split_half": 0.9892255508314864,
+    "gini_half2": 0.4886972564841547,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "out_proj": {
+   "n_records": 18,
+   "n_excluded": 0,
+   "numel": 37748736,
+   "stat": {
+    "gini": 0.7559253121559466,
+    "frac_channels_50": 0.03127712673611111,
+    "frac_channels_90": 0.3965928819444444,
+    "energy_share_top20pct": 0.7842096880218024,
+    "frac_active_lt_1pct": 0.00018988715277777778,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.7400125215450922,
+    "energy_max_over_median": 1551.6253267984794,
+    "rms": 0.08879330497110853,
+    "tau": 0.004439665248555426,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9664920888068309
+   },
+   "control": {
+    "spearman_split_half": 0.9664920888068309,
+    "gini_half2": 0.7522742972751544,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "gate": {
+   "n_records": 24,
+   "n_excluded": 0,
+   "numel": 88080384,
+   "stat": {
+    "gini": 0.46696494710020464,
+    "frac_channels_50": 0.1295166015625,
+    "frac_channels_90": 0.7721761067708334,
+    "energy_share_top20pct": 0.5668268372273236,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9477032373348871,
+    "energy_max_over_median": 186.046885403568,
+    "rms": 1.1321112065621333,
+    "tau": 0.05660556032810667,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9811036706860431
+   },
+   "control": {
+    "spearman_split_half": 0.9811036706860431,
+    "gini_half2": 0.46763045931543346,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "up": {
+   "n_records": 24,
+   "n_excluded": 0,
+   "numel": 88080384,
+   "stat": {
+    "gini": 0.46696494710020464,
+    "frac_channels_50": 0.1295166015625,
+    "frac_channels_90": 0.7721761067708334,
+    "energy_share_top20pct": 0.5668268372273236,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.9477032373348871,
+    "energy_max_over_median": 186.046885403568,
+    "rms": 1.1321112065621333,
+    "tau": 0.05660556032810667,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9811036706860431
+   },
+   "control": {
+    "spearman_split_half": 0.9811036706860431,
+    "gini_half2": 0.46763045931543346,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "down": {
+   "n_records": 24,
+   "n_excluded": 0,
+   "numel": 88080384,
+   "stat": {
+    "gini": 0.43611858129179704,
+    "frac_channels_50": 0.19352213541666666,
+    "frac_channels_90": 0.7155877976190477,
+    "energy_share_top20pct": 0.5237222144639551,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8868207489805562,
+    "energy_max_over_median": 404.5842431395266,
+    "rms": 0.09257926494278304,
+    "tau": 0.004628963247139152,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9279272925485339
+   },
+   "control": {
+    "spearman_split_half": 0.9279272925485339,
+    "gini_half2": 0.4324040158738794,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "q": {
+   "n_records": 6,
+   "n_excluded": 0,
+   "numel": 25165824,
+   "stat": {
+    "gini": 0.5012688276686599,
+    "frac_channels_50": 0.11637369791666667,
+    "frac_channels_90": 0.7415364583333334,
+    "energy_share_top20pct": 0.5872098529132518,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946826308965683,
+    "energy_max_over_median": 194.618098575157,
+    "rms": 1.1912854720297559,
+    "tau": 0.059564273601487805,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9904093054787718
+   },
+   "control": {
+    "spearman_split_half": 0.9904093054787718,
+    "gini_half2": 0.5024317005579012,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "k": {
+   "n_records": 6,
+   "n_excluded": 0,
+   "numel": 3145728,
+   "stat": {
+    "gini": 0.5012688276686599,
+    "frac_channels_50": 0.11637369791666667,
+    "frac_channels_90": 0.7415364583333334,
+    "energy_share_top20pct": 0.5872098529132518,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946826308965683,
+    "energy_max_over_median": 194.618098575157,
+    "rms": 1.1912854720297559,
+    "tau": 0.059564273601487805,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9904093054787718
+   },
+   "control": {
+    "spearman_split_half": 0.9904093054787718,
+    "gini_half2": 0.5024317005579012,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "v": {
+   "n_records": 6,
+   "n_excluded": 0,
+   "numel": 3145728,
+   "stat": {
+    "gini": 0.5012688276686599,
+    "frac_channels_50": 0.11637369791666667,
+    "frac_channels_90": 0.7415364583333334,
+    "energy_share_top20pct": 0.5872098529132518,
+    "frac_active_lt_1pct": 0.0,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.946826308965683,
+    "energy_max_over_median": 194.618098575157,
+    "rms": 1.1912854720297559,
+    "tau": 0.059564273601487805,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9904093054787718
+   },
+   "control": {
+    "spearman_split_half": 0.9904093054787718,
+    "gini_half2": 0.5024317005579012,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  },
+  "o": {
+   "n_records": 6,
+   "n_excluded": 0,
+   "numel": 12582912,
+   "stat": {
+    "gini": 0.7428844691280164,
+    "frac_channels_50": 0.043212890625,
+    "frac_channels_90": 0.4005533854166667,
+    "energy_share_top20pct": 0.7742835076825859,
+    "frac_active_lt_1pct": 0.0004069010416666667,
+    "frac_never_active": 0.0,
+    "mean_active_rate": 0.8027018966774145,
+    "energy_max_over_median": 606.0428449361387,
+    "rms": 0.14524098969376423,
+    "tau": 0.007262049484688213,
+    "n_tokens": 65536.0,
+    "spearman_split_half": 0.9672722419399079
+   },
+   "control": {
+    "spearman_split_half": 0.9672722419399079,
+    "gini_half2": 0.7361942664833289,
+    "n_tokens_half2": 65536.0
+   },
+   "gain_bits": null,
+   "gain_bits_control": null
+  }
+ },
+ "global": {
+  "n_primary": 48,
+  "min_split_half_spearman_primary": 0.8117793867490004
+ }
+}

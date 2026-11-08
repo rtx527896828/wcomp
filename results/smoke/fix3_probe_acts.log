@@ -1,0 +1,39 @@
+04:23:09 probe_acts: off-protocol settings: windows 4; fisher_windows 4; fisher_tokens 256; eval_windows 4
+W1108 04:23:10.724000 15032 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   0%|          | 1/320 [00:00<04:23,  1.21it/s]Loading weights:   8%|8         | 27/320 [00:00<00:07, 38.42it/s]Loading weights:  15%|#4        | 47/320 [00:01<00:04, 65.25it/s]Loading weights:  21%|##        | 67/320 [00:01<00:02, 89.58it/s]Loading weights:  29%|##9       | 93/320 [00:01<00:01, 122.20it/s]Loading weights:  36%|###5      | 114/320 [00:01<00:01, 141.28it/s]Loading weights:  44%|####3     | 140/320 [00:01<00:01, 168.44it/s]Loading weights:  54%|#####3    | 172/320 [00:01<00:00, 207.38it/s]Loading weights:  62%|######1   | 197/320 [00:01<00:00, 203.59it/s]Loading weights:  69%|######9   | 221/320 [00:01<00:00, 199.27it/s]Loading weights:  76%|#######5  | 243/320 [00:01<00:00, 195.33it/s]Loading weights:  85%|########5 | 273/320 [00:02<00:00, 205.22it/s]Loading weights:  92%|#########2| 295/320 [00:02<00:00, 200.80it/s]Loading weights:  99%|#########8| 316/320 [00:02<00:00, 198.02it/s]Loading weights: 100%|##########| 320/320 [00:02<00:00, 137.23it/s]
+04:23:14 probe_acts: loaded qwen3.5-0.8b in 4.3s
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+04:23:32 wcomp.probe.acts: input stats: layers 0-5 done (47 linears)
+04:23:42 wcomp.probe.acts: input stats: layers 6-11 done (46 linears)
+04:23:55 wcomp.probe.acts: input stats: layers 12-17 done (47 linears)
+04:23:57 wcomp.probe.acts: input stats: layers 18-23 done (46 linears)
+04:23:57 wcomp.probe.acts: input stats: layers 0-5 done (47 linears)
+04:23:58 wcomp.probe.acts: input stats: layers 6-11 done (46 linears)
+04:23:59 wcomp.probe.acts: input stats: layers 12-17 done (47 linears)
+04:24:00 wcomp.probe.acts: input stats: layers 18-23 done (46 linears)
+04:24:00 probe_acts: input stats: 46.8s, peak 2.50 GB, full_hessian=True
+04:24:01 probe_acts: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\acts.json (186 records)
+skipped: D:/repos/wcomp/results/smoke/probe/qwen3.5-0.8b/ablation.jsonl: 6 smoke rows ignored (include_smoke / --include-smoke to read them)
+04:24:12 probe_acts: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\sensitivity.json (186 records)
+04:25:17 probe_acts: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\lowrank_weighted.json (186 records)
+04:25:33 probe_acts: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\fisher.json (186 records)
+04:25:38 wcomp.probe.acts: P7 model.layers.23.mlp.down_proj[0,254]=-0.01807 (max_spike_below_threshold): dPPL +0.00% KL 0.0000 | magnitude ctrl dPPL +0.07% | random ctrl dPPL +0.00%
+04:25:41 wcomp.probe.acts: P7 model.layers.20.linear_attn.in_proj_qkv[1682,74]=0.582 (top16): dPPL +0.04% KL 0.0004 | magnitude ctrl dPPL -0.00% | random ctrl dPPL -0.03%
+04:25:44 wcomp.probe.acts: P7 model.layers.23.self_attn.v_proj[184,123]=0.5391 (top16): dPPL -0.12% KL 0.0013 | magnitude ctrl dPPL +0.08% | random ctrl dPPL -0.01%
+04:25:47 wcomp.probe.acts: P7 model.layers.23.mlp.gate_proj[1608,531]=-0.5117 (top16): dPPL -0.01% KL 0.0001 | magnitude ctrl dPPL +0.01% | random ctrl dPPL -0.01%
+04:25:50 wcomp.probe.acts: P7 model.layers.21.linear_attn.in_proj_qkv[1969,66]=0.4961 (top16): dPPL -0.03% KL 0.0003 | magnitude ctrl dPPL +0.02% | random ctrl dPPL -0.02%
+04:25:50 wcomp.probe.acts: P7 model.layers.20.linear_attn.in_proj_qkv[4883,24]=0.4746 (top16): dPPL -0.00% KL 0.0004 | magnitude ctrl dPPL +0.04% | random ctrl dPPL -0.03%
+04:25:52 wcomp.probe.acts: P7 model.layers.19.mlp.gate_proj[1045,807]=-0.4707 (top16): dPPL +0.02% KL 0.0004 | magnitude ctrl dPPL +0.01% | random ctrl dPPL -0.02%
+04:25:55 wcomp.probe.acts: P7 model.layers.0.linear_attn.in_proj_z[542,111]=-0.4609 (top16): dPPL -0.05% KL 0.0007 | magnitude ctrl dPPL +0.02% | random ctrl dPPL +0.12%
+04:25:55 wcomp.probe.acts: P7 model.layers.23.mlp.gate_proj[252,460]=0.4414 (top16): dPPL +0.01% KL 0.0001 | magnitude ctrl dPPL -0.01% | random ctrl dPPL -0.01%
+04:25:58 wcomp.probe.acts: P7 model.layers.14.linear_attn.in_proj_qkv[2347,16]=0.4414 (top16): dPPL +0.04% KL 0.0005 | magnitude ctrl dPPL +0.00% | random ctrl dPPL +0.03%
+04:25:59 wcomp.probe.acts: P7 model.layers.23.mlp.gate_proj[1608,807]=-0.4375 (top16): dPPL -0.03% KL 0.0001 | magnitude ctrl dPPL -0.01% | random ctrl dPPL -0.01%
+04:26:00 wcomp.probe.acts: P7 model.layers.20.linear_attn.in_proj_qkv[1682,166]=0.4355 (top16): dPPL -0.03% KL 0.0004 | magnitude ctrl dPPL +0.04% | random ctrl dPPL -0.03%
+04:26:01 wcomp.probe.acts: P7 model.layers.23.mlp.gate_proj[252,679]=0.4102 (top16): dPPL -0.00% KL 0.0001 | magnitude ctrl dPPL -0.01% | random ctrl dPPL -0.01%
+04:26:02 wcomp.probe.acts: P7 model.layers.20.linear_attn.in_proj_qkv[3811,74]=-0.4102 (top16): dPPL +0.02% KL 0.0004 | magnitude ctrl dPPL +0.04% | random ctrl dPPL -0.03%
+04:26:09 wcomp.probe.acts: P7 model.layers.22.mlp.gate_proj[1334,425]=0.4082 (top16): dPPL -0.05% KL 0.0002 | magnitude ctrl dPPL +0.04% | random ctrl dPPL -0.01%
+04:26:18 wcomp.probe.acts: P7 model.layers.22.linear_attn.in_proj_qkv[4598,807]=0.4062 (top16): dPPL -0.02% KL 0.0002 | magnitude ctrl dPPL -0.02% | random ctrl dPPL -0.01%
+04:26:21 wcomp.probe.acts: P7 model.layers.23.mlp.gate_proj[757,523]=0.4023 (top16): dPPL +0.01% KL 0.0001 | magnitude ctrl dPPL -0.01% | random ctrl dPPL -0.01%
+04:26:22 probe_acts: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\superweight.json (17 records)
+04:26:22 probe_acts: done in 192.7s

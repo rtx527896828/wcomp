@@ -1,0 +1,33 @@
+02:13:16 run_baselines: loading reference qwen3.5-0.8b
+W1108 02:13:17.560000 20420 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  17%|#6        | 53/320 [00:00<00:00, 526.73it/s]Loading weights:  42%|####1     | 133/320 [00:00<00:00, 685.83it/s]Loading weights:  69%|######8   | 220/320 [00:00<00:00, 763.21it/s]Loading weights:  96%|#########5| 306/320 [00:00<00:00, 782.67it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 767.70it/s]
+02:13:19 run_baselines: eval windows (4, 2048)
+02:13:19 run_baselines: smoke run (limit-windows 4; kl-windows 4)
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+02:13:35 run_baselines: reference hidden states (4, 2048, 1024) in 15.6s; reference layers moved to the CPU
+02:13:35 run_baselines: === fp16 ===
+02:13:35 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  27%|##6       | 85/320 [00:00<00:00, 834.56it/s]Loading weights:  53%|#####2    | 169/320 [00:00<00:00, 802.83it/s]Loading weights:  78%|#######8  | 250/320 [00:00<00:00, 796.02it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 806.91it/s]
+02:13:36 run_baselines: fp16: ppl 19.48 kl 0.00000 top1 1.0000 bits_blocks 16.0000 bits_all 16.0000 time 1.8s (method 0.0s)
+02:13:36 run_baselines: === rtn-sym-g128-4 ===
+02:13:36 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  14%|#4        | 45/320 [00:00<00:00, 441.16it/s]Loading weights:  43%|####2     | 137/320 [00:00<00:00, 716.96it/s]Loading weights:  67%|######7   | 215/320 [00:00<00:00, 737.71it/s]Loading weights:  92%|#########2| 295/320 [00:00<00:00, 753.16it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 733.37it/s]
+02:13:38 run_baselines: rtn-sym-g128-4: ppl 24.15 kl 0.19948 top1 0.7756 bits_blocks 4.1250 bits_all 8.1462 time 1.8s (method 0.1s)
+02:13:38 run_baselines: === rtn-sym-g32-4 ===
+02:13:38 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  18%|#7        | 57/320 [00:00<00:00, 555.11it/s]Loading weights:  44%|####4     | 142/320 [00:00<00:00, 710.06it/s]Loading weights:  69%|######8   | 220/320 [00:00<00:00, 733.18it/s]Loading weights:  94%|#########4| 301/320 [00:00<00:00, 761.46it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 749.91it/s]
+02:13:40 run_baselines: rtn-sym-g32-4: ppl 23.48 kl 0.13237 top1 0.8123 bits_blocks 4.5000 bits_all 8.3942 time 1.8s (method 0.1s)
+02:13:40 run_baselines: === rtn-sym-g128-4@only=down ===
+02:13:40 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  16%|#5        | 51/320 [00:00<00:00, 505.13it/s]Loading weights:  42%|####1     | 134/320 [00:00<00:00, 689.37it/s]Loading weights:  64%|######3   | 204/320 [00:00<00:00, 688.82it/s]Loading weights:  88%|########7 | 281/320 [00:00<00:00, 719.10it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 710.74it/s]
+02:13:42 run_baselines: rtn-sym-g128-4@only=down: ppl 20.54 kl 0.03088 top1 0.9029 bits_blocks 13.8981 bits_all 14.6098 time 1.7s (method 0.0s)
+02:13:42 run_baselines: === rtn-sym-g128-4+keepcols=1 ===
+02:13:42 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  18%|#7        | 57/320 [00:00<00:00, 503.08it/s]Loading weights:  46%|####6     | 148/320 [00:00<00:00, 707.36it/s]Loading weights:  72%|#######2  | 231/320 [00:00<00:00, 752.79it/s]Loading weights:  97%|#########7| 311/320 [00:00<00:00, 763.53it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 747.70it/s]
+02:13:44 run_baselines: rtn-sym-g128-4+keepcols=1: ppl 23.67 kl 0.18574 top1 0.7857 bits_blocks 4.2433 bits_all 8.2244 time 1.9s (method 0.2s)
+02:13:44 run_baselines: === rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json ===
+02:13:44 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  15%|#5        | 48/320 [00:00<00:00, 476.03it/s]Loading weights:  43%|####3     | 138/320 [00:00<00:00, 709.97it/s]Loading weights:  68%|######7   | 216/320 [00:00<00:00, 739.92it/s]Loading weights:  93%|#########2| 297/320 [00:00<00:00, 759.87it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 737.67it/s]
+02:13:45 run_baselines: rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json: ppl 24.15 kl 0.19957 top1 0.7767 bits_blocks 4.1250 bits_all 8.1462 time 1.8s (method 0.1s)
+02:13:45 run_baselines: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\ablation.jsonl

@@ -1,0 +1,21 @@
+W1108 04:35:22.471000 29464 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  15%|#4        | 47/320 [00:00<00:00, 467.80it/s]Loading weights:  40%|####      | 129/320 [00:00<00:00, 671.29it/s]Loading weights:  66%|######6   | 212/320 [00:00<00:00, 741.51it/s]Loading weights:  93%|#########2| 297/320 [00:00<00:00, 769.31it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 739.56it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+04:35:42 hessian_paths: linear_attn.out_proj 3b: relF 5.62e-07, max rel diag 2.67e-06, changed 0.133%, objective ratio 0.999964
+04:35:43 hessian_paths: linear_attn.out_proj 4b: relF 5.62e-07, max rel diag 2.67e-06, changed 0.180%, objective ratio 0.999999
+04:35:43 hessian_paths: linear_attn.in_proj_qkv 3b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.040%, objective ratio 1.000002
+04:35:43 hessian_paths: linear_attn.in_proj_qkv 4b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.031%, objective ratio 1.000003
+04:35:44 hessian_paths: linear_attn.in_proj_z 3b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.023%, objective ratio 1.000008
+04:35:44 hessian_paths: linear_attn.in_proj_z 4b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.053%, objective ratio 0.999967
+04:35:44 hessian_paths: linear_attn.in_proj_b 3b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.000%, objective ratio 1.000000
+04:35:45 hessian_paths: linear_attn.in_proj_b 4b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.000%, objective ratio 1.000000
+04:35:45 hessian_paths: linear_attn.in_proj_a 3b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.000%, objective ratio 1.000000
+04:35:45 hessian_paths: linear_attn.in_proj_a 4b: relF 1.25e-07, max rel diag 1.51e-06, changed 0.000%, objective ratio 1.000000
+04:35:45 hessian_paths: mlp.gate_proj 3b: relF 2.13e-07, max rel diag 9.85e-07, changed 0.021%, objective ratio 1.000003
+04:35:46 hessian_paths: mlp.gate_proj 4b: relF 2.13e-07, max rel diag 9.85e-07, changed 0.038%, objective ratio 0.999996
+04:35:46 hessian_paths: mlp.up_proj 3b: relF 2.13e-07, max rel diag 9.85e-07, changed 0.003%, objective ratio 1.000000
+04:35:46 hessian_paths: mlp.up_proj 4b: relF 2.13e-07, max rel diag 9.85e-07, changed 0.034%, objective ratio 1.000007
+04:35:48 hessian_paths: mlp.down_proj 3b: relF 1.83e-06, max rel diag 5.92e-06, changed 0.053%, objective ratio 1.000017
+04:35:49 hessian_paths: mlp.down_proj 4b: relF 1.83e-06, max rel diag 5.92e-06, changed 0.097%, objective ratio 1.000008
+04:35:49 hessian_paths: wrote D:\repos\wcomp\results\qwen3.5-0.8b\hessian_paths.json

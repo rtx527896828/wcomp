@@ -49,6 +49,20 @@ def test_smoke_markers_and_results_dir():
     assert rb.default_results_dir(m) == "results/smoke"
     assert rb.default_results_dir(rb.smoke_markers(None, 4, 128)) == "results/smoke"
     assert rb.default_results_dir(rb.smoke_markers(8, 32, 128)) == "results/smoke"
+    # the calib-n marker belongs to calibrated methods only: an RTN-only invocation with --calib-n 16 is on protocol
+    assert rb.smoke_markers(None, 32, 16, calib_used=False) == []
+    assert rb.smoke_markers(8, 4, 16, calib_used=False) == ["limit-windows 8", "kl-windows 4"]
+    assert rb.default_results_dir(rb.smoke_markers(None, 32, 16, calib_used=False)) == "results"
+
+
+def test_smoke_results_dir_redirects_explicit_dirs():
+    """An explicit --results-dir never receives smoke rows: results/probe -> results/probe/smoke; a dir that already
+    says smoke, or a full-protocol run, is left alone."""
+    assert rb.smoke_results_dir("results/probe", ["limit-windows 8"]) == str(Path("results/probe") / "smoke")
+    assert rb.smoke_results_dir("results/probe", []) == "results/probe"
+    assert rb.smoke_results_dir("results/smoke/probe", ["limit-windows 8"]) == "results/smoke/probe"
+    assert rb.smoke_results_dir("results/smoke", ["kl-windows 4"]) == "results/smoke"
+    assert rb.smoke_results_dir(str(Path("D:/x/smoke/probe")), ["calib-n 16"]) == str(Path("D:/x/smoke/probe"))
 
 
 def test_make_row_has_design_fields():
@@ -327,3 +341,77 @@ def test_timed_measures_only_the_call():
     assert out == 42 and 0.04 <= s < 2.0
     _, s0 = rb.timed(lambda: None)
     assert s0 < 0.5  # a no-op method (fp16) must not be charged with a model load
+
+
+# ---------------------------------------------------------------- Hessian path in the row identity
+
+
+def test_run_key_and_merge_keep_the_f32_acceptance_row_apart(capsys):
+    p1 = _row("gptq-sym-g128-3", 24.4482, "calib 128x2048 seed 0; gptq 3b sym g128 block128 damp0.01", calib_seed=0,
+              ts="2026-11-08T03:42:30+00:00")
+    acc = _row("gptq-sym-g128-3", 23.9, "calib 128x2048 seed 0; gptq 3b sym g128 block128 damp0.01 hessian-f32", calib_seed=0,
+               ts="2026-11-08T12:00:00+00:00")
+    f64 = _row("gptq-sym-g128-3", 24.4482, "calib 128x2048 seed 0; gptq 3b sym g128 block128 damp0.01 hessian-f64", calib_seed=0,
+               ts="2026-11-08T12:30:00+00:00")
+    assert plot_rd.run_key(p1) != plot_rd.run_key(acc) and plot_rd.run_key(p1) == plot_rd.run_key(f64)
+    assert plot_rd.hessian_tag(acc["note"]) == "hessian-f32" and plot_rd.hessian_tag(p1["note"]) == ""
+    merged = plot_rd.merge_runs([p1], [acc])
+    assert sorted(r["ppl"] for r in merged) == [23.9, 24.4482]
+    assert not plot_rd.default_seed(acc) and plot_rd.default_seed(p1)
+    assert plot_rd.point_label(acc) == "3 H32" and plot_rd.point_label(p1) == "3"
+    # a Phase 1 name with the same key is never replaced by an --extra row, and a disagreement is reported
+    other = _row("gptq-sym-g128-3", 25.0, "calib 128x2048 seed 0; gptq 3b sym g128 block128 damp0.01 hessian-f64", calib_seed=0,
+                 ts="2026-11-08T13:00:00+00:00")
+    merged = plot_rd.merge_runs([p1], [other])
+    assert len(merged) == 1 and merged[0]["ppl"] == 24.4482
+    assert "disagree" in capsys.readouterr().err
+    # a Phase 2 name takes the latest row, silently when identical
+    a = _row("rtn-sym-g32-4", 18.0, "rtn", ts="2026-11-08T01:00:00+00:00")
+    b = _row("rtn-sym-g32-4", 18.1, "rtn", ts="2026-11-08T02:00:00+00:00")
+    assert plot_rd.merge_runs([a], [b])[0]["ppl"] == 18.1 and "disagree" in capsys.readouterr().err
+    assert plot_rd.merge_runs([], [a, a]) == [a] and capsys.readouterr().err == ""
+
+
+def test_hessian_choice_required_only_for_gptq_rows_into_the_probe_tree():
+    assert rb.hessian_choice_required(["gptq-sym-g128-3"], "results/probe")
+    assert rb.hessian_choice_required(["rtn-sym-g32-4", "had-gptq-sym-g128-3"], "results/probe")
+    assert not rb.hessian_choice_required(["gptq-sym-g128-3"], None)  # Phase 1 runs.jsonl: the Phase 1 default path
+    assert not rb.hessian_choice_required(["gptq-sym-g128-3"], "results")
+    assert not rb.hessian_choice_required(["gptq-sym-g128-3"], "results/smoke/probe")
+    assert not rb.hessian_choice_required(["rtn-sym-g128-4@only=down", "fp16"], "results/probe")
+
+
+def test_planned_results_dir_decides_the_hessian_gate_before_loading():
+    """A GPTQ smoke run aimed at results/probe lands in results/probe/smoke, where no Hessian flag is required; the
+    gate must see that redirected path, not the raw --results-dir."""
+    m = ["gptq-sym-g128-3"]
+    assert rb.planned_results_dir(None, m, None, 32, 128) is None
+    assert rb.planned_results_dir("results/probe", m, None, 32, 128) == "results/probe"
+    assert rb.hessian_choice_required(m, rb.planned_results_dir("results/probe", m, None, 32, 128))
+    smoke = rb.planned_results_dir("results/probe", m, 4, 4, 4)
+    assert smoke == str(Path("results/probe") / "smoke") and not rb.hessian_choice_required(m, smoke)
+    assert rb.planned_results_dir("results/probe", m, None, 32, 16) == str(Path("results/probe") / "smoke")  # calib-n alone
+    assert rb.planned_results_dir("results/probe", ["rtn-sym-g32-4"], None, 32, 16) == "results/probe"  # calib-n is no RTN marker
+    assert rb.planned_results_dir("results/smoke/probe", m, 4, 4, 4) == "results/smoke/probe"
+
+
+def test_skip_keepsuper_refuses_a_missing_or_malformed_p7_json(tmp_path):
+    with pytest.raises(SystemExit, match="cannot read the P7 JSON"):
+        rb.skip_keepsuper(f"rtn-sym-g128-4+keepsuper={tmp_path / 'missing.json'}")
+    bad = tmp_path / "bad.json"
+    bad.write_text("{}", encoding="utf-8")
+    with pytest.raises(SystemExit, match="cannot read the P7 JSON"):
+        rb.skip_keepsuper(f"rtn-sym-g128-4+keepsuper={bad}")
+
+
+def test_skip_keepsuper_without_spike_candidates(tmp_path, caplog):
+    no_spike = tmp_path / "sw_top.json"
+    no_spike.write_text(json.dumps({"records": [{"tensor": "model.layers.0.mlp.down_proj", "stat": {"row": 1, "col": 2}, "note": "top16; z"}]}), encoding="utf-8")
+    spike = tmp_path / "sw_spike.json"
+    spike.write_text(json.dumps({"records": [{"tensor": "model.layers.0.mlp.down_proj", "stat": {"row": 1, "col": 2}, "note": "spike+top16; z"}]}), encoding="utf-8")
+    with caplog.at_level("WARNING"):
+        assert rb.skip_keepsuper(f"rtn-sym-g128-4+keepsuper={no_spike}")
+        assert not rb.skip_keepsuper(f"rtn-sym-g128-4+keepsuper={no_spike}", any_kind=True)
+    assert "skipped" in caplog.text and "positive-amax clip" in caplog.text and "running anyway" in caplog.text
+    assert not rb.skip_keepsuper(f"rtn-sym-g128-4+keepsuper={spike}")
+    assert not rb.skip_keepsuper("rtn-sym-g128-4+keepcols=1") and not rb.skip_keepsuper("gptq-sym-g128-3")

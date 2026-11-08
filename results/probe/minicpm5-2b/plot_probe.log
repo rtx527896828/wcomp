@@ -1,0 +1,12 @@
+skipped: D:/repos/wcomp/results/probe/minicpm5-2b/lowrank_weighted.json (missing)
+skipped: D:/repos/wcomp/results/probe/minicpm5-2b/fisher.json (missing)
+skipped: ablation: @layer rows at 3 bits
+not rendered (no data): fisher
+D:\repos\wcomp\results\probe_minicpm5-2b_marginal.png
+D:\repos\wcomp\results\probe_minicpm5-2b_lowrank.png
+D:\repos\wcomp\results\probe_minicpm5-2b_outliers.png
+D:\repos\wcomp\results\probe_minicpm5-2b_interlayer.png
+D:\repos\wcomp\results\probe_minicpm5-2b_acts.png
+D:\repos\wcomp\results\probe_minicpm5-2b_sensitivity.png
+D:\repos\wcomp\results\probe_minicpm5-2b_superweight.png
+D:\repos\wcomp\results\probe_minicpm5-2b_ablation.png

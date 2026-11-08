@@ -17,6 +17,13 @@ smoke row is differenced against the fp16 row of the *same* eval windows (same "
 row without such an fp16 row is reported and skipped. Rows of one (method, seed, calib_seed, smoke setting) are
 deduplicated to the latest timestamp; when they disagree in note, code version, ppl or kl a warning lists them.
 Output: <results-dir>/rd_<model>.png
+
+--extra <jsonl> (repeatable, Phase 2): further files in the same row schema, e.g. results/probe/<model>/ablation.jsonl.
+Only full-model quantizer rows are drawn from them (rtn-sym-g32/g64, +keepcols, +keepsuper, had-*, GPTQ seed
+repeats); @only / @except / @layer rows quantize part of the model and are never RD points, so they are skipped
+(counted on stderr). A variant of a Phase 1 family (another group size, or a +keepcols / +keepsuper suffix) keeps
+the parent family's colour and takes its own line style and marker; +keepcols rows form one family with the
+percentage in the point label. Without --extra the output is unchanged.
 """
 from __future__ import annotations
 
@@ -37,7 +44,7 @@ from matplotlib.ticker import FixedFormatter, FixedLocator, NullLocator  # noqa:
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from wcomp.methods import family  # noqa: E402
+from wcomp.methods import METHODS, family  # noqa: E402
 
 # Fixed family order and colors (validated categorical palette, light mode); never cycled.
 FAMILIES = ["rtn-sym-g128", "rtn-asym-g128", "had-rtn-sym-g128", "gptq-sym-g128", "had-gptq-sym-g128"]
@@ -53,6 +60,71 @@ PPL_TICKS = [12, 15, 20, 25, 30, 40, 50, 70, 100, 200, 500, 1e3, 2e3, 5e3, 1e4, 
 PROTOCOL_CALIB_N = 128  # DESIGN.md 4
 SMOKE_PREFIXES = ("limit-windows", "kl-windows", "calib-n")
 _CALIB_RE = re.compile(r"^calib (\d+)x\d+ seed (\d+)$")
+# Line style and marker of a variant family (--extra rows), drawn in its parent Phase 1 family's colour.
+VARIANT_STYLES = {"g32": ("--", "s"), "g64": (":", "D"), "+keepcols": ("-.", "P"), "+keepsuper": ((0, (3, 1, 1, 1, 1, 1)), "X")}
+
+
+def run_family(name: str) -> tuple[str, int | None]:
+    """family() extended to the Phase 2 parametric names: "rtn-sym-g128-4+keepcols=1" -> ("rtn-sym-g128+keepcols", 4),
+    "rtn-sym-g128-4+keepsuper=<path>" -> ("rtn-sym-g128+keepsuper", 4). Names without "+" behave exactly as family()."""
+    base, plus, suffix = name.partition("+")
+    fam, bits = family(base)
+    if plus:
+        fam = f"{fam}+{suffix.split('=')[0]}"
+    return fam, bits
+
+
+def plus_value(name: str) -> str | None:
+    """The value after "+<key>=" of a parametric name (the keepcols percentage), else None."""
+    _, plus, suffix = name.partition("+")
+    if not plus or "=" not in suffix:
+        return None
+    return suffix.split("=", 1)[1]
+
+
+def variant_of(fam: str) -> tuple[str, str] | None:
+    """(parent family, variant key) when fam is a group-size or +suffix variant of a FAMILIES member, else None."""
+    base, plus, suffix = fam.partition("+")
+    parent = re.sub(r"-g\d+$", "-g128", base)
+    if parent not in FAMILIES:
+        return None
+    keys = []
+    m = re.search(r"-g(\d+)$", base)
+    if m and m.group(1) != "128":
+        keys.append(f"g{m.group(1)}")
+    if plus:
+        keys.append(f"+{suffix}")
+    if len(keys) != 1 or keys[0] not in VARIANT_STYLES:
+        return None
+    return parent, keys[0]
+
+
+def is_full_model(method: str) -> bool:
+    """False for @only / @except / @layer rows (part of the model quantized): never a rate-distortion point."""
+    return "@" not in method
+
+
+def merge_runs(primary: list[dict], extra: list[dict]) -> list[dict]:
+    """Union of rows by run_key. A Phase 1 method name (wcomp.methods.METHODS) present in the primary file is never
+    replaced by an --extra row; any other key keeps the latest timestamp (the primary file wins ties). Rows of one
+    key that disagree (rows_disagree) are reported on stderr like load_runs does, never resolved silently. The
+    Hessian path is part of run_key, so the gptq-sym-g128-3 acceptance row (hessian-f32) is a separate point."""
+    latest: dict[tuple, dict] = {run_key(r): r for r in primary}
+    for r in extra:
+        key = run_key(r)
+        prev = latest.get(key)
+        if prev is None:
+            latest[key] = r
+            continue
+        phase1 = r["method"] in METHODS
+        newer = r.get("timestamp", "") > prev.get("timestamp", "")
+        if rows_disagree(prev, r):
+            print(f"warning: {r['method']} (seed {key[1]}, calib_seed {key[2]}): primary row (ppl {prev.get('ppl')}, {prev.get('timestamp')}) "
+                  f"and --extra row (ppl {r.get('ppl')}, {r.get('timestamp')}) disagree; keeping "
+                  f"{'the primary (Phase 1 name)' if phase1 else ('the later --extra row' if newer else 'the primary')}", file=sys.stderr)
+        if not phase1 and newer:
+            latest[key] = r
+    return list(latest.values())
 
 
 def smoke_tag(note: str) -> str:
@@ -83,9 +155,19 @@ def is_smoke(r: dict) -> bool:
     return smoke_tag(r.get("note", "")) != ""
 
 
+HESSIAN_F32_TOKEN = "hessian-f32"  # wcomp.quant.gptq note token of the f32-product Hessian path
+
+
+def hessian_tag(note: str) -> str:
+    """"hessian-f32" for a GPTQ row that ran the f32-product Hessian path, else "" (the Phase 1 f64 path, whether the
+    note says "hessian-f64" or predates the token)."""
+    return HESSIAN_F32_TOKEN if HESSIAN_F32_TOKEN in re.split(r"[;\s]+", note) else ""
+
+
 def run_key(r: dict) -> tuple:
-    """(method, seed, calib_seed, smoke tag). A calibrated row without a calib_seed field (older code) gets the
-    seed recorded in its "calib Nx2048 seed s" note token."""
+    """(method, seed, calib_seed, smoke tag, hessian tag). A calibrated row without a calib_seed field (older code)
+    gets the seed recorded in its "calib Nx2048 seed s" note token. The Hessian path is part of the identity so a
+    differently configured run of a Phase 1 method name is a separate (detached) point, never a replacement."""
     note = r.get("note", "")
     calib_seed = r.get("calib_seed")
     if calib_seed is None:
@@ -93,7 +175,7 @@ def run_key(r: dict) -> tuple:
             m = _CALIB_RE.match(tok.strip())
             if m:
                 calib_seed = int(m.group(2))
-    return (r["method"], r.get("seed", 0), calib_seed, smoke_tag(note))
+    return (r["method"], r.get("seed", 0), calib_seed, smoke_tag(note), hessian_tag(note))
 
 
 CONFLICT_FIELDS = ("note", "git_or_code_version", "ppl", "kl")
@@ -188,17 +270,23 @@ def line_ys(ys: list[float], hollow: list[bool]) -> list[float]:
 
 
 def default_seed(r: dict) -> bool:
-    """True for the protocol's default seeds (seed 0, calib_seed 0 or none): the rows the family line goes through."""
-    return r.get("seed", 0) == 0 and r.get("calib_seed") in (None, 0)
+    """True for the protocol's default configuration (seed 0, calib_seed 0 or none, Phase 1 f64 Hessian path): the
+    rows the family line goes through; an f32-Hessian row is a detached marker like a seed repeat."""
+    return r.get("seed", 0) == 0 and r.get("calib_seed") in (None, 0) and hessian_tag(r.get("note", "")) == ""
 
 
 def point_label(r: dict) -> str:
-    bits = family(r["method"])[1]
+    bits = run_family(r["method"])[1]
     lab = f"{bits}"
+    p = plus_value(r["method"])
+    if p is not None and "+keepcols" in r["method"]:
+        lab += f" p{p}"
     if r.get("seed", 0) != 0:
         lab += f" s{r['seed']}"
     if r.get("calib_seed") not in (None, 0):
         lab += f" c{r['calib_seed']}"
+    if hessian_tag(r.get("note", "")):
+        lab += " H32"
     return lab
 
 
@@ -209,6 +297,29 @@ def label_offset(slot: int, flip: bool = False) -> tuple[tuple[int, int], str]:
     if flip:
         dy = 5 if dy < 0 else -11
     return (dx, dy), ha
+
+
+LEGEND_LOCS = ("upper right", "lower left", "center right", "upper left", "lower right")
+
+
+def place_legend(ax, handles: list, points: list[tuple[float, float]], **kw) -> None:
+    """Legend at the candidate location whose box covers the fewest plotted points (ties: first in LEGEND_LOCS).
+    matplotlib's "best" counts the full-width had-fp16 reference line as an obstacle everywhere, so it ends up
+    crossing that line or sitting on the point labels; a reference line under the legend is harmless, a hidden
+    point is not. Labels sit right of their points, so each point is widened by 60 px on that side."""
+    fig = ax.figure
+    best = None
+    for loc in LEGEND_LOCS:
+        leg = ax.legend(handles=handles, loc=loc, **kw)
+        fig.canvas.draw()
+        box = leg.get_window_extent()
+        disp = ax.transData.transform(points) if points else []
+        n = sum(1 for x, y in disp if box.x0 - 60 <= x <= box.x1 and box.y0 <= y <= box.y1)
+        if best is None or n < best[0]:
+            best = (n, loc)
+        if n == 0:
+            break
+    ax.legend(handles=handles, loc=best[1], **kw)
 
 
 def absolute_ppl_axis(ax, fp16: float) -> None:
@@ -241,10 +352,22 @@ def main() -> None:
     ap.add_argument("--results-dir", default="results")
     ap.add_argument("--out", default=None, help="output png (default <results-dir>/rd_<model>.png)")
     ap.add_argument("--include-smoke", action="store_true", help="also plot limit-windows / kl-windows / calib-n rows")
+    ap.add_argument("--extra", action="append", default=[], metavar="JSONL",
+                    help="additional runs.jsonl-schema file (repeatable); only full-model quantizer rows are drawn")
     args = ap.parse_args()
 
     rdir = Path(args.results_dir) if Path(args.results_dir).is_absolute() else ROOT / args.results_dir
     runs = load_runs(rdir / args.model / "runs.jsonl", args.include_smoke)
+    sources = [(Path(args.results_dir) / args.model / "runs.jsonl").as_posix()]
+    for extra in args.extra:
+        epath = Path(extra) if Path(extra).is_absolute() else ROOT / extra
+        rows = load_runs(epath, args.include_smoke)
+        full = [r for r in rows if is_full_model(r["method"])]
+        if len(full) < len(rows):
+            print(f"note: {extra}: {len(rows) - len(full)} @only / @except / @layer rows are not full-model points, skipped",
+                  file=sys.stderr)
+        runs = merge_runs(runs, full)
+        sources.append(Path(extra).as_posix())
     base = baselines(runs)
     smoke = {smoke_tag(r.get("note", "")) for r in runs if is_smoke(r)}
     if smoke:
@@ -268,7 +391,7 @@ def main() -> None:
     by_family: dict[str, list[dict]] = {}
     refs: list[dict] = []  # unquantized reference rows other than fp16, e.g. had-fp16 (rotation only)
     for r in plotted:
-        fam, bits = family(r["method"])
+        fam, bits = run_family(r["method"])
         if bits is None:
             refs.append(r)
             continue
@@ -306,9 +429,16 @@ def main() -> None:
     axes[1].set_title(f"KL to the bf16 model ({', '.join(f'{k:,}' for k in kl_tokens) or '?'} tokens)", color=TEXT, fontsize=10, loc="left")
 
     any_hollow = False
+    drawn_points: dict[int, list[tuple[float, float]]] = {id(ax): [] for ax in axes}  # for the legend placement
     for slot, fam in enumerate(order):
         rows = sorted(by_family[fam], key=lambda r: r["bits_blocks"])
-        color, marker = family_style(fam, order)
+        variant = variant_of(fam)
+        if variant is not None:  # parent colour, variant line style / marker
+            color = family_style(variant[0], order)[0]
+            linestyle, marker = VARIANT_STYLES[variant[1]]
+        else:
+            color, marker = family_style(fam, order)
+            linestyle = "-"
         for ax, key in ((axes[0], "dppl"), (axes[1], "kl")):
             xs, ys, labels, hollow, extra = [], [], [], [], []
             for r in rows:
@@ -333,12 +463,13 @@ def main() -> None:
                 hollow.append(not ok)
             if not xs and not extra:
                 continue
+            drawn_points[id(ax)] += list(zip(xs, ys)) + [(x, y) for x, y, _, _ in extra]
             # The line and the solid markers go through the default-seed measured points only; floored points are
             # isolated hollow markers (a line into the floor would assert a positive delta that was not measured)
             # and other seeds are detached markers (a seed is a repeat of the same point, not a new rate).
             if xs:
                 ax.plot(xs, line_ys(ys, hollow), color=color, marker=marker, markersize=6, linewidth=2, label=fam,
-                        markeredgecolor=SURFACE, markeredgewidth=1)
+                        markeredgecolor=SURFACE, markeredgewidth=1, linestyle=linestyle)
             for x, y, lab, h in extra:
                 if not h:
                     ax.plot([x], [y], marker=marker, markersize=6, color=color, markeredgecolor=TEXT2,
@@ -365,12 +496,15 @@ def main() -> None:
     for ax, text in zip(axes, fp16_text):
         handles, labels = ax.get_legend_handles_labels()
         handles.append(Line2D([], [], linestyle="none", label=text))
-        ax.legend(handles=handles, frameon=False, fontsize=8, labelcolor=TEXT)
+        place_legend(ax, handles, drawn_points[id(ax)], frameon=False, fontsize=8, labelcolor=TEXT)
     if len(base) == 1:
         absolute_ppl_axis(axes[0], next(iter(base.values())))
-    fig.suptitle(f"{args.model}: rate-distortion of Phase 1 baselines", color=TEXT, fontsize=12, x=0.02, ha="left")
-    footer = (f"source: {(Path(args.results_dir) / args.model / 'runs.jsonl').as_posix()} (fields bits_blocks, ppl, kl); "
-              "point labels: bit width, s<seed> / c<calib_seed> when not 0 (detached marker)")
+    what = "Phase 1 baselines" if not args.extra else "Phase 1 baselines + Phase 2 full-model ablation rows"
+    fig.suptitle(f"{args.model}: rate-distortion of {what}", color=TEXT, fontsize=12, x=0.02, ha="left")
+    footer = (f"source: {', '.join(sources)} (fields bits_blocks, ppl, kl); "
+              "point labels: bit width, s<seed> / c<calib_seed> when not 0, H32 for the f32-Hessian GPTQ path (detached marker)")
+    if args.extra:
+        footer += ", p<percent> for +keepcols"
     if any_hollow:
         footer += "\nhollow marker: value <= 0 cannot be placed on the log axis; drawn at the floor, measured value in its label"
     fig.text(0.02, 0.012, footer, color=TEXT2, fontsize=7.5, ha="left", va="bottom", linespacing=1.4)

@@ -34,6 +34,9 @@ _WEIGHT_TYPES: dict[str, str] = {
     "out_proj": "out_proj",
 }
 
+# Every weight type weight_type() can return (Phase 2: the values accepted by @only= / @except=).
+WEIGHT_TYPES: frozenset[str] = frozenset(_WEIGHT_TYPES.values())
+
 # Order in which the projections are applied inside one decoder layer (from the HF forward code;
 # nn.Module registration order differs: Qwen3.5's DeltaNet registers out_proj first).
 _FORWARD_ORDER: dict[str, int] = {

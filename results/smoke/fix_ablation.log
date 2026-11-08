@@ -1,0 +1,14 @@
+03:00:52 run_baselines: loading reference qwen3.5-0.8b
+W1108 03:00:53.417000 36400 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  12%|#2        | 40/320 [00:00<00:00, 373.65it/s]Loading weights:  39%|###8      | 124/320 [00:00<00:00, 597.51it/s]Loading weights:  61%|######1   | 196/320 [00:00<00:00, 640.43it/s]Loading weights:  85%|########5 | 272/320 [00:00<00:00, 679.00it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 646.67it/s]
+03:00:55 run_baselines: eval windows (4, 2048)
+03:00:55 run_baselines: smoke run (limit-windows 4; kl-windows 4)
+03:00:55 run_baselines: rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json: the P7 JSON has no co-occurring spike candidate; the row restores {'top16': 16} only (run list: '+keepsuper if P7 finds any'); the row note records the kinds
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+03:00:58 run_baselines: reference hidden states (4, 2048, 1024) in 3.1s; reference layers moved to the CPU
+03:00:58 run_baselines: === rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json ===
+03:00:58 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  20%|#9        | 63/320 [00:00<00:00, 624.25it/s]Loading weights:  43%|####3     | 139/320 [00:00<00:00, 681.68it/s]Loading weights:  68%|######7   | 217/320 [00:00<00:00, 722.70it/s]Loading weights:  91%|######### | 290/320 [00:00<00:00, 703.75it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 702.76it/s]
+03:01:04 run_baselines: rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json: ppl 24.15 kl 0.19957 top1 0.7767 bits_blocks 4.1250 bits_all 8.1462 time 6.0s (method 3.2s)
+03:01:04 run_baselines: wrote D:\repos\wcomp\results\smoke\probe\qwen3.5-0.8b\ablation.jsonl

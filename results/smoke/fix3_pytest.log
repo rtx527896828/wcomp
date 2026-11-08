@@ -1,0 +1,121 @@
+........................................................................ [ 32%]
+........F...F.FF........................................................ [ 65%]
+................................................................FF...... [ 98%]
+....                                                                     [100%]
+================================== FAILURES ===================================
+_____________________________ test_plot_probe_cli _____________________________
+
+fixtures = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/results0')
+tmp_path = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/test_plot_probe_cli0')
+
+    def test_plot_probe_cli(fixtures, tmp_path):
+        cmd = [sys.executable, "-I", str(ROOT / "scripts" / "plot_probe.py"), "--model", "qwen3.5-2b", "--results-dir", str(fixtures),
+               "--probes", "ablation,marginal", "--out-dir", str(tmp_path)]
+        r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
+>       assert r.returncode == 0, r.stderr
+E       AssertionError: 
+E       assert 3221225794 == 0
+E        +  where 3221225794 = CompletedProcess(args=['D:\\repos\\wcomp\\.venv\\Scripts\\python.exe', '-I', 'D:\\repos\\wcomp\\scripts\\plot_probe.py...\AppData\\Local\\Temp\\pytest-of-tixir\\pytest-45\\test_plot_probe_cli0'], returncode=3221225794, stdout='', stderr='').returncode
+
+tests\test_plots_phase2.py:194: AssertionError
+__________________________ test_structure_table_cli ___________________________
+
+fixtures = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/results0')
+tmp_path = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/test_structure_table_cli0')
+
+    def test_structure_table_cli(fixtures, tmp_path):
+        cmd = [sys.executable, "-I", str(ROOT / "scripts" / "structure_table.py"), "--models", "minicpm5-2b", "--results-dir", str(fixtures),
+               "--out", str(tmp_path / "t.md")]
+        r = subprocess.run(cmd, capture_output=True, text=True, cwd=ROOT)
+>       assert r.returncode == 0, r.stderr
+E       AssertionError: 
+E       assert 3221225794 == 0
+E        +  where 3221225794 = CompletedProcess(args=['D:\\repos\\wcomp\\.venv\\Scripts\\python.exe', '-I', 'D:\\repos\\wcomp\\scripts\\structure_tab...ocal\\Temp\\pytest-of-tixir\\pytest-45\\test_structure_table_cli0\\t.md'], returncode=3221225794, stdout='', stderr='').returncode
+
+tests\test_plots_phase2.py:261: AssertionError
+________________ test_plot_rd_extra_draws_only_full_model_rows ________________
+
+fixtures = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/results0')
+tmp_path = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/test_plot_rd_extra_draws_only_0')
+
+    def test_plot_rd_extra_draws_only_full_model_rows(fixtures, tmp_path):
+        abl = fixtures / "probe" / "qwen3.5-0.8b" / "ablation.jsonl"
+        r = _run_rd(fixtures, "--extra", str(abl), "--out", str(tmp_path / "rd.png"))
+>       assert r.returncode == 0, r.stderr
+E       AssertionError: 
+E       assert 3221225794 == 0
+E        +  where 3221225794 = CompletedProcess(args=['D:\\repos\\wcomp\\.venv\\Scripts\\python.exe', '-I', 'D:\\repos\\wcomp\\scripts\\plot_rd.py', ...mp\\pytest-of-tixir\\pytest-45\\test_plot_rd_extra_draws_only_0\\rd.png'], returncode=3221225794, stdout='', stderr='').returncode
+
+tests\test_plots_phase2.py:291: AssertionError
+___________________ test_plot_rd_without_extra_is_unchanged ___________________
+
+fixtures = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/results0')
+tmp_path = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/test_plot_rd_without_extra_is_0')
+
+    def test_plot_rd_without_extra_is_unchanged(fixtures, tmp_path):
+        """Same primary file, with and without an --extra that holds only partial-model rows: identical bytes."""
+        abl = fixtures / "probe" / "qwen3.5-0.8b" / "ablation.jsonl"
+        partial = tmp_path / "partial.jsonl"
+        partial.write_text("".join(l for l in abl.read_text(encoding="utf-8").splitlines(keepends=True) if "@" in l), encoding="utf-8")
+        a = _run_rd(fixtures, "--out", str(tmp_path / "a.png"))
+        b = _run_rd(fixtures, "--extra", str(partial), "--out", str(tmp_path / "b.png"))
+>       assert a.returncode == 0 and b.returncode == 0, a.stderr + b.stderr
+E       AssertionError: 
+E       assert (3221225794 == 0)
+E        +  where 3221225794 = CompletedProcess(args=['D:\\repos\\wcomp\\.venv\\Scripts\\python.exe', '-I', 'D:\\repos\\wcomp\\scripts\\plot_rd.py', ...emp\\pytest-of-tixir\\pytest-45\\test_plot_rd_without_extra_is_0\\a.png'], returncode=3221225794, stdout='', stderr='').returncode
+
+tests\test_plots_phase2.py:309: AssertionError
+________________ test_plot_script_smoke_row_uses_its_own_fp16 _________________
+
+tmp_path = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/test_plot_script_smoke_row_use0')
+
+    def test_plot_script_smoke_row_uses_its_own_fp16(tmp_path):
+        rdir = tmp_path / "results"
+        _write(rdir / "m" / "runs.jsonl", [
+            _row("fp16", 14.0, "bf16, not quantized", bits=16.0, kl=0.0),
+            _row("rtn-sym-g128-4", 15.0, "rtn-sym-g128-4: f16 scale"),
+            _row("fp16", 12.593, "limit-windows 1; bf16, not quantized", bits=16.0, kl=0.0),
+            _row("rtn-sym-g128-4", 13.2, "limit-windows 1; rtn-sym-g128-4: f16 scale"),  # +0.6 on its own windows
+            _row("gptq-sym-g128-3", 15.3, "limit-windows 2; calib 128x2048 seed 0; gptq", calib_seed=0),  # no fp16 row
+            _row("had-fp16", 14.01, "bf16, not quantized; input rotation hadamard(1024)", bits=16.0, kl=0.001),
+        ])
+        r = _run_plot(rdir)
+>       assert r.returncode == 0, r.stderr
+E       AssertionError: 
+E       assert 3221225794 == 0
+E        +  where 3221225794 = CompletedProcess(args=['D:\\repos\\wcomp\\.venv\\Scripts\\python.exe', '-I', 'D:\\repos\\wcomp\\scripts\\plot_rd.py', ...p\\pytest-of-tixir\\pytest-45\\test_plot_script_smoke_row_use0\\results'], returncode=3221225794, stdout='', stderr='').returncode
+
+tests\test_runner_plot.py:246: AssertionError
+_________________ test_plot_script_seed1_fp16_does_not_break __________________
+
+tmp_path = WindowsPath('C:/Users/tixir/AppData/Local/Temp/pytest-of-tixir/pytest-45/test_plot_script_seed1_fp16_do0')
+
+    def test_plot_script_seed1_fp16_does_not_break(tmp_path):
+        rdir = tmp_path / "results"
+        _write(rdir / "m" / "runs.jsonl", [
+            _row("fp16", 14.0, "bf16, not quantized", bits=16.0, kl=0.0),
+            _row("gptq-sym-g128-3", 15.0, "calib 128x2048 seed 0; gptq", calib_seed=0),
+            _row("fp16", 14.0, "bf16, not quantized", seed=1, bits=16.0, kl=0.0),  # DESIGN.md seed-1 GPTQ run
+            _row("gptq-sym-g128-3", 15.1, "calib 128x2048 seed 1; gptq", seed=1, calib_seed=1),
+        ])
+        r = _run_plot(rdir)
+>       assert r.returncode == 0, r.stderr
+E       AssertionError: 
+E       assert 3221225794 == 0
+E        +  where 3221225794 = CompletedProcess(args=['D:\\repos\\wcomp\\.venv\\Scripts\\python.exe', '-I', 'D:\\repos\\wcomp\\scripts\\plot_rd.py', ...p\\pytest-of-tixir\\pytest-45\\test_plot_script_seed1_fp16_do0\\results'], returncode=3221225794, stdout='', stderr='').returncode
+
+tests\test_runner_plot.py:265: AssertionError
+============================== warnings summary ===============================
+tests/test_plots_phase2.py::test_figures_tolerate_missing_stats
+  D:\repos\wcomp\scripts\plot_probe.py:158: UserWarning: constrained_layout not applied because axes sizes collapsed to zero.  Try making figure larger or Axes decorations smaller.
+    fig.savefig(out, dpi=140, facecolor=SURFACE)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_plots_phase2.py::test_plot_probe_cli - AssertionError: 
+FAILED tests/test_plots_phase2.py::test_structure_table_cli - AssertionError: 
+FAILED tests/test_plots_phase2.py::test_plot_rd_extra_draws_only_full_model_rows
+FAILED tests/test_plots_phase2.py::test_plot_rd_without_extra_is_unchanged - ...
+FAILED tests/test_runner_plot.py::test_plot_script_smoke_row_uses_its_own_fp16
+FAILED tests/test_runner_plot.py::test_plot_script_seed1_fp16_does_not_break
+6 failed, 214 passed, 1 warning in 156.60s (0:02:36)

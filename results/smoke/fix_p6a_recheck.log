@@ -1,0 +1,13 @@
+03:01:07 probe_acts: off-protocol settings: windows 4
+W1108 03:01:08.605000 23104 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  18%|#7        | 56/320 [00:00<00:00, 536.57it/s]Loading weights:  40%|####      | 129/320 [00:00<00:00, 644.35it/s]Loading weights:  62%|######1   | 198/320 [00:00<00:00, 655.12it/s]Loading weights:  88%|########7 | 280/320 [00:00<00:00, 709.13it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 693.40it/s]
+03:01:09 probe_acts: loaded qwen3.5-0.8b in 2.4s
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+03:01:11 wcomp.probe.acts: input stats: layers 0-5 done (47 linears)
+03:01:13 wcomp.probe.acts: input stats: layers 6-11 done (46 linears)
+03:01:15 wcomp.probe.acts: input stats: layers 12-17 done (47 linears)
+03:01:17 wcomp.probe.acts: input stats: layers 18-23 done (46 linears)
+03:01:17 probe_acts: input stats: 7.8s, peak 1.94 GB, full_hessian=False
+03:01:22 probe_acts: wrote results\smoke\probe\qwen3.5-0.8b\sensitivity.json (186 records)
+03:01:22 probe_acts: done in 14.8s

@@ -1,0 +1,3 @@
+note: results/probe/qwen3.5-0.8b/ablation.jsonl: 57 @only / @except / @layer rows are not full-model points, skipped
+warning: rtn-sym-g128-8 (rtn-sym-g128-8: f16 scale): ppl 17.5584 vs fp16 17.5675 not on the log axis, drawn hollow at 0.00614
+D:\repos\wcomp\results\rd_qwen3.5-0.8b.png

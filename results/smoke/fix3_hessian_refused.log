@@ -1,0 +1,1 @@
+a GPTQ row into the Phase 2 tree (results/probe) needs an explicit Hessian path: --hessian-f32 (the DESIGN.md 'GPTQ speed' acceptance run, gptq-sym-g128-3 seed 0) or --hessian-f64 (the Phase 1 path, which reproduces the Phase 1 number by construction and tests nothing); an f32 row's note carries 'hessian-f32', the f64 path leaves the Phase 1 note unchanged

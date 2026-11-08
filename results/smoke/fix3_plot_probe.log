@@ -1,0 +1,13 @@
+skipped: D:/repos/wcomp/results/smoke/qwen3.5-0.8b/runs.jsonl: 27 smoke rows ignored (include_smoke / --include-smoke to read them)
+skipped: D:/repos/wcomp/results/smoke/probe/qwen3.5-0.8b/ablation.jsonl: 8 smoke rows ignored (include_smoke / --include-smoke to read them)
+skipped: sensitivity prediction check: ablation.jsonl @only rows at 4 bit
+skipped: results/smoke/probe/qwen3.5-0.8b/ablation.jsonl: no ablation rows
+not rendered (no data): ablation
+results\smoke\probe_qwen3.5-0.8b_marginal.png
+results\smoke\probe_qwen3.5-0.8b_lowrank.png
+results\smoke\probe_qwen3.5-0.8b_outliers.png
+results\smoke\probe_qwen3.5-0.8b_interlayer.png
+results\smoke\probe_qwen3.5-0.8b_acts.png
+results\smoke\probe_qwen3.5-0.8b_sensitivity.png
+results\smoke\probe_qwen3.5-0.8b_fisher.png
+results\smoke\probe_qwen3.5-0.8b_superweight.png

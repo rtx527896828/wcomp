@@ -1,0 +1,25 @@
+01:38:43 run_baselines: loading reference qwen3.5-0.8b
+W1108 01:38:44.919000 12384 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  11%|#         | 35/320 [00:00<00:00, 347.33it/s]Loading weights:  31%|###1      | 100/320 [00:00<00:00, 519.89it/s]Loading weights:  57%|#####6    | 181/320 [00:00<00:00, 628.39it/s]Loading weights:  78%|#######8  | 251/320 [00:00<00:00, 653.18it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 646.84it/s]
+01:38:46 run_baselines: eval windows (8, 2048)
+01:38:46 run_baselines: smoke run (limit-windows 8; kl-windows 8; calib-n 16)
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+01:38:56 run_baselines: reference hidden states (8, 2048, 1024) in 10.2s; reference layers moved to the CPU
+01:38:56 run_baselines: === rtn-sym-g128-4@only=down ===
+01:38:56 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  22%|##2       | 71/320 [00:00<00:00, 683.74it/s]Loading weights:  44%|####4     | 142/320 [00:00<00:00, 688.55it/s]Loading weights:  68%|######8   | 219/320 [00:00<00:00, 724.93it/s]Loading weights:  91%|#########1| 292/320 [00:00<00:00, 709.43it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 713.71it/s]
+01:39:05 run_baselines: rtn-sym-g128-4@only=down: ppl 15.68 kl 0.02916 top1 0.9063 bits_blocks 13.8981 bits_all 14.6098 time 8.9s (method 2.4s)
+01:39:05 run_baselines: === rtn-sym-g32-4 ===
+01:39:05 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  15%|#4        | 47/320 [00:00<00:00, 449.89it/s]Loading weights:  40%|####      | 128/320 [00:00<00:00, 642.97it/s]Loading weights:  61%|######1   | 196/320 [00:00<00:00, 649.30it/s]Loading weights:  84%|########3 | 268/320 [00:00<00:00, 676.09it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 667.53it/s]
+01:39:10 run_baselines: rtn-sym-g32-4: ppl 18.41 kl 0.13879 top1 0.8150 bits_blocks 4.5000 bits_all 8.3942 time 4.7s (method 0.2s)
+01:39:10 run_baselines: === rtn-sym-g128-4+keepcols=1 ===
+01:39:10 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  14%|#4        | 45/320 [00:00<00:00, 442.85it/s]Loading weights:  36%|###5      | 114/320 [00:00<00:00, 587.23it/s]Loading weights:  56%|#####5    | 179/320 [00:00<00:00, 599.97it/s]Loading weights:  79%|#######9  | 254/320 [00:00<00:00, 655.98it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 649.97it/s]
+01:39:16 run_baselines: rtn-sym-g128-4+keepcols=1: ppl 18.98 kl 0.19319 top1 0.7860 bits_blocks 4.2433 bits_all 8.2244 time 6.4s (method 2.0s)
+01:39:16 run_baselines: === rtn-sym-g128-3@layer=0 ===
+01:39:16 run_baselines: gpu memory: 14.12 GB free of 17.07 GB, loading 1.50 GB
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  12%|#2        | 39/320 [00:00<00:00, 383.81it/s]Loading weights:  35%|###5      | 112/320 [00:00<00:00, 571.05it/s]Loading weights:  57%|#####6    | 181/320 [00:00<00:00, 605.27it/s]Loading weights:  78%|#######8  | 251/320 [00:00<00:00, 641.16it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 632.49it/s]
+01:39:21 run_baselines: rtn-sym-g128-3@layer=0: ppl 16.37 kl 0.09315 top1 0.8622 bits_blocks 15.4430 bits_all 15.6316 time 4.5s (method 0.0s)
+01:39:21 run_baselines: wrote D:\repos\wcomp\results\smoke\qwen3.5-0.8b\ablation.jsonl

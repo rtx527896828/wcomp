@@ -1,0 +1,41 @@
+warning: fp16 (seed 0, calib_seed None): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T02:00:32+00:00, ppl 14.9469):
+    2026-11-08T01:34:12+00:00 version 0afd0d8+dirty ppl 14.9469 note 'limit-windows 8; kl-windows 4; bf16, not quantized'
+    2026-11-08T02:00:32+00:00 version 0afd0d8+dirty/0060cbb3c2 ppl 14.9469 note 'limit-windows 8; kl-windows 4; bf16, not quantized'
+warning: rtn-sym-g128-4 (seed 0, calib_seed None): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T02:00:35+00:00, ppl 19.0075):
+    2026-11-08T01:34:19+00:00 version 0afd0d8+dirty ppl 19.0075 note 'limit-windows 8; kl-windows 4; rtn-sym-g128-4: f16 scale'
+    2026-11-08T02:00:35+00:00 version 0afd0d8+dirty/0060cbb3c2 ppl 19.0075 note 'limit-windows 8; kl-windows 4; rtn-sym-g128-4: f16 scale'
+warning: gptq-sym-g128-4 (seed 0, calib_seed 0): 3 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T02:37:12+00:00, ppl 16.2482):
+    2026-11-08T01:36:23+00:00 version 0afd0d8+dirty ppl 15.9484 note 'limit-windows 8; kl-windows 4; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01'
+    2026-11-08T02:02:54+00:00 version 0afd0d8+dirty/0060cbb3c2 ppl 16.2482 note 'limit-windows 8; kl-windows 4; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01'
+    2026-11-08T02:37:12+00:00 version 0afd0d8+dirty/0f0e1b59fd ppl 16.2482 note 'limit-windows 8; kl-windows 4; calib-n 16; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01'
+warning: fp16 (seed 0, calib_seed None): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T06:33:17+00:00, ppl 14.9469):
+    2026-11-08T03:13:38+00:00 version 0afd0d8+dirty/d2cfe18180 ppl 14.9469 note 'limit-windows 8; kl-windows 8; calib-n 16; bf16, not quantized'
+    2026-11-08T06:33:17+00:00 version 72c7eff+dirty/7347511093 ppl 14.9469 note 'limit-windows 8; kl-windows 8; calib-n 16; bf16, not quantized'
+warning: rtn-sym-g128-4 (seed 0, calib_seed None): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T06:33:19+00:00, ppl 19.0075):
+    2026-11-08T03:13:41+00:00 version 0afd0d8+dirty/d2cfe18180 ppl 19.0075 note 'limit-windows 8; kl-windows 8; calib-n 16; rtn-sym-g128-4: f16 scale'
+    2026-11-08T06:33:19+00:00 version 72c7eff+dirty/7347511093 ppl 19.0075 note 'limit-windows 8; kl-windows 8; calib-n 16; rtn-sym-g128-4: f16 scale'
+warning: gptq-sym-g128-4 (seed 0, calib_seed 0): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T06:38:40+00:00, ppl 16.2482):
+    2026-11-08T03:15:28+00:00 version 0afd0d8+dirty/d2cfe18180 ppl 16.2482 note 'limit-windows 8; kl-windows 8; calib-n 16; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01'
+    2026-11-08T06:38:40+00:00 version 72c7eff+dirty/0dbeaa66a6 ppl 16.2482 note 'limit-windows 8; kl-windows 8; calib-n 16; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01 hessian-f64'
+warning: gptq-sym-g128-4 (seed 0, calib_seed 0): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T07:11:16+00:00, ppl 15.9843):
+    2026-11-08T06:34:10+00:00 version 72c7eff+dirty/7347511093 ppl 15.9843 note 'limit-windows 8; kl-windows 8; calib-n 16; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01 hessian-f32'
+    2026-11-08T07:11:16+00:00 version 72c7eff+dirty/ae994f32b4 ppl 15.9843 note 'limit-windows 8; kl-windows 8; calib-n 16; calib 16x2048 seed 0; gptq 4b sym g128 block128 damp0.01 hessian-f32'
+warning: fp16 (seed 0, calib_seed None): 3 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T09:22:11+00:00, ppl 14.9469):
+    2026-11-08T07:10:21+00:00 version 72c7eff+dirty/ae994f32b4 ppl 14.9469 note 'limit-windows 8; kl-windows 8; bf16, not quantized'
+    2026-11-08T07:58:01+00:00 version 72c7eff+dirty/68c5deb59e ppl 14.9469 note 'limit-windows 8; kl-windows 8; bf16, not quantized'
+    2026-11-08T09:22:11+00:00 version 72c7eff+dirty/9662cc2cfa ppl 14.9469 note 'limit-windows 8; kl-windows 8; bf16, not quantized'
+warning: rtn-sym-g128-4 (seed 0, calib_seed None): 3 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T09:22:18+00:00, ppl 19.0075):
+    2026-11-08T07:10:24+00:00 version 72c7eff+dirty/ae994f32b4 ppl 19.0075 note 'limit-windows 8; kl-windows 8; rtn-sym-g128-4: f16 scale'
+    2026-11-08T07:58:05+00:00 version 72c7eff+dirty/68c5deb59e ppl 19.0075 note 'limit-windows 8; kl-windows 8; rtn-sym-g128-4: f16 scale'
+    2026-11-08T09:22:18+00:00 version 72c7eff+dirty/9662cc2cfa ppl 19.0075 note 'limit-windows 8; kl-windows 8; rtn-sym-g128-4: f16 scale'
+warning: rtn-sym-g128-4@only=down (seed 0, calib_seed None): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T09:26:42+00:00, ppl 20.5374):
+    2026-11-08T07:13:42+00:00 version 72c7eff+dirty/ae994f32b4 ppl 20.5374 note 'limit-windows 4; kl-windows 4; bf16, not quantized; rtn-sym-g128-4: f16 scale'
+    2026-11-08T09:26:42+00:00 version 72c7eff+dirty/9662cc2cfa ppl 20.5374 note 'limit-windows 4; kl-windows 4; bf16, not quantized; rtn-sym-g128-4: f16 scale'
+warning: rtn-sym-g128-4+keepsuper=results/smoke/probe/qwen3.5-0.8b/superweight.json (seed 0, calib_seed None): 2 rows that disagree in note, code version, ppl or kl, keeping the latest (2026-11-08T09:26:46+00:00, ppl 24.1519):
+    2026-11-08T08:01:04+00:00 version 72c7eff+dirty/68c5deb59e ppl 24.1519 note 'limit-windows 4; kl-windows 4; rtn-sym-g128-4: f16 scale; rtn-sym-g128-4: f16 scale; keepsuper: 16 bf16 weights restored (top16 16), 16+ceil(log2(N*K)) bits each'
+    2026-11-08T09:26:46+00:00 version 72c7eff+dirty/9662cc2cfa ppl 24.1519 note 'limit-windows 4; kl-windows 4; rtn-sym-g128-4: f16 scale; rtn-sym-g128-4: f16 scale; keepsuper: 16 bf16 weights restored (top16 16) model-wide, 16+ceil(log2(N*K)) bits each'
+note: results/smoke/probe/qwen3.5-0.8b/ablation.jsonl: 1 @only / @except / @layer rows are not full-model points, skipped
+warning: plotting smoke runs (calib-n 16; kl-windows 4; limit-windows 8 | calib-n 16; kl-windows 8; limit-windows 8 | calib-n 4; kl-windows 4; limit-windows 4 | kl-windows 4; limit-windows 4 | kl-windows 4; limit-windows 8 | kl-windows 8; limit-windows 8)
+note: fp16 baselines per window subset: [limit-windows 4] 19.4779, [limit-windows 8] 14.9469
+warning: rtn-sym-g128-8 (limit-windows 8; kl-windows 4; rtn-sym-g128-8: f16 scale): ppl 14.9262 vs fp16 14.9469 not on the log axis, drawn hollow at 0.519
+results\smoke\rd_qwen3.5-0.8b_extra.png
