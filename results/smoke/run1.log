@@ -1,0 +1,46 @@
+20:33:59 run_baselines: loading reference qwen3.5-0.8b
+W1107 20:34:00.556000 34492 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  13%|#2        | 41/320 [00:00<00:00, 409.03it/s]Loading weights:  40%|###9      | 127/320 [00:00<00:00, 658.42it/s]Loading weights:  66%|######6   | 212/320 [00:00<00:00, 741.65it/s]Loading weights:  90%|########9 | 287/320 [00:00<00:00, 742.39it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 723.28it/s]
+20:34:01 run_baselines: eval windows (8, 2048)
+20:34:02 run_baselines: calibration windows (16, 2048) (seed 0)
+20:34:02 run_baselines: === fp16 ===
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  24%|##4       | 77/320 [00:00<00:00, 764.64it/s]Loading weights:  50%|#####     | 161/320 [00:00<00:00, 797.89it/s]Loading weights:  75%|#######5  | 241/320 [00:00<00:00, 797.88it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 784.39it/s]
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+20:34:12 run_baselines: fp16: ppl 14.95 kl 0.00000 top1 1.0000 bits_blocks 16.0000 bits_all 16.0000 time 9.3s (method 1.0s)
+20:34:12 run_baselines: === rtn-sym-g128-8 ===
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  14%|#4        | 46/320 [00:00<00:00, 459.85it/s]Loading weights:  40%|####      | 128/320 [00:00<00:00, 642.58it/s]Loading weights:  63%|######2   | 201/320 [00:00<00:00, 677.40it/s]Loading weights:  88%|########8 | 283/320 [00:00<00:00, 724.91it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 706.41it/s]
+20:34:15 run_baselines: rtn-sym-g128-8: ppl 14.93 kl 0.00153 top1 0.9811 bits_blocks 8.1250 bits_all 10.7917 time 3.7s (method 1.0s)
+20:34:15 run_baselines: === rtn-sym-g128-4 ===
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  15%|#4        | 47/320 [00:00<00:00, 460.92it/s]Loading weights:  39%|###9      | 126/320 [00:00<00:00, 646.05it/s]Loading weights:  63%|######3   | 202/320 [00:00<00:00, 696.14it/s]Loading weights:  89%|########8 | 284/320 [00:00<00:00, 740.00it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 709.89it/s]
+20:34:19 run_baselines: rtn-sym-g128-4: ppl 19.01 kl 0.19948 top1 0.7756 bits_blocks 4.1250 bits_all 8.1462 time 3.7s (method 1.0s)
+20:34:19 run_baselines: === gptq-sym-g128-4 ===
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:  14%|#4        | 46/320 [00:00<00:00, 457.48it/s]Loading weights:  40%|####      | 128/320 [00:00<00:00, 641.53it/s]Loading weights:  64%|######4   | 205/320 [00:00<00:00, 696.21it/s]Loading weights:  88%|########8 | 283/320 [00:00<00:00, 723.30it/s]Loading weights: 100%|##########| 320/320 [00:00<00:00, 697.72it/s]
+20:34:20 wcomp.quant.gptq: gptq: 16 windows x 2048 tokens, activations on cuda:0 (64 MB)
+20:34:20 wcomp.quant.gptq: gptq: captured layer-0 inputs in 0.2s
+20:34:25 wcomp.quant.gptq: gptq layer  0: 8 linears, hessian 2.5s, quantize 2.6s, forward 0.1s, total 5.2s
+20:34:31 wcomp.quant.gptq: gptq layer  1: 8 linears, hessian 2.5s, quantize 2.6s, forward 0.1s, total 5.2s
+20:34:36 wcomp.quant.gptq: gptq layer  2: 8 linears, hessian 2.5s, quantize 2.6s, forward 0.1s, total 5.2s
+20:34:40 wcomp.quant.gptq: gptq layer  3: 7 linears, hessian 1.1s, quantize 3.5s, forward 0.0s, total 4.6s
+20:34:46 wcomp.quant.gptq: gptq layer  4: 8 linears, hessian 2.5s, quantize 2.5s, forward 0.1s, total 5.2s
+20:34:51 wcomp.quant.gptq: gptq layer  5: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.0s
+20:34:56 wcomp.quant.gptq: gptq layer  6: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.0s
+20:35:00 wcomp.quant.gptq: gptq layer  7: 7 linears, hessian 1.0s, quantize 3.6s, forward 0.0s, total 4.7s
+20:35:05 wcomp.quant.gptq: gptq layer  8: 8 linears, hessian 2.5s, quantize 2.6s, forward 0.1s, total 5.2s
+20:35:11 wcomp.quant.gptq: gptq layer  9: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.1s
+20:35:16 wcomp.quant.gptq: gptq layer 10: 8 linears, hessian 2.5s, quantize 2.5s, forward 0.1s, total 5.1s
+20:35:20 wcomp.quant.gptq: gptq layer 11: 7 linears, hessian 1.0s, quantize 3.6s, forward 0.0s, total 4.6s
+20:35:25 wcomp.quant.gptq: gptq layer 12: 8 linears, hessian 2.5s, quantize 2.5s, forward 0.1s, total 5.1s
+20:35:30 wcomp.quant.gptq: gptq layer 13: 8 linears, hessian 2.5s, quantize 2.5s, forward 0.1s, total 5.1s
+20:35:35 wcomp.quant.gptq: gptq layer 14: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.0s
+20:35:40 wcomp.quant.gptq: gptq layer 15: 7 linears, hessian 1.0s, quantize 3.6s, forward 0.0s, total 4.7s
+20:35:45 wcomp.quant.gptq: gptq layer 16: 8 linears, hessian 2.5s, quantize 2.5s, forward 0.1s, total 5.1s
+20:35:50 wcomp.quant.gptq: gptq layer 17: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.0s
+20:35:55 wcomp.quant.gptq: gptq layer 18: 8 linears, hessian 2.5s, quantize 2.6s, forward 0.1s, total 5.1s
+20:36:00 wcomp.quant.gptq: gptq layer 19: 7 linears, hessian 1.1s, quantize 3.6s, forward 0.0s, total 4.8s
+20:36:05 wcomp.quant.gptq: gptq layer 20: 8 linears, hessian 2.5s, quantize 2.5s, forward 0.1s, total 5.1s
+20:36:10 wcomp.quant.gptq: gptq layer 21: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.1s
+20:36:15 wcomp.quant.gptq: gptq layer 22: 8 linears, hessian 2.4s, quantize 2.5s, forward 0.1s, total 5.0s
+20:36:20 wcomp.quant.gptq: gptq layer 23: 7 linears, hessian 1.0s, quantize 3.6s, forward 0.0s, total 4.7s
+20:36:23 run_baselines: gptq-sym-g128-4: ppl 15.95 kl 0.07200 top1 0.8600 bits_blocks 4.1250 bits_all 8.1462 time 123.7s (method 121.1s)
+20:36:23 run_baselines: wrote D:\repos\wcomp\results\smoke\qwen3.5-0.8b\runs.jsonl
