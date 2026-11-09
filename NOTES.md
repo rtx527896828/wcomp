@@ -1087,6 +1087,17 @@ MiniCPM (0.3%); H-P0 concentration on Qwen; g32 at 4 bits (1.39x, below the curv
 acceptance (-4.6%, outside the 0.5% rule; attributed to rounding chaos); bf16 lossless bound beyond the marginal
 (none); P1 shape beyond Gaussian for the big MLP types (0.03-0.07).
 
+**Correction (2026-11-08, REPORT.md fact-check).** New / unexpected (3), "damage per parameter tracks 1 / n_t", is
+**retracted**: d_t = KL_t / n_t shares the denominator with 1 / n_t, and a KL independent of n gives the same
+correlation. With KL permuted across types (5000 permutations, numpy rng seed 1; `scripts/report_numbers.py` section
+(7)), Spearman(d, 1/n) on the WikiText-2 `rtn-sym-g128-4@only` KL is 0.802 / 0.908 / 0.850 against null medians 0.820 /
+0.876 / 0.945, p(null >= observed) 0.582 / 0.312 / 0.853 (C4 damage rows: 0.624 / 0.322 / 0.767), i.e. it does not pass
+a shuffle test. Per-type KL instead rises with n (Spearman +0.636 / +0.802 / +0.605, log-log slope 0.44 / 0.40 / 0.29):
+only "KL is sub-linear in n" remains, a descriptive fact. The paragraph in P6 above and item (3) are left as written.
+Item (4), "Qwen3.5 has no super weight", is classified in REPORT.md as consistent with known work, not new: both Qwen3.5
+configs set `attn_output_gate: true`, and SDPA output gating is reported to suppress massive activations (Qiu et al.
+2025, Gated Attention), which super weights produce (Yu et al. 2024); the DeltaNet attribution was a prior, never tested.
+
 ### Audit findings and how each was resolved
 
 Hypothesis audit (verdicts recorded above as stated):
@@ -1875,6 +1886,10 @@ With GPTQ the gain shrinks to -7.5% to -9.2% KL (+0.05 to +0.07 bits fixed) and 
 (avg 4 "no", avg 3 "no (1 of 2 seeds)", dPPL decides every one of the four rows; KL-only all four pass). Within-tensor
 allocation is therefore not dropped, but its GPTQ gain is not established. The cheap second observation of G
 (d_t against ||W_t X||^2 / n_t and the output RMS) was not in the run list and was not run.
+**Correction (2026-11-08, REPORT.md fact-check):** "dPPL decides every one of the four rows" is wrong. dPPL decides
+three: avg 4 seeds 0 and 1 (dPPL ratio 2.272 / 2.873) and avg 3 seed 0 (1.087). Avg 3 seed 1 clears both margins (KL
+0.908, dPPL 0.935, row beats = True, as in the table above); the avg-3 verdict is "no (1 of 2 seeds)" because seed 0
+fails on dPPL. The conclusion (GPTQ gain not established) is unchanged.
 
 #### Combination (H3-combo)
 
@@ -2016,3 +2031,11 @@ eig cost re-derived; combo component decisions follow the rules.
    3/4-bit splits at 2.625 / 3.625 bits) and a 5-bit anchor, so mid-segment rows are read without the 4-7% chord bias
    and 4-bit rows are not extrapolated; and pre-register a dPPL rule that respects the measured 4-bit dPPL spread
    (113% on the 0.8B), since 11 rows were decided by a margin inside the noise.
+
+### REPORT.md written (2026-11-08)
+
+REPORT.md (Chinese) summarizes Phases 1-3; figures results/report_rd.png and results/report_rd_ppl.png from
+scripts/plot_report.py (test tests/test_report_plot.py); report numbers recomputed by scripts/report_numbers.py. The
+report went through two review rounds (numbers, literature classification, requirement coverage, reader) with each
+finding judged independently. Subagents were not allowed to write the report file, so the reviewed text was written to
+disk by the main session unchanged except for the reproduction section's commit line.
